@@ -5,7 +5,6 @@ import { useEffectOnce } from 'react-use';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Analytics } from '@vercel/analytics/react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 import 'inter-ui/inter.css';
 import 'nprogress/nprogress.css';
@@ -46,17 +45,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
 				<meta name="theme-color" content="#111827" />
 			</Head>
 
-			<AnimatePresence>
-				<motion.div
-					key={router.route}
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					exit={{ opacity: 0, y: -20 }}
-					transition={{ duration: 0.3 }}>
-					<Component {...pageProps} />
-				</motion.div>
-			</AnimatePresence>
-
+			<Component {...pageProps} />
 			<Analytics />
 
 			<style jsx global>{`
