@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import fs from 'fs';
 import path from 'path';
 import { memo } from 'react';
+import Link from 'next/link';
 
 import { Button, Pill } from '~/components';
 import { Layout } from '~/layouts';
@@ -119,13 +120,11 @@ export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): 
             <div className="flex flex-grow min-h-screen pt-16 pb-12">
                 <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto px-3 sm:px-6 md:px-8">
                     <div className="block sm:hidden absolute top-4 left-4">
-                        <Button.Icon
-                            href="/"
-                            aria-label="Geri Dön"
-                            className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg hover:scale-110 transition-transform duration-200"
-                        >
-                            <Icon icon="feather:arrow-left" className="w-5 h-5 text-gray-800 dark:text-gray-200" />
-                        </Button.Icon>
+                        <Link href="/">
+                            <a className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg hover:scale-110 transition-transform duration-200 inline-flex items-center justify-center">
+                                <Icon icon="feather:arrow-left" className="w-5 h-5 text-gray-800 dark:text-gray-200" />
+                            </a>
+                        </Link>
                     </div>
                     <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-8 md:mb-12">Zaman Çizelgem</h1>
                     <ul className="-mb-8 w-full" role="list">
