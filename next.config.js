@@ -34,6 +34,10 @@ const config = {
 			// Unsplash
 			'source.unsplash.com',
 			'images.unsplash.com',
+
+			// Additional GitHub assets
+			'github.com',
+			'avatars.githubusercontent.com',
 		],
 	},
 	// Inspired by: https://github.com/leerob/leerob.io/blob/main/next.config.js#L44-L81
@@ -63,12 +67,32 @@ const config = {
 						key: 'Permissions-Policy',
 						value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
 					},
+					{
+						key: 'X-Content-Type-Options',
+						value: 'nosniff',
+					},
+					{
+						key: 'X-Frame-Options',
+						value: 'SAMEORIGIN',
+					},
+					{
+						key: 'X-XSS-Protection',
+						value: '1; mode=block',
+					},
 				],
 			},
 		];
 	},
 	reactStrictMode: true,
 	swcMinify: true,
+	async rewrites() {
+		return [
+			{
+				source: '/sitemap.xml',
+				destination: '/api/sitemap',
+			},
+		];
+	},
 	webpack: (config, { dev, isServer }) => {
 		// TODO: Temp disabled as since upgrading `next` to v12.2.3 production builds fail & this seems to be the cause
 		// Replace React with Preact only in client production build
@@ -92,6 +116,9 @@ const config = {
 			test: /\.json$/,
 			type: 'json',
 		});
+
+		// Optimize bundle size
+		config.optimization.minimize = true;
 
 		return config;
 	},
