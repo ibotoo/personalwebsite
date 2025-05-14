@@ -46,7 +46,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
 				<meta name="theme-color" content="#111827" />
 			</Head>
 
-			<AnimatePresence mode="wait">
+			<AnimatePresence>
 				<motion.div
 					key={router.route}
 					initial={{ opacity: 0, y: 20 }}
