@@ -1,0 +1,12 @@
+1. Önce gerekli paketleri yüklemek için:
+npm install -g pnpm
+pnpm install
+
+2. Siteyi geliştirme modunda başlatmak için:
+pnpm dev
+
+3. Siteyi production modunda başlatmak için:
+pnpm build
+pnpm start
+
+Not: Site development modunda http://localhost:3000 adresinde çalışacaktır. 

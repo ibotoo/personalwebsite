@@ -6,8 +6,13 @@ import { usePersistantState, useSeoProps } from '~/lib';
 
 import type { WithChildren, WithProps } from '~/types';
 
+// Arka planı sadece ihtiyaç olduğunda yükle
 const Background = dynamic(() =>
 	import('~/components/Background/Standard.component').then(({ Standard }) => Standard),
+	{
+		ssr: false, // Sunucu tarafında render etme
+		loading: () => null, // Yüklenirken hiçbir şey gösterme
+	}
 );
 
 interface DefaultLayoutProps extends WithChildren {

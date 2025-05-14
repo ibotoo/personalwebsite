@@ -15,7 +15,7 @@ export function Standard(): JSX.Element {
 
 		const renderer = new Renderer({
 			depth: false,
-			dpr: 2,
+			dpr: 1,
 			alpha: true,
 		});
 
@@ -27,29 +27,44 @@ export function Standard(): JSX.Element {
 		camera.position.z = 15;
 
 		function handleReisze(): void {
-			renderer.setSize(window.innerWidth, window.innerHeight);
+			const width = window.innerWidth;
+			const height = window.innerHeight;
+			renderer.setSize(width, height);
 			camera.perspective({
-				aspect: gl.canvas.width / gl.canvas.height,
+				aspect: width / height,
 			});
 		}
 
 		try {
-			containerRef.current.appendChild(gl.canvas);
-			gl.clearColor(0, 0, 0, 0);
-			window.addEventListener('resize', handleReisze, false);
-			handleReisze();
+			if (containerRef.current) {
+				containerRef.current.appendChild(gl.canvas);
+				gl.clearColor(0, 0, 0, 0);
+				window.addEventListener('resize', handleReisze, false);
+				handleReisze();
+			}
 		} catch (error) {
 			console.error(error);
 			log.error('Failed to initialize canvas', error);
+			return;
 		}
 
-		const numParticles = 100;
+		const numParticles = 25;
 		const position = new Float32Array(numParticles * 3);
 		const random = new Float32Array(numParticles * 4);
 
 		for (let i = 0; i < numParticles; i++) {
-			position.set([Math.random(), Math.random(), Math.random()], i * 3);
-			random.set([Math.random(), Math.random(), Math.random(), Math.random()], i * 4);
+			position.set([
+				Math.random() * 2 - 1,
+				Math.random() * 2 - 1,
+				Math.random() * 2 - 1
+			], i * 3);
+
+			random.set([
+				Math.random(),
+				Math.random(),
+				Math.random(),
+				Math.random()
+			], i * 4);
 		}
 
 		const geometry = new Geometry(gl, {
@@ -84,21 +99,36 @@ export function Standard(): JSX.Element {
 			program,
 		});
 
-		function update(t: number): void {
+		let lastFrameTime = 0;
+		const frameInterval = 1000 / 30;
+
+		function update(timestamp: number): void {
 			animationId = requestAnimationFrame(update);
 
-			particles.rotation.z += 0.0025;
-			program.uniforms.uTime.value = t * 0.00025;
+			const elapsed = timestamp - lastFrameTime;
+			if (elapsed < frameInterval) return;
+
+			lastFrameTime = timestamp - (elapsed % frameInterval);
+
+			particles.rotation.z += 0.0015;
+			program.uniforms.uTime.value = timestamp * 0.00015;
 
 			renderer.render({
 				scene: particles,
 				camera: camera,
 			});
 		}
+
 		animationId = requestAnimationFrame(update);
 
-		return () => cancelAnimationFrame(animationId);
+		return () => {
+			cancelAnimationFrame(animationId);
+			window.removeEventListener('resize', handleReisze);
+			if (containerRef.current && gl.canvas.parentNode === containerRef.current) {
+				containerRef.current.removeChild(gl.canvas);
+			}
+		};
 	});
 
-	return <div className="fixed inset-0" ref={containerRef} />;
+	return <div className="fixed inset-0 -z-10" ref={containerRef} />;
 }

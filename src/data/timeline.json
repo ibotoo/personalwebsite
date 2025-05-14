@@ -1,76 +1,68 @@
 [
 	{
-		"date": "03-14-2022",
-		"title": "Started @ Wander",
-		"description": "Joined the Wander team",
-		"icon": "feather:briefcase",
-		"link": {
-			"text": "Visit Wander",
-			"url": "https://wander.com/"
-		}
+		"date": "08-01-2003",
+		"title": "Doğum Günüm!",
+		"description": "01 Ağustos 2003 tarihinde Ağrı'da dünyaya geldim.",
+		"icon": "feather:gift"
 	},
 	{
-		"date": "10-22-2021",
-		"title": "Launched nuro.dev",
-		"description": "Successfully launched my newly re-designed portfolio",
+		"date": "05-01-2006",
+		"title": "Denizli'ye Taşındık",
+		"description": "Ailemle birlikte Denizli'ye taşındık.",
+		"icon": "feather:map-pin"
+	},
+	{
+		"date": "04-24-2020",
+		"title": "Sosyal Medya Reklamcılığı",
+		"description": "Sosyal medya reklamcılığını fark edip Instagram ve YouTube üzerinden çeşitli girişimler yaptım, hesaplar ve sayfalar geliştirip bunları satmaya başladım.",
+		"icon": "feather:instagram"
+	},
+	{
+		"date": "07-26-2020",
+		"title": "r10.net ile Tanıştım",
+		"description": "Türkiye'nin en büyük webmaster forumu olan r10.net'e üye oldum.",
+		"icon": "feather:globe"
+	},
+	{
+		"date": "06-01-2021",
+		"title": "Rage Medya Kuruldu",
+		"description": "Rage Medya adında sosyal medya işletmesini kurup bu alanda hizmet vermeye başladım.",
+		"icon": "feather:trending-up"
+	},
+	{
+		"date": "07-02-2021",
+		"title": "Liseden Mezun Oldum",
+		"description": "Özel Denizli OSB Teknik Koleji, Makine Teknolojisi bölümünden mezun oldum.",
 		"icon": "feather:award"
 	},
 	{
-		"date": "03-15-2021",
-		"title": "Started @ Attio",
-		"description": "Joined the Attio team",
-		"icon": "feather:briefcase",
-		"link": {
-			"text": "Visit Attio",
-			"url": "https://attio.com/"
-		}
+		"date": "08-05-2021",
+		"title": "Şirket Kurulumu",
+		"description": "18 yaşıma girdikten birkaç gün sonra ilk şirket kurulumumu gerçekleştirdim.",
+		"icon": "feather:briefcase"
 	},
 	{
-		"date": "11-16-2020",
-		"title": "Started @ Aiming.pro",
-		"description": "Joined the Aiming.pro team",
-		"icon": "feather:briefcase",
-		"link": {
-			"text": "Visit Aiming.pro",
-			"url": "https://aiming.pro/"
-		}
-	},
-	{
-		"date": "07-15-2020",
-		"title": "Graduated University!",
-		"description": "Successfully completed my Bachelor's Degree",
-		"icon": "feather:award"
-	},
-	{
-		"date": "10-11-2018",
-		"title": "First Developer Role",
-		"description": "Began an internship as a junior developer working at Stink Studios",
-		"icon": "feather:briefcase",
-		"link": {
-			"text": "Visit Stink Studios",
-			"url": "https://stinkstudios.com/"
-		}
-	},
-	{
-		"date": "11-04-2016",
-		"title": "First Job!",
-		"description": "Began my first part-time job as a junior service desk analyist at CreeperHost",
-		"icon": "feather:briefcase",
-		"link": {
-			"text": "Visit CreeperHost",
-			"url": "http://creeperhost.net/"
-		}
-	},
-	{
-		"date": "09-10-2016",
-		"title": "Start University",
-		"description": "Began studying Computer Games Programming at Staffordshire University",
+		"date": "08-22-2022",
+		"title": "Üniversiteye Başladım",
+		"description": "Akdeniz Üniversitesi İletişim Fakültesi Reklamcılık Bölümü'ne başladım.",
 		"icon": "feather:book"
 	},
 	{
-		"date": "08-09-1997",
-		"title": "Birthday!",
-		"description": "I was born the 9th of August 1997",
-		"icon": "feather:gift"
+		"date": "03-30-2023",
+		"title": "Shopify Hizmetleri",
+		"description": "Profesyonel Anahtar Teslim Shopify Site Kurulum hizmeti vermeye başladım.",
+		"icon": "feather:shopping-cart"
+	},
+	{
+		"date": "09-10-2023",
+		"title": "Snug Sneakers",
+		"description": "3 ortaklı online ayakkabı mağazası Snug Sneakers'ı kurduk. Yaklaşık 1 yıl işlettikten sonra tüm hakları ve mağazayı sattık.",
+		"icon": "feather:shopping-bag"
+	},
+	{
+		"date": "current",
+		"title": "Yapay Zeka ve E-Ticaret Odağı",
+		"description": "Yapay zeka teknolojileri üzerine yoğunlaşarak kendimi geliştiriyorum. Bu web sitesini de tamamen yapay zeka aracılığıyla oluşturdum. E-ticaret alanında da kendimi geliştirirken, kurduğum önceki işletme ve hizmetlerimi de sürdürmeye devam ediyorum.",
+		"icon": "feather:cpu"
 	}
 ]

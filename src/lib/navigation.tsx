@@ -1,7 +1,6 @@
 import { useTheme } from 'next-themes';
 
-import { Status } from '~/components';
-import { usePersistantState, useStatus } from '~/lib';
+import { usePersistantState } from '~/lib';
 
 import { NavigationItemType, Theme } from '~/types';
 
@@ -12,47 +11,29 @@ const staticMenuItems: Array<Array<NavigationItem>> = [
 		{
 			type: NavigationItemType.LINK,
 			icon: 'feather:home',
-			text: 'Home',
+			text: 'Ana Sayfa',
 			href: '/',
 		},
 		{
 			type: NavigationItemType.LINK,
-			icon: 'feather:edit-3',
-			text: 'Blog',
-			href: '/blog',
-		},
-		{
-			type: NavigationItemType.LINK,
-			icon: 'feather:copy',
-			text: 'Projects',
-			href: '/projects',
-		},
-		{
-			type: NavigationItemType.LINK,
 			icon: 'feather:clock',
-			text: 'Timeline',
-			href: '/timeline',
-		},
-		{
-			type: NavigationItemType.LINK,
-			icon: 'feather:link',
-			text: 'Referrals',
-			href: '/referrals',
+			text: 'Zaman Çizelgesi',
+			href: '/zaman-cizelgesi',
 		},
 	],
 	[
 		{
 			type: NavigationItemType.LINK,
-			icon: 'feather:twitter',
-			text: 'Twitter',
-			href: 'https://twitter.com/nurodev',
+			icon: 'feather:instagram',
+			text: 'Instagram',
+			href: 'https://www.instagram.com/ibrahimsancar0/',
 			external: true,
 		},
 		{
 			type: NavigationItemType.LINK,
-			icon: 'feather:github',
-			text: 'GitHub',
-			href: 'https://github.com/nurodev',
+			icon: 'simple-icons:x',
+			text: 'X',
+			href: 'https://x.com/ibrahimsancar0',
 			external: true,
 		},
 	],
@@ -64,23 +45,10 @@ export function useNavigation(): {
 } {
 	const state = usePersistantState();
 	const { animations: background, sound } = state.get();
-	const { color, loading, status } = useStatus();
-	const { theme, setTheme } = useTheme();
+	const { theme } = useTheme();
 
 	const menuItems: NavigationItems = [
 		...staticMenuItems,
-		...(!loading && status.discord_status !== 'offline'
-			? [
-					[
-						{
-							type: NavigationItemType.LINK,
-							icon: <Status.Indicator color={color} pulse />,
-							text: 'Status',
-							href: '/status',
-						} as NavigationItem,
-					],
-			  ]
-			: []),
 	];
 
 	const settingsItems: NavigationItems = [
@@ -89,7 +57,7 @@ export function useNavigation(): {
 				type: NavigationItemType.ACTION,
 				icon: 'feather:image',
 				endIcon: background ? 'feather:check-circle' : 'feather:circle',
-				text: `Animations ${background ? 'On' : 'Off'}`,
+				text: `Animasyonlar ${background ? 'Açık' : 'Kapalı'}`,
 				onClick: () =>
 					state.set((settings) => ({
 						...settings,
@@ -100,36 +68,12 @@ export function useNavigation(): {
 				type: NavigationItemType.ACTION,
 				icon: sound ? 'feather:volume-2' : 'feather:volume-x',
 				endIcon: sound ? 'feather:check-circle' : 'feather:circle',
-				text: `Sounds ${sound ? 'On' : 'Off'}`,
+				text: `Sesler ${sound ? 'Açık' : 'Kapalı'}`,
 				onClick: () =>
 					state.set((settings) => ({
 						...settings,
 						sound: !settings.sound,
 					})),
-			},
-			{
-				type: NavigationItemType.DIVIDER,
-			},
-			{
-				type: NavigationItemType.ACTION,
-				icon: 'feather:monitor',
-				endIcon: theme === Theme.SYSTEM ? 'feather:check-circle' : undefined,
-				text: 'System Theme',
-				onClick: () => setTheme(Theme.SYSTEM),
-			},
-			{
-				type: NavigationItemType.ACTION,
-				icon: 'feather:sun',
-				endIcon: theme === Theme.LIGHT ? 'feather:check-circle' : undefined,
-				text: 'Light Theme',
-				onClick: () => setTheme(Theme.LIGHT),
-			},
-			{
-				type: NavigationItemType.ACTION,
-				icon: 'feather:moon',
-				endIcon: theme === Theme.DARK ? 'feather:check-circle' : undefined,
-				text: 'Dark Theme',
-				onClick: () => setTheme(Theme.DARK),
 			},
 		],
 	];

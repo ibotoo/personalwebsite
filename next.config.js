@@ -87,6 +87,12 @@ const config = {
 			use: ['ts-shader-loader'],
 		});
 
+		// JSON dosyaları için yükleyici
+		config.module.rules.push({
+			test: /\.json$/,
+			type: 'json',
+		});
+
 		return config;
 	},
 };

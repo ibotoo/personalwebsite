@@ -18,22 +18,17 @@ const Event = dynamic<EventProps>(
 const ACTIONS: Array<NavigationItem> = [
 	{
 		type: NavigationItemType.LINK,
-		href: '/blog',
-		icon: <Icon className="mr-3" icon="feather:edit-3" />,
-		text: 'Blog',
-	},
-	{
-		type: NavigationItemType.LINK,
-		href: '/projects',
-		icon: <Icon className="mr-3" icon="feather:copy" />,
-		text: 'Projects',
+		external: true,
+		href: 'https://www.instagram.com/ibrahimsancar0/',
+		icon: <Icon className="mr-3" icon="feather:instagram" />,
+		text: 'Instagram',
 	},
 	{
 		type: NavigationItemType.LINK,
 		external: true,
-		href: 'https://github.com/nurodev',
-		icon: <Icon className="mr-3" icon="feather:github" />,
-		text: 'GitHub',
+		href: 'https://x.com/ibrahimsancar0',
+		icon: <Icon className="mr-3" icon="simple-icons:x" />,
+		text: 'X',
 	},
 ];
 
@@ -43,23 +38,23 @@ export default function HomePage(): JSX.Element {
 	const isBirthday =
 		today.getDate() === birthday.getDate() && today.getMonth() === birthday.getMonth();
 
-	const description = `I am a software engineer & games developer`;
+	const description = `Reklamcılık öğrencisi, girişimci ve sosyal medya uzmanı`;
 
 	return (
 		<Layout.Default>
 			{isBirthday && <Event event={EventType.BIRTHDAY} />}
-			<div className="min-h-screen flex items-center justify-center py-12">
-				<div className="max-w-md sm:max-w-lg md:sm:max-w-2xl lg:sm:max-w-3xl w-full space-y-8 text-center">
+			<div className="min-h-screen flex flex-col items-center justify-center py-6 sm:py-12 relative px-4 sm:px-8">
+				<div className="max-w-md sm:max-w-lg md:sm:max-w-2xl lg:sm:max-w-3xl w-full space-y-6 sm:space-y-8 text-center">
 					<Animate
 						as="h1"
 						animation={{
 							opacity: [0, 1],
 							scale: [0.75, 1],
 						}}
-						className="text-gray-500 dark:text-white text-5xl sm:text-6xl md:text-6xl lg:text-8xl tracking-tight font-extrabold">
+						className="text-gray-500 dark:text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight font-extrabold">
 						Hey <span className="inline-block origin-70 hover:(animate-wave)">👋</span>{' '}
-						I&apos;m Ben, <br className="hidden sm:block" />a{' '}
-						<Pill.Standard className="mt-4">developer</Pill.Standard>
+						Ben İbrahim, <br className="hidden sm:block" />{' '}
+						<Pill.Standard className="mt-3 sm:mt-4">Ben Bir Girişimciyim</Pill.Standard>
 					</Animate>
 
 					<Animate
@@ -68,14 +63,14 @@ export default function HomePage(): JSX.Element {
 							opacity: [0, 1],
 							scale: [0.75, 1],
 						}}
-						className="max-w-xs mt-4 md:mt-8 mx-auto text-base text-gray-400 sm:text-lg md:text-xl md:max-w-3xl"
+						className="max-w-xs mt-3 md:mt-6 mx-auto text-sm sm:text-base md:text-xl text-gray-400 md:max-w-3xl"
 						transition={{
 							delay: 0.5,
 						}}>
 						{description}
 					</Animate>
 
-					<div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-4 space-y-4 sm:space-y-0 w-full mt-8 sm:mt-4">
+					<div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-4 space-y-3 sm:space-y-0 w-full mt-6 sm:mt-4">
 						{ACTIONS.map((action, index) => {
 							if (action.type !== NavigationItemType.LINK) return null;
 
@@ -90,7 +85,7 @@ export default function HomePage(): JSX.Element {
 									transition={{
 										delay: 0.1 * (index + 2) + 0.5,
 									}}>
-									<Button.Outline href={action.href}>
+									<Button.Outline href={action.href} external={action.external}>
 										{action.icon}
 										<span>{action.text}</span>
 									</Button.Outline>
@@ -98,6 +93,11 @@ export default function HomePage(): JSX.Element {
 							);
 						})}
 					</div>
+				</div>
+				<div className="absolute bottom-2 sm:bottom-4 w-full text-center">
+					<p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm font-medium">
+						© {new Date().getFullYear() > 2025 ? new Date().getFullYear() : 2025} İbrahim Can Sancar. Tüm hakları saklıdır.
+					</p>
 				</div>
 			</div>
 		</Layout.Default>
