@@ -123,7 +123,7 @@ export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): 
                 <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto px-3 sm:px-6 md:px-8">
                     <button
                         onClick={() => router.back()}
-                        className="sm:hidden fixed top-4 left-4 z-10 flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
+                        className="fixed top-4 left-4 z-50 flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
                         <Icon icon="feather:arrow-left" className="w-5 h-5 text-primary-500" />
                     </button>
                     <div className="flex items-center justify-center mb-4 sm:mb-8 md:mb-12">
