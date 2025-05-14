@@ -49,16 +49,17 @@ export default function HomePage(): JSX.Element {
 	return (
 		<Layout.Default>
 			{isBirthday && <Event event={EventType.BIRTHDAY} />}
-			<div className="min-h-screen flex flex-col items-center justify-center py-12 sm:py-16 relative px-4 sm:px-8 overflow-hidden h-screen bg-gradient-to-b from-gray-50 dark:from-gray-900 to-transparent">
-				<div className="container mx-auto max-w-7xl">
-					<div className="max-w-md sm:max-w-lg md:sm:max-w-2xl lg:sm:max-w-3xl w-full mx-auto space-y-4 sm:space-y-8 text-center">
+			<div className="min-h-screen w-full flex flex-col items-center justify-center py-12 sm:py-16 relative overflow-hidden bg-gradient-to-b from-gray-900 to-black">
+				<div className="absolute inset-0 w-full h-full bg-grid-white/[0.02] bg-grid-opacity-10" />
+				<div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+					<div className="max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto space-y-4 sm:space-y-8 text-center">
 						<Animate
 							as="h1"
 							animation={{
 								opacity: [0, 1],
 								scale: [0.75, 1],
 							}}
-							className="text-gray-500 dark:text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight font-extrabold">
+							className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight font-extrabold">
 							Hey <span className="inline-block origin-70 hover:(animate-wave)">👋</span>{' '}
 							Ben İbrahim, <br className="hidden sm:block" />{' '}
 							<Pill.Standard className="mt-2 sm:mt-4 text-3xl sm:text-4xl lg:text-7xl whitespace-nowrap">Ben Bir Girişimciyim</Pill.Standard>
@@ -102,7 +103,7 @@ export default function HomePage(): JSX.Element {
 						</div>
 					</div>
 				</div>
-				<div className="absolute bottom-4 sm:bottom-6 w-full text-center">
+				<div className="absolute bottom-4 sm:bottom-6 w-full text-center z-10">
 					<p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm font-medium text-center mx-auto">
 						© {new Date().getFullYear() > 2025 ? new Date().getFullYear() : 2025} İbrahim Can Sancar. Tüm hakları saklıdır.
 					</p>

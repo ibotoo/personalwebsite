@@ -117,17 +117,18 @@ export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): 
 
     return (
         <Layout.Default seo={{ title: 'İbrahim Can Sancar ─ Zaman Çizelgesi' }}>
-            <div className="flex flex-grow min-h-screen pt-16 pb-12">
-                <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto">
-                        <div className="block sm:hidden absolute top-4 left-4">
+            <div className="min-h-screen w-full flex flex-col pt-16 pb-12 relative overflow-hidden bg-gradient-to-b from-gray-900 to-black">
+                <div className="absolute inset-0 w-full h-full bg-grid-white/[0.02] bg-grid-opacity-10" />
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="flex-grow flex flex-col justify-start max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto">
+                        <div className="block sm:hidden absolute top-4 left-4 z-20">
                             <Link href="/">
-                                <a className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg hover:scale-110 transition-transform duration-200 inline-flex items-center justify-center">
-                                    <Icon icon="feather:arrow-left" className="w-5 h-5 text-gray-800 dark:text-gray-200" />
+                                <a className="p-2 bg-gray-800/50 backdrop-blur-sm rounded-lg hover:scale-110 transition-transform duration-200 inline-flex items-center justify-center">
+                                    <Icon icon="feather:arrow-left" className="w-5 h-5 text-gray-200" />
                                 </a>
                             </Link>
                         </div>
-                        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-8 md:mb-12">Zaman Çizelgem</h1>
+                        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-8 md:mb-12">Zaman Çizelgem</h1>
                         <ul className="-mb-8 w-full" role="list">
                             {timeline.map((event, index) => (
                                 <TimelineItem
