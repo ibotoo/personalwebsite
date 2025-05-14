@@ -49,7 +49,7 @@ export default function HomePage(): JSX.Element {
 	return (
 		<Layout.Default>
 			{isBirthday && <Event event={EventType.BIRTHDAY} />}
-			<div className="min-h-screen flex flex-col items-center justify-center py-12 sm:py-16 relative px-4 sm:px-8 overflow-hidden h-screen">
+			<div className="min-h-screen flex flex-col items-center justify-center py-12 sm:py-16 relative px-4 sm:px-8 overflow-hidden h-screen bg-gradient-to-b from-gray-50 dark:from-gray-900 to-transparent">
 				<div className="max-w-md sm:max-w-lg md:sm:max-w-2xl lg:sm:max-w-3xl w-full space-y-4 sm:space-y-8 text-center">
 					<Animate
 						as="h1"
@@ -60,7 +60,7 @@ export default function HomePage(): JSX.Element {
 						className="text-gray-500 dark:text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight font-extrabold">
 						Hey <span className="inline-block origin-70 hover:(animate-wave)">👋</span>{' '}
 						Ben İbrahim, <br className="hidden sm:block" />{' '}
-						<Pill.Standard className="mt-2 sm:mt-4 text-2xl sm:text-4xl lg:text-7xl whitespace-nowrap">Ben Bir Girişimciyim</Pill.Standard>
+						<Pill.Standard className="mt-2 sm:mt-4 text-3xl sm:text-4xl lg:text-7xl whitespace-nowrap">Ben Bir Girişimciyim</Pill.Standard>
 					</Animate>
 
 					<Animate
