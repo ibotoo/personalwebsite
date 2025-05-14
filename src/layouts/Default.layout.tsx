@@ -26,7 +26,7 @@ export function DefaultLayout({
 	seo: customSeo,
 }: DefaultLayoutProps): JSX.Element {
 	const { animations: background } = usePersistantState().get();
-	const showBackground = overrideBackground ?? background;
+	const showBackground = overrideBackground ?? true;
 
 	const seo = useSeoProps(customSeo);
 
@@ -34,7 +34,7 @@ export function DefaultLayout({
 		<>
 			<NextSeo {...seo} />
 			<Navbar.Standard />
-			<main className="flex flex-col justify-center px-8">
+			<main className="flex flex-col justify-center">
 				{showBackground && <Background />}
 				{children}
 			</main>

@@ -51,7 +51,7 @@ export default function HomePage(): JSX.Element {
 			{isBirthday && <Event event={EventType.BIRTHDAY} />}
 			<div className="min-h-screen w-full flex flex-col items-center justify-center py-12 sm:py-16 relative overflow-hidden bg-gradient-to-b from-gray-900 to-black">
 				<div className="absolute inset-0 w-full h-full bg-grid-white/[0.02] bg-grid-opacity-10" />
-				<div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+				<div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
 					<div className="max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto space-y-4 sm:space-y-8 text-center">
 						<Animate
 							as="h1"
