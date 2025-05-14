@@ -120,9 +120,11 @@ export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): 
             <div className="flex flex-grow min-h-screen pt-16 pb-12">
                 <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto px-3 sm:px-6 md:px-8">
                     <div className="flex items-center justify-between mb-4 sm:mb-8 md:mb-12">
-                        <Link href="/" className="sm:hidden flex items-center text-primary-500 hover:text-primary-600 transition-colors">
-                            <Icon icon="feather:arrow-left" className="w-5 h-5 mr-2" />
-                            <span>Ana Sayfa</span>
+                        <Link href="/" passHref legacyBehavior>
+                            <a className="sm:hidden flex items-center text-primary-500 hover:text-primary-600 transition-colors">
+                                <Icon icon="feather:arrow-left" className="w-5 h-5 mr-2" />
+                                <span>Ana Sayfa</span>
+                            </a>
                         </Link>
                         <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white flex-1 sm:flex-none">Zaman Çizelgem</h1>
                     </div>

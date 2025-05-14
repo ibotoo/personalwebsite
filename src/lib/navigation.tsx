@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
 
 import { usePersistantState } from '~/lib';
@@ -5,6 +6,8 @@ import { usePersistantState } from '~/lib';
 import { NavigationItemType, Theme } from '~/types';
 
 import type { NavigationItem, NavigationItems } from '~/types';
+
+import manifest from '~/data/manifest.json';
 
 const staticMenuItems: Array<Array<NavigationItem>> = [
 	[

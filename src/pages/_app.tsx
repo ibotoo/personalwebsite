@@ -1,7 +1,7 @@
 import NProgress from 'nprogress';
 import { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
-import { useEffectOnce } from 'react-use';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Analytics } from '@vercel/analytics/react';
@@ -19,13 +19,30 @@ NProgress.configure({
 	showSpinner: false,
 });
 
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
+const App = ({ Component, pageProps }: AppProps): JSX.Element => {
 	const router = useRouter();
 
-	useEffectOnce(() => {
+	useEffect(() => {
+		const handleRouteChange = (url: string) => {
+			if (typeof window !== 'undefined' && window.gtag) {
+				window.gtag('config', 'GA_MEASUREMENT_ID', {
+					page_path: url,
+				});
+			}
+		};
+
+		router.events.on('routeChangeComplete', handleRouteChange);
+		return () => router.events.off('routeChangeComplete', handleRouteChange);
+	}, [router.events]);
+
+	useEffect(() => {
 		// İlerleme çubuğu için yönlendirme olaylarını dinle
-		const handleStart = (): any => NProgress.start();
-		const handleComplete = (): any => NProgress.done();
+		const handleStart = () => {
+			NProgress.start();
+		};
+		const handleComplete = () => {
+			NProgress.done();
+		};
 
 		router.events.on('routeChangeStart', handleStart);
 		router.events.on('routeChangeComplete', handleComplete);
@@ -36,7 +53,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
 			router.events.off('routeChangeComplete', handleComplete);
 			router.events.off('routeChangeError', handleComplete);
 		};
-	});
+	}, [router.events]);
 
 	return (
 		<ThemeProvider attribute="class" defaultTheme={Theme.SYSTEM}>
@@ -120,3 +137,5 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
 		</ThemeProvider>
 	);
 }
+
+export default App;
