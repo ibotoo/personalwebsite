@@ -28,12 +28,12 @@ const TimelineItem = memo(({ event, isLast }: TimelineItemProps) => (
             {!isLast && (
                 <span
                     aria-hidden="true"
-                    className="absolute top-1 left-1/2 w-0.5 h-full -ml-px bg-gray-200 dark:bg-gray-600"
+                    className="absolute top-1 left-1/2 w-0.5 h-full -ml-px bg-gray-200 dark:bg-gray-600 animate-pulse"
                 />
             )}
 
-            <div className="relative flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3 bg-gray-50 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 px-3 py-3 sm:py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-primary-500 dark:hover:border-primary-500 transition duration-300 ease-in-out">
-                <div className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-primary-500 bg-opacity-15 mx-auto sm:mx-2 rounded-full shadow-lg">
+            <div className="relative flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3 bg-gray-50 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 px-3 py-3 sm:py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-primary-500 dark:hover:border-primary-500 transition duration-300 ease-in-out transform hover:scale-105 hover:-translate-y-1 animate-fadeIn">
+                <div className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-primary-500 bg-opacity-15 mx-auto sm:mx-2 rounded-full shadow-lg animate-bounce">
                     <Icon
                         aria-hidden="true"
                         className="w-5 h-5 sm:w-6 sm:h-6 text-primary-500"

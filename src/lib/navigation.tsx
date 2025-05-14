@@ -7,20 +7,7 @@ import { NavigationItemType, Theme } from '~/types';
 import type { NavigationItem, NavigationItems } from '~/types';
 
 const staticMenuItems: Array<Array<NavigationItem>> = [
-	[
-		{
-			type: NavigationItemType.LINK,
-			icon: 'feather:home',
-			text: 'Ana Sayfa',
-			href: '/',
-		},
-		{
-			type: NavigationItemType.LINK,
-			icon: 'feather:clock',
-			text: 'Zaman Çizelgesi',
-			href: '/zaman-cizelgesi',
-		},
-	],
+	[],
 	[
 		{
 			type: NavigationItemType.LINK,
@@ -28,6 +15,7 @@ const staticMenuItems: Array<Array<NavigationItem>> = [
 			text: 'Instagram',
 			href: 'https://www.instagram.com/ibrahimsancar0/',
 			external: true,
+			className: 'text-base sm:text-lg md:text-xl'
 		},
 		{
 			type: NavigationItemType.LINK,
@@ -35,6 +23,7 @@ const staticMenuItems: Array<Array<NavigationItem>> = [
 			text: 'X',
 			href: 'https://x.com/ibrahimsancar0',
 			external: true,
+			className: 'text-base sm:text-lg md:text-xl'
 		},
 	],
 ];
