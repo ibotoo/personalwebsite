@@ -18,6 +18,12 @@ const Event = dynamic<EventProps>(
 const ACTIONS: Array<NavigationItem> = [
 	{
 		type: NavigationItemType.LINK,
+		href: '/zaman-cizelgesi',
+		icon: <Icon className="mr-3" icon="feather:clock" />,
+		text: 'Zaman Çizelgesi',
+	},
+	{
+		type: NavigationItemType.LINK,
 		external: true,
 		href: 'https://www.instagram.com/ibrahimsancar0/',
 		icon: <Icon className="mr-3" icon="feather:instagram" />,
@@ -43,7 +49,7 @@ export default function HomePage(): JSX.Element {
 	return (
 		<Layout.Default>
 			{isBirthday && <Event event={EventType.BIRTHDAY} />}
-			<div className="min-h-screen flex flex-col items-center justify-center py-6 sm:py-12 relative px-4 sm:px-8 overflow-hidden h-screen">
+			<div className="min-h-screen flex flex-col items-center justify-center py-12 sm:py-16 relative px-4 sm:px-8 overflow-hidden h-screen">
 				<div className="max-w-md sm:max-w-lg md:sm:max-w-2xl lg:sm:max-w-3xl w-full space-y-4 sm:space-y-8 text-center">
 					<Animate
 						as="h1"
@@ -80,7 +86,7 @@ export default function HomePage(): JSX.Element {
 										y: [50, 0],
 										opacity: [0, 1],
 									}}
-									className="w-full sm:w-auto"
+									className={`w-full sm:w-auto order-${index === 0 ? 'first sm:order-none' : 'none'}`}
 									key={index}
 									transition={{
 										delay: 0.1 * (index + 2) + 0.5,
