@@ -43,11 +43,10 @@ const TimelineItem = memo(({ event, isLast }: TimelineItemProps) => (
 
                 <div className="flex flex-col items-center sm:items-start text-center sm:text-left w-full">
                     <h1 className="flex flex-col sm:flex-row items-center mb-2 text-gray-500 dark:text-white text-base sm:text-lg tracking-tight font-bold">
-                        <span>{event.title}</span>
-                        <span className="flex-1 hidden sm:block" />
-                        <Pill.Date className="mt-2 sm:mt-0" small={true}>
+                        <Pill.Date className="mb-2 sm:mb-0 sm:mr-3" small={true}>
                             {format(event.date, 'PPP', { locale: tr })}
                         </Pill.Date>
+                        <span>{event.title}</span>
                     </h1>
 
                     <p className="my-2 text-gray-300 text-sm sm:text-base text-center sm:text-left">
