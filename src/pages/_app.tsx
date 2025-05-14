@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import { useEffectOnce } from 'react-use';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { Analytics } from '@vercel/analytics/react';
 
 import 'inter-ui/inter.css';
 import 'nprogress/nprogress.css';
@@ -38,13 +39,14 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
 	});
 
 	return (
-		<ThemeProvider attribute="class" defaultTheme={Theme.DARK} themes={[Theme.SYSTEM, Theme.DARK]}>
+		<ThemeProvider attribute="class" defaultTheme={Theme.SYSTEM}>
 			<Head>
 				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1" />
 				<meta name="theme-color" content="#111827" />
 			</Head>
 
 			<Component {...pageProps} />
+			<Analytics />
 
 			<style jsx global>{`
 				#nprogress .bar {
