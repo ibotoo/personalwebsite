@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const BASE_URL = 'https://nuro.dev';
+const BASE_URL = 'https://ibrahimcansancar.com';
 
 const staticPages = [
     '/',

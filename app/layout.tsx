@@ -1,8 +1,7 @@
-import type { Metadata } from 'next'
-import { SpeedInsights } from '@vercel/speed-insights/next'
+import React from 'react'
 import Schema from './components/Schema'
 
-export const metadata: Metadata = {
+export const metadata = {
     title: 'İbrahim Can Sancar | Girişimci',
     description: 'İbrahim Can Sancar - Girişimci ve Sosyal Medya Uzmanı. Web geliştirme, mobil uygulama ve yazılım çözümleri.',
     keywords: ['İbrahim Sancar', 'sosyal medya uzmanı', 'İbrahim Can Sancar', 'Girişimci', 'Yazılım Mühendisi', 'Web Geliştirme'],
@@ -33,7 +32,6 @@ export default function RootLayout({
             </head>
             <body>
                 {children}
-                <SpeedInsights />
             </body>
         </html>
     )
