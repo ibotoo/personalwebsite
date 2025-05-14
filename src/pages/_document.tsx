@@ -23,6 +23,12 @@ export default function Document(): JSX.Element {
 				<meta name="twitter:title" content="İbrahim Can Sancar" />
 				<meta name="twitter:description" content="Reklamcılık öğrencisi, girişimci ve sosyal medya uzmanı" />
 
+				{/* Mobil Görünüm İçin Meta Etiketleri */}
+				<meta name="theme-color" content="#121518" media="(prefers-color-scheme: dark)" />
+				<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+				<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
 				{/* Diğer Meta Etiketleri */}
 				<meta name="robots" content="index, follow" />
 			</Head>
