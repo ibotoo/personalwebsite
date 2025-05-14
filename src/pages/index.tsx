@@ -93,7 +93,7 @@ export default function HomePage(): JSX.Element {
 									}}>
 									<Button.Outline href={action.href} external={action.external}>
 										{action.icon}
-										<span>{action.text}</span>
+										<span className="transform hover:scale-105 transition-transform duration-200 hover:text-primary-500">{action.text}</span>
 									</Button.Outline>
 								</Animate>
 							);

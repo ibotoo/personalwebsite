@@ -7,7 +7,20 @@ import { NavigationItemType, Theme } from '~/types';
 import type { NavigationItem, NavigationItems } from '~/types';
 
 const staticMenuItems: Array<Array<NavigationItem>> = [
-	[],
+	[
+		{
+			type: NavigationItemType.LINK,
+			icon: 'feather:home',
+			text: 'Ana Sayfa',
+			href: '/',
+		},
+		{
+			type: NavigationItemType.LINK,
+			icon: 'feather:clock',
+			text: 'Zaman Çizelgesi',
+			href: '/zaman-cizelgesi',
+		},
+	],
 	[
 		{
 			type: NavigationItemType.LINK,
