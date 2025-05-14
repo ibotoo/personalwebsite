@@ -1,7 +1,6 @@
 import { createState, useState } from '@hookstate/core';
 import { Persistence } from '@hookstate/persistence';
 import { useEffect } from 'react';
-import { useMedia } from 'react-use';
 
 import type { State } from '@hookstate/core';
 

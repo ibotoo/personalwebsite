@@ -23,7 +23,7 @@ const App = ({ Component, pageProps }: AppProps): JSX.Element => {
 	const router = useRouter();
 
 	useEffect(() => {
-		const handleRouteChange = (url: string) => {
+		const handleRouteChange = (url: string): void => {
 			if (typeof window !== 'undefined' && window.gtag) {
 				window.gtag('config', 'GA_MEASUREMENT_ID', {
 					page_path: url,
@@ -37,10 +37,10 @@ const App = ({ Component, pageProps }: AppProps): JSX.Element => {
 
 	useEffect(() => {
 		// İlerleme çubuğu için yönlendirme olaylarını dinle
-		const handleStart = () => {
+		const handleStart = (): void => {
 			NProgress.start();
 		};
-		const handleComplete = () => {
+		const handleComplete = (): void => {
 			NProgress.done();
 		};
 
