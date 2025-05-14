@@ -9,7 +9,7 @@ import type { Settings } from '~/types';
 
 // Varsayılan olarak animasyonları kapalı tutuyoruz
 const DEFAULT_STATE = createState<Settings>({
-	animations: false,
+	animations: true,
 	sound: false,
 });
 

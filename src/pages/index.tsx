@@ -43,7 +43,7 @@ export default function HomePage(): JSX.Element {
 	return (
 		<Layout.Default>
 			{isBirthday && <Event event={EventType.BIRTHDAY} />}
-			<div className="min-h-screen flex flex-col items-center justify-center py-6 sm:py-12 relative px-4 sm:px-8">
+			<div className="min-h-screen flex flex-col items-center justify-center py-6 sm:py-12 relative px-4 sm:px-8 overflow-hidden">
 				<div className="max-w-md sm:max-w-lg md:sm:max-w-2xl lg:sm:max-w-3xl w-full space-y-6 sm:space-y-8 text-center">
 					<Animate
 						as="h1"
@@ -54,7 +54,7 @@ export default function HomePage(): JSX.Element {
 						className="text-gray-500 dark:text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight font-extrabold">
 						Hey <span className="inline-block origin-70 hover:(animate-wave)">👋</span>{' '}
 						Ben İbrahim, <br className="hidden sm:block" />{' '}
-						<Pill.Standard className="mt-3 sm:mt-4">Ben Bir Girişimciyim</Pill.Standard>
+						<Pill.Standard className="mt-3 sm:mt-4 text-sm sm:text-base">Ben Bir Girişimciyim</Pill.Standard>
 					</Animate>
 
 					<Animate
@@ -95,7 +95,7 @@ export default function HomePage(): JSX.Element {
 					</div>
 				</div>
 				<div className="absolute bottom-2 sm:bottom-4 w-full text-center">
-					<p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm font-medium">
+					<p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm font-medium text-center">
 						© {new Date().getFullYear() > 2025 ? new Date().getFullYear() : 2025} İbrahim Can Sancar. Tüm hakları saklıdır.
 					</p>
 				</div>

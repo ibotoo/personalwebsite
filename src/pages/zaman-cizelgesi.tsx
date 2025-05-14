@@ -32,7 +32,7 @@ const TimelineItem = memo(({ event, isLast }: TimelineItemProps) => (
                 />
             )}
 
-            <div className="relative flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 bg-gray-50 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 px-3 py-3 sm:py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-primary-500 dark:hover:border-primary-500 transition duration-300 ease-in-out">
+            <div className="relative flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3 bg-gray-50 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 px-3 py-3 sm:py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-primary-500 dark:hover:border-primary-500 transition duration-300 ease-in-out">
                 <div className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-primary-500 bg-opacity-15 mx-auto sm:mx-2 rounded-full shadow-lg">
                     <Icon
                         aria-hidden="true"
@@ -41,22 +41,22 @@ const TimelineItem = memo(({ event, isLast }: TimelineItemProps) => (
                     />
                 </div>
 
-                <div className="min-w-0 flex-1 px-2 sm:px-4 text-center sm:text-left">
-                    <h1 className="flex flex-col sm:flex-row sm:flex-wrap sm:justify-between mb-2 text-gray-500 dark:text-white text-base sm:text-lg tracking-tight font-bold">
+                <div className="flex flex-col items-center sm:items-start text-center sm:text-left w-full">
+                    <h1 className="flex flex-col sm:flex-row items-center mb-2 text-gray-500 dark:text-white text-base sm:text-lg tracking-tight font-bold">
                         <span>{event.title}</span>
                         <span className="flex-1 hidden sm:block" />
-                        <Pill.Date className="mt-2 sm:mt-0 mx-auto sm:mx-0" small={true}>
+                        <Pill.Date className="mt-2 sm:mt-0" small={true}>
                             {format(event.date, 'PPP', { locale: tr })}
                         </Pill.Date>
                     </h1>
 
-                    <p className="my-2 sm:my-2 text-gray-300 text-sm sm:text-base">
+                    <p className="my-2 text-gray-300 text-sm sm:text-base text-center sm:text-left">
                         {event.description}
                     </p>
 
                     {event.link && (
                         <Button.Outline
-                            className="mt-2 sm:mt-2 mx-auto sm:mx-0 block sm:inline-flex"
+                            className="mt-2 mx-auto sm:mx-0"
                             href={event.link.url}
                             rel="noopener noreferrer"
                             small={true}
