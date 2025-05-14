@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { memo } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { Button, Pill } from '~/components';
 import { Layout } from '~/layouts';
@@ -33,8 +34,8 @@ const TimelineItem = memo(({ event, isLast }: TimelineItemProps) => (
                 />
             )}
 
-            <div className="relative flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3 bg-gray-50 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 px-3 py-3 sm:py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-primary-500 dark:hover:border-primary-500 transition duration-300 ease-in-out transform hover:scale-105 hover:-translate-y-1 animate-fadeIn">
-                <div className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-primary-500 bg-opacity-15 mx-auto sm:mx-2 rounded-full shadow-lg animate-bounce">
+            <div className="relative flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3 bg-gray-50 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 px-6 py-4 sm:py-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-primary-500 dark:hover:border-primary-500 transition duration-300 ease-in-out transform hover:scale-105 hover:-translate-y-1 animate-fadeIn">
+                <div className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-primary-500 bg-opacity-15 mx-auto sm:mx-0 rounded-full shadow-lg animate-bounce">
                     <Icon
                         aria-hidden="true"
                         className="w-5 h-5 sm:w-6 sm:h-6 text-primary-500"
@@ -43,10 +44,9 @@ const TimelineItem = memo(({ event, isLast }: TimelineItemProps) => (
                 </div>
 
                 <div className="flex flex-col items-center sm:items-start text-center sm:text-left w-full">
-                    <h1 className="flex flex-col sm:flex-row items-center mb-2 text-gray-500 dark:text-white text-base sm:text-lg tracking-tight font-bold">
+                    <h1 className="flex flex-col sm:flex-row items-center justify-between w-full mb-2 text-gray-500 dark:text-white text-base sm:text-lg tracking-tight font-bold">
                         <span>{event.title}</span>
-                        <span className="flex-1 hidden sm:block" />
-                        <Pill.Date className="mt-2 sm:mt-0" small={true}>
+                        <Pill.Date className="mt-2 sm:mt-0 sm:ml-4">
                             {format(event.date, 'PPP', { locale: tr })}
                         </Pill.Date>
                     </h1>
@@ -115,17 +115,18 @@ export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): 
         };
     });
 
+    const router = useRouter();
+
     return (
         <Layout.Default seo={{ title: 'İbrahim Can Sancar ─ Zaman Çizelgesi' }}>
             <div className="flex flex-grow min-h-screen pt-16 pb-12">
                 <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto px-3 sm:px-6 md:px-8">
                     <div className="flex items-center justify-between mb-4 sm:mb-8 md:mb-12">
-                        <Link href="/" passHref legacyBehavior>
-                            <a className="sm:hidden flex items-center text-primary-500 hover:text-primary-600 transition-colors">
-                                <Icon icon="feather:arrow-left" className="w-5 h-5 mr-2" />
-                                <span>Ana Sayfa</span>
-                            </a>
-                        </Link>
+                        <button
+                            onClick={() => router.back()}
+                            className="sm:hidden flex items-center justify-center w-10 h-10 text-primary-500 hover:text-primary-600 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ease-in-out">
+                            <Icon icon="feather:arrow-left" className="w-5 h-5" />
+                        </button>
                         <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white flex-1 sm:flex-none">Zaman Çizelgem</h1>
                     </div>
                     <ul className="-mb-8 w-full" role="list">
