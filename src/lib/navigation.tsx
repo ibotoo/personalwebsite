@@ -14,16 +14,14 @@ const staticMenuItems: Array<Array<NavigationItem>> = [
 			icon: 'feather:instagram',
 			text: 'Instagram',
 			href: 'https://www.instagram.com/ibrahimsancar0/',
-			external: true,
-			className: 'text-base sm:text-lg md:text-xl'
+			external: true
 		},
 		{
 			type: NavigationItemType.LINK,
 			icon: 'simple-icons:x',
 			text: 'X',
 			href: 'https://x.com/ibrahimsancar0',
-			external: true,
-			className: 'text-base sm:text-lg md:text-xl'
+			external: true
 		},
 	],
 ];
