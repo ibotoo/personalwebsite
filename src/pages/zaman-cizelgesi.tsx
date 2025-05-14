@@ -121,13 +121,13 @@ export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): 
         <Layout.Default seo={{ title: 'İbrahim Can Sancar ─ Zaman Çizelgesi' }}>
             <div className="flex flex-grow min-h-screen pt-16 pb-12">
                 <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto px-3 sm:px-6 md:px-8">
-                    <div className="flex items-center justify-between mb-4 sm:mb-8 md:mb-12">
-                        <button
-                            onClick={() => router.back()}
-                            className="sm:hidden flex items-center justify-center w-10 h-10 text-primary-500 hover:text-primary-600 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ease-in-out">
-                            <Icon icon="feather:arrow-left" className="w-5 h-5" />
-                        </button>
-                        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white flex-1 sm:flex-none">Zaman Çizelgem</h1>
+                    <button
+                        onClick={() => router.back()}
+                        className="sm:hidden fixed top-4 left-4 z-10 flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
+                        <Icon icon="feather:arrow-left" className="w-5 h-5 text-primary-500" />
+                    </button>
+                    <div className="flex items-center justify-center mb-4 sm:mb-8 md:mb-12">
+                        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">Zaman Çizelgem</h1>
                     </div>
                     <ul className="-mb-8 w-full" role="list">
                         {timeline.map((event, index) => (
