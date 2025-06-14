@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Layout } from '~/layouts';
 
 interface Channel {
@@ -40,6 +40,14 @@ export default function MultiTVPage(): JSX.Element {
     const [draggedChannel, setDraggedChannel] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'grid' | 'channels' | 'add'>('grid');
+    const [currentOrigin, setCurrentOrigin] = useState('');
+
+    useEffect(() => {
+        // Client-side'da window.location.origin'i al
+        if (typeof window !== 'undefined') {
+            setCurrentOrigin(window.location.origin);
+        }
+    }, []);
 
     const displayedChannels = channels.slice(0, gridSize);
 
@@ -158,7 +166,7 @@ export default function MultiTVPage(): JSX.Element {
             rel: '0',
             fs: '1',
             enablejsapi: '1',
-            origin: window.location.origin
+            ...(currentOrigin && { origin: currentOrigin })
         });
 
         return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
@@ -166,45 +174,50 @@ export default function MultiTVPage(): JSX.Element {
 
     return (
         <Layout.Default seo={{ title: 'Multi TV - İbrahim SANCAR' }} background={false}>
-            <div className="min-h-screen py-24 px-4">
-                <div className="max-w-full mx-auto">
-                    <div className="flex justify-between items-center mb-8">
-                        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-                            📺 Multi TV
-                        </h1>
-                        <button
-                            onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
-                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200"
-                        >
-                            ⚙️ Ayarlar
-                        </button>
-                    </div>
-
-                    {/* Hızlı Kanal Ekleme */}
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg mb-8">
-                        <div className="flex gap-2">
-                            <input
-                                type="text"
-                                placeholder="YouTube video linkini buraya yapıştırın..."
-                                value={newChannelUrl}
-                                onChange={(e): void => setNewChannelUrl(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                className="flex-1 p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-lg"
-                                disabled={isLoading}
-                            />
+            <div className="min-h-screen pt-32 pb-8">
+                {/* Sticky Header */}
+                <div className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 py-4">
+                    <div className="max-w-full mx-auto">
+                        <div className="flex justify-between items-center">
+                            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                                📺 Multi TV
+                            </h1>
                             <button
-                                onClick={addChannel}
-                                disabled={isLoading || !newChannelUrl.trim()}
-                                className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg transition-colors duration-200 text-lg font-semibold"
+                                onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
+                                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200"
                             >
-                                {isLoading ? '⏳ Ekleniyor...' : '➕ Ekle'}
+                                ⚙️ Ayarlar
                             </button>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                            YouTube video linkini yapıştırın, başlık otomatik olarak çekilecek
-                        </p>
-                    </div>
 
+                        {/* Hızlı Kanal Ekleme */}
+                        <div className="mt-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    placeholder="YouTube video linkini buraya yapıştırın..."
+                                    value={newChannelUrl}
+                                    onChange={(e): void => setNewChannelUrl(e.target.value)}
+                                    onKeyPress={handleKeyPress}
+                                    className="flex-1 p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-lg"
+                                    disabled={isLoading}
+                                />
+                                <button
+                                    onClick={addChannel}
+                                    disabled={isLoading || !newChannelUrl.trim()}
+                                    className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg transition-colors duration-200 text-lg font-semibold"
+                                >
+                                    {isLoading ? '⏳' : '➕ Ekle'}
+                                </button>
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                                YouTube video linkini yapıştırın, başlık otomatik olarak çekilecek
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="max-w-full mx-auto px-4">
                     {isSettingsOpen && (
                         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
                             <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
@@ -273,7 +286,7 @@ export default function MultiTVPage(): JSX.Element {
                                         Kanal adresi bölümüne YouTube yayın adresi uzantısını girmelisiniz.
                                     </p>
                                     <div className="space-y-4">
-                                        {channels.map((channel, index) => (
+                                        {channels.map((channel) => (
                                             <div key={channel.id} className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -330,8 +343,10 @@ export default function MultiTVPage(): JSX.Element {
                                         </button>
                                         <button
                                             onClick={(): void => {
-                                                localStorage.setItem('multiTV_channels', JSON.stringify(channels));
-                                                alert('Ayarlar kaydedildi!');
+                                                if (typeof window !== 'undefined') {
+                                                    localStorage.setItem('multiTV_channels', JSON.stringify(channels));
+                                                    alert('Ayarlar kaydedildi!');
+                                                }
                                             }}
                                             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
                                         >
