@@ -227,7 +227,7 @@ export default function MultiTVPage(): JSX.Element {
         }
 
         return (
-            <div className="relative aspect-video bg-black">
+            <div className="relative aspect-video bg-black flex items-center justify-center">
                 <iframe
                     key={embedUrl} // key olarak embedUrl kullanmak iframe'in origin değiştiğinde yeniden render olmasını sağlar
                     src={embedUrl}
