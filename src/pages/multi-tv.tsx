@@ -11,7 +11,7 @@ interface Channel {
     y: number;
 }
 
-// Orijinal Multi TV projesindeki varsayılan kanallar - Güncel canlı yayın ID'leri
+// Güncel ve çalışan canlı yayın ID'leri
 const defaultChannels: Array<Channel> = [
     { id: '1', name: 'NTV', url: 'qnpfhjMhMKY', width: 800, height: 600, x: 50, y: 50 },
     { id: '2', name: 'Habertürk', url: 'RNVNlJSUFoE', width: 400, height: 300, x: 420, y: 0 },
@@ -44,7 +44,7 @@ export default function MultiTVPage(): JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'grid' | 'channels'>('grid');
     const [autoplay, setAutoplay] = useState(true);
-    const [embedMethod, setEmbedMethod] = useState<'nocookie' | 'invidious' | 'direct' | 'proxy'>('nocookie');
+    const [embedMethod, setEmbedMethod] = useState<'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct'>('piped');
     const [failedVideos, setFailedVideos] = useState<Set<string>>(new Set());
 
     useEffect(() => {
@@ -72,7 +72,7 @@ export default function MultiTVPage(): JSX.Element {
             }
 
             if (savedEmbedMethod) {
-                setEmbedMethod(savedEmbedMethod as 'nocookie' | 'invidious' | 'direct' | 'proxy');
+                setEmbedMethod(savedEmbedMethod as 'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct');
             }
         }
     }, []);
@@ -199,33 +199,34 @@ export default function MultiTVPage(): JSX.Element {
         }
     };
 
-    // Çoklu alternatif embed yöntemleri
-    const getYouTubeEmbedUrl = (videoId: string): string => {
+    // Alternatif YouTube frontend'leri ve proxy'ler
+    const getVideoEmbedUrl = (videoId: string): string => {
         const baseParams = {
             autoplay: autoplay ? '1' : '0',
             mute: '1',
             controls: '1',
             rel: '0',
-            modestbranding: '1',
-            fs: '1',
-            cc_load_policy: '0',
-            iv_load_policy: '3',
-            disablekb: '1'
+            modestbranding: '1'
         };
 
         const params = new URLSearchParams(baseParams);
 
         switch (embedMethod) {
-            case 'nocookie':
-                return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
+            case 'piped':
+                // Piped - En güvenilir alternatif
+                return `https://piped.video/embed/${videoId}?${params.toString()}`;
             case 'invidious':
-                // Invidious alternatif frontend
-                return `https://invidious.io/embed/${videoId}?${params.toString()}`;
-            case 'proxy':
-                // CORS proxy ile
-                return `https://cors-anywhere.herokuapp.com/https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+                // Invidious - Popüler alternatif
+                return `https://yewtu.be/embed/${videoId}?${params.toString()}`;
+            case 'viewtube':
+                // ViewTube - Modern alternatif
+                return `https://viewtube.io/embed/${videoId}?${params.toString()}`;
+            case 'youtube':
+                // YouTube No-Cookie
+                return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
             case 'direct':
             default:
+                // Doğrudan YouTube
                 return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
         }
     };
@@ -252,6 +253,14 @@ export default function MultiTVPage(): JSX.Element {
                             >
                                 YouTube&apos;da Aç
                             </a>
+                            <a
+                                href={`https://piped.video/watch?v=${channel.url}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors"
+                            >
+                                Piped&apos;de Aç
+                            </a>
                             <button
                                 onClick={() => {
                                     setFailedVideos(prev => {
@@ -260,7 +269,7 @@ export default function MultiTVPage(): JSX.Element {
                                         return newSet;
                                     });
                                 }}
-                                className="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors"
+                                className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors"
                             >
                                 Tekrar Dene
                             </button>
@@ -273,17 +282,30 @@ export default function MultiTVPage(): JSX.Element {
         return (
             <div className="relative aspect-video bg-black">
                 <iframe
-                    src={getYouTubeEmbedUrl(channel.url)}
+                    src={getVideoEmbedUrl(channel.url)}
                     title={channel.name}
                     className="w-full h-full"
                     frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                     allowFullScreen
                     loading="lazy"
-                    referrerPolicy="strict-origin-when-cross-origin"
                     onError={() => handleVideoError(channel.url)}
-                    sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
+                    style={{ border: 'none' }}
                 />
+                {/* Fallback için alternatif yükleyici */}
+                <div className="absolute top-2 right-2 opacity-0 hover:opacity-100 transition-opacity">
+                    <select
+                        value={embedMethod}
+                        onChange={(e) => setEmbedMethod(e.target.value as 'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct')}
+                        className="text-xs bg-black/70 text-white border-none rounded px-2 py-1"
+                    >
+                        <option value="piped">Piped</option>
+                        <option value="invidious">Invidious</option>
+                        <option value="viewtube">ViewTube</option>
+                        <option value="youtube">YouTube</option>
+                        <option value="direct">Direct</option>
+                    </select>
+                </div>
             </div>
         );
     };
@@ -303,12 +325,25 @@ export default function MultiTVPage(): JSX.Element {
                                     Aynı anda birden fazla haber kanalını izleyebileceğiniz çoklu ekran uygulaması
                                 </p>
                             </div>
-                            <button
-                                onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
-                                className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
-                            >
-                                ⚙️ Ayarlar
-                            </button>
+                            <div className="flex gap-2">
+                                <select
+                                    value={embedMethod}
+                                    onChange={(e) => setEmbedMethod(e.target.value as 'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct')}
+                                    className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 rounded-lg text-sm border border-gray-300 dark:border-gray-600"
+                                >
+                                    <option value="piped">🔧 Piped</option>
+                                    <option value="invidious">🔧 Invidious</option>
+                                    <option value="viewtube">🔧 ViewTube</option>
+                                    <option value="youtube">🔧 YouTube</option>
+                                    <option value="direct">🔧 Direct</option>
+                                </select>
+                                <button
+                                    onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
+                                    className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                                >
+                                    ⚙️ Ayarlar
+                                </button>
+                            </div>
                         </div>
 
                         {/* Hızlı Kanal Ekleme */}
@@ -379,8 +414,8 @@ export default function MultiTVPage(): JSX.Element {
                                                     key={size}
                                                     onClick={(): void => setGridSize(Number(size) as keyof typeof gridLayouts)}
                                                     className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === Number(size)
-                                                        ? 'bg-primary-500 text-white shadow-lg scale-105'
-                                                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'
+                                                            ? 'bg-primary-500 text-white shadow-lg scale-105'
+                                                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'
                                                         }`}
                                                     title={`${layout.cols}x${layout.rows} grid`}
                                                 >
@@ -398,10 +433,11 @@ export default function MultiTVPage(): JSX.Element {
                                         </h3>
                                         <div className="space-y-2">
                                             {[
-                                                { value: 'nocookie', label: 'YouTube No-Cookie (Önerilen)', desc: 'Gizlilik odaklı, çoğu engellemeyi aşar' },
-                                                { value: 'invidious', label: 'Invidious Frontend', desc: 'Alternatif YouTube frontend' },
-                                                { value: 'direct', label: 'Doğrudan YouTube', desc: 'Standart YouTube embed' },
-                                                { value: 'proxy', label: 'Proxy Üzerinden', desc: 'CORS proxy ile engelleme aşma' }
+                                                { value: 'piped', label: 'Piped (En Güvenilir)', desc: 'Açık kaynak YouTube alternatifi, en az engelleme' },
+                                                { value: 'invidious', label: 'Invidious (Popüler)', desc: 'Gizlilik odaklı YouTube frontend' },
+                                                { value: 'viewtube', label: 'ViewTube (Modern)', desc: 'Modern YouTube alternatifi' },
+                                                { value: 'youtube', label: 'YouTube No-Cookie', desc: 'YouTube resmi no-cookie versiyonu' },
+                                                { value: 'direct', label: 'Doğrudan YouTube', desc: 'Standart YouTube embed (en çok engellenir)' }
                                             ].map((method) => (
                                                 <label key={method.value} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                                                     <input
@@ -409,7 +445,7 @@ export default function MultiTVPage(): JSX.Element {
                                                         name="embedMethod"
                                                         value={method.value}
                                                         checked={embedMethod === method.value}
-                                                        onChange={(e): void => setEmbedMethod(e.target.value as 'nocookie' | 'invidious' | 'direct' | 'proxy')}
+                                                        onChange={(e): void => setEmbedMethod(e.target.value as 'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct')}
                                                         className="mt-1 text-primary-600 focus:ring-primary-500"
                                                     />
                                                     <div>
@@ -532,6 +568,7 @@ export default function MultiTVPage(): JSX.Element {
                                         {failedVideos.has(channel.url) && (
                                             <span className="text-yellow-500 text-xs">⚠️</span>
                                         )}
+                                        <span className="text-xs opacity-75">{embedMethod}</span>
                                     </div>
                                 </div>
                                 {renderVideoPlayer(channel)}
