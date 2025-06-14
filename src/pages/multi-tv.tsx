@@ -13,7 +13,7 @@ interface Channel {
 
 // Varsayılan kanallar güncelleniyor ve genişletiliyor
 const defaultChannels: Array<Channel> = [
-    { id: '1', name: 'NTV', url: '7K83N5tB2M0', width: 0, height: 0, x: 0, y: 0 },
+    { id: '1', name: 'NTV', url: 'qnpfhjMhMKY', width: 0, height: 0, x: 0, y: 0 },
     { id: '2', name: 'Habertürk', url: 'SqEFj93oQMg', width: 0, height: 0, x: 0, y: 0 },
     { id: '3', name: 'Haber Global', url: 'Cj21_y9Z1oU', width: 0, height: 0, x: 0, y: 0 },
     { id: '4', name: 'TRT Haber', url: 'g0_N0L3n5qY', width: 0, height: 0, x: 0, y: 0 },
@@ -229,7 +229,7 @@ export default function MultiTVPage(): JSX.Element {
         return (
             <div className="relative aspect-video bg-black">
                 <iframe
-                    key={embedUrl}
+                    key={embedUrl} // key olarak embedUrl kullanmak iframe'in origin değiştiğinde yeniden render olmasını sağlar
                     src={embedUrl}
                     title={channel.name}
                     className="w-full h-full"
@@ -255,7 +255,6 @@ export default function MultiTVPage(): JSX.Element {
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Aynı anda birden fazla haber kanalını izleyebileceğiniz çoklu ekran uygulaması</p>
                             </div>
                             <div className="flex gap-2 items-center">
-                                {/* Embed yöntemi seçimi tamamen kaldırıldı */}
                                 <button onClick={(): void => setIsSettingsOpen(!isSettingsOpen)} className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-xl">⚙️ Ayarlar</button>
                             </div>
                         </div>
@@ -285,11 +284,11 @@ export default function MultiTVPage(): JSX.Element {
                                 <div className="space-y-6">
                                     <div>
                                         <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Grid Boyutu Seçin</h3>
-                                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-3"> {/* Daha fazla buton sığması için md ve lg artırıldı */}
+                                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-3">
                                             {Object.keys(gridLayouts).map((sizeStr) => {
                                                 const size = Number(sizeStr);
                                                 const layout = gridLayouts[size];
-                                                if (!layout) return null; // Ekstra güvenlik
+                                                if (!layout) return null;
                                                 return (
                                                     <button
                                                         key={size}
@@ -310,7 +309,6 @@ export default function MultiTVPage(): JSX.Element {
                                             🔊 Otomatik oynatma
                                         </label>
                                     </div>
-                                    {/* Embed yöntemi seçimi tamamen kaldırıldı */}
                                 </div>
                             )}
 
@@ -345,15 +343,14 @@ export default function MultiTVPage(): JSX.Element {
                     )}
 
                     {/* Video Grid */}
-                    <div className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-2 md:gap-4 min-h-[60vh]`}> {/* gridSize geçersizse varsayılan grid class */}
+                    <div className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-2 md:gap-4 min-h-[60vh]`}>
                         {displayedChannels.map((channel) => (
-                            <div key={channel.id} className="bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl group" draggable onDragStart={(e) => handleDragStart(e, channel.id)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, channel.id)}> {/* border sınıfları kaldırıldı */}
+                            <div key={channel.id} className="bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl group" draggable onDragStart={(e) => handleDragStart(e, channel.id)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, channel.id)}>
                                 <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-2 md:px-3 py-1 text-xs md:text-sm font-medium flex justify-between items-center">
                                     <span className="truncate flex-1">{channel.name}</span>
                                     <div className="flex items-center gap-1 md:gap-2 ml-2">
                                         <span className="text-red-500 animate-pulse text-xs">● CANLI</span>
                                         {failedVideos.has(channel.url) && <span className="text-yellow-500 text-xs">⚠️</span>}
-                                        {/* Embed yöntemi göstergesi kaldırıldı */}
                                     </div>
                                 </div>
                                 {renderVideoPlayer(channel)}
