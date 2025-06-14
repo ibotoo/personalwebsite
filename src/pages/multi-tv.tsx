@@ -127,7 +127,7 @@ export default function MultiTVPage(): JSX.Element {
             const newChannel: Channel = { id: Date.now().toString(), name: title, url: videoId, width: 400, height: 300, x: 0, y: 0 };
             setChannels(prevChannels => [...prevChannels, newChannel]);
             setNewChannelUrl('');
-        } catch (error) { console.error('[MultiTV] addChannel: Error adding channel:', error); }
+        } catch (error) { console.error('Kanal eklenirken hata:', error); }
         finally { setIsLoading(false); }
     };
 
@@ -168,7 +168,7 @@ export default function MultiTVPage(): JSX.Element {
             localStorage.setItem('multiTV_channels', JSON.stringify(channels));
             localStorage.setItem('multiTV_gridSize', gridSize.toString());
             localStorage.setItem('multiTV_autoplay', autoplay.toString());
-            alert('Ayarlar kaydedildi!');
+            alert('Ayarlar başarıyla kaydedildi!');
         }
     };
 
@@ -195,7 +195,7 @@ export default function MultiTVPage(): JSX.Element {
     };
 
     const handleVideoError = (videoId: string, channelName: string): void => {
-        console.error(`[MultiTV] handleVideoError: Error loading video ID: ${videoId} (Channel: ${channelName}), Origin: ${currentOrigin || 'N/A'}`);
+        console.error(`Video yükleme hatası: ${channelName} (${videoId})`);
         setFailedVideos(prev => new Set(prev).add(videoId));
     };
 
@@ -205,7 +205,10 @@ export default function MultiTVPage(): JSX.Element {
         if (!embedUrl) {
             return (
                 <div className="w-full h-full flex items-center justify-center text-white bg-gray-700">
-                    <span>Video Kaynağı Bekleniyor... (Origin: {currentOrigin || 'henüz yok'})</span>
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+                        <span className="text-sm">Video yükleniyor...</span>
+                    </div>
                 </div>
             );
         }
@@ -216,10 +219,26 @@ export default function MultiTVPage(): JSX.Element {
                 <div className="w-full h-full flex flex-col items-center justify-center text-white bg-gray-900 p-4">
                     <div className="text-center">
                         <div className="text-4xl mb-2">⚠️</div>
-                        <p className="text-sm mb-3">Video yüklenemedi: {channel.name}</p>
+                        <p className="text-sm mb-3">Video yüklenemedi</p>
                         <div className="flex flex-col gap-2">
-                            <a href={`https://www.youtube.com/watch?v=${channel.url}`} target="_blank" rel="noopener noreferrer" className="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700">YouTube&apos;da Aç</a>
-                            <button onClick={() => setFailedVideos(prev => { const n = new Set(prev); n.delete(channel.url); return n; })} className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700">Tekrar Dene</button>
+                            <a
+                                href={`https://www.youtube.com/watch?v=${channel.url}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition-colors"
+                            >
+                                YouTube'da Aç
+                            </a>
+                            <button
+                                onClick={() => setFailedVideos(prev => {
+                                    const newSet = new Set(prev);
+                                    newSet.delete(channel.url);
+                                    return newSet;
+                                })}
+                                className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs transition-colors"
+                            >
+                                Tekrar Dene
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -243,105 +262,120 @@ export default function MultiTVPage(): JSX.Element {
 
     return (
         <Layout.Default seo={{ title: 'Multi TV - Çoklu Haber Kanalı İzleme' }} background={false}>
-            <div className="min-h-screen pt-32 pb-8">
-                {/* Sticky Header */}
-                <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 py-4">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">📺 Multi TV</h1>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Aynı anda birden fazla haber kanalını izleyebileceğiniz çoklu ekran uygulaması</p>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                                <button onClick={(): void => setIsSettingsOpen(!isSettingsOpen)} className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-xl">⚙️ Ayarlar</button>
-                            </div>
-                        </div>
-                        {/* Hızlı Kanal Ekleme */}
-                        <div className="mt-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                            <div className="flex gap-2">
-                                <input type="text" placeholder="YouTube video linkini veya ID'sini yapıştırın..." value={newChannelUrl} onChange={(e): void => setNewChannelUrl(e.target.value)} onKeyPress={handleKeyPress} className="flex-1 p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-lg focus:ring-2 focus:ring-primary-500" disabled={isLoading} />
-                                <button onClick={addChannel} disabled={isLoading || !newChannelUrl.trim()} className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg text-lg font-semibold">{isLoading ? '⏳' : '➕ Ekle'}</button>
-                            </div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Video linkini yapıştırın, başlık otomatik çekilecek.</p>
-                        </div>
-                    </div>
-                </div>
+            <div className="min-h-screen relative">
+                {/* Floating Settings Button */}
+                <button
+                    onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                    className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50 bg-primary-500 hover:bg-primary-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all"
+                >
+                    ⚙️
+                </button>
 
-                <div className="max-w-7xl mx-auto">
-                    {isSettingsOpen && (
-                        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8 border border-gray-200 dark:border-gray-700">
-                            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">⚙️ Multi TV Ayarları</h2>
-                            <div className="mb-6">
-                                <div className="flex border-b border-gray-200 dark:border-gray-600">
-                                    <button onClick={(): void => setActiveTab('grid')} className={`px-4 py-2 font-medium ${activeTab === 'grid' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📊 Kanal Sayısı</button>
-                                    <button onClick={(): void => setActiveTab('channels')} className={`px-4 py-2 font-medium ${activeTab === 'channels' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📺 Kanalları Düzenle</button>
+                {/* Settings Sidebar */}
+                {isSettingsOpen && (
+                    <>
+                        {/* Backdrop */}
+                        <div
+                            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                            onClick={() => setIsSettingsOpen(false)}
+                        />
+
+                        {/* Settings Panel */}
+                        <div className="fixed top-0 right-0 h-full w-96 bg-white dark:bg-gray-800 shadow-xl z-50 overflow-y-auto">
+                            <div className="p-6">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">⚙️ Ayarlar</h2>
+                                    <button
+                                        onClick={() => setIsSettingsOpen(false)}
+                                        className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                    >
+                                        ✕
+                                    </button>
                                 </div>
-                            </div>
 
-                            {activeTab === 'grid' && (
-                                <div className="space-y-6">
-                                    <div>
-                                        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Grid Boyutu Seçin</h3>
-                                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-3">
-                                            {Object.keys(gridLayouts).map((sizeStr) => {
-                                                const size = Number(sizeStr);
-                                                const layout = gridLayouts[size];
-                                                if (!layout) return null;
-                                                return (
-                                                    <button
-                                                        key={size}
-                                                        onClick={() => setGridSize(size)}
-                                                        className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === size ? 'bg-primary-500 text-white shadow-lg scale-105' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'}`}
-                                                        title={`${size} kanal (${layout.cols}x${layout.rows} grid)`}
-                                                    >
-                                                        <span className="text-lg">{size}</span>
-                                                        <span className="text-xs opacity-75">{layout.cols}×{layout.rows}</span>
-                                                    </button>
-                                                );
-                                            })}
+                                <div className="mb-6">
+                                    <div className="flex border-b border-gray-200 dark:border-gray-600">
+                                        <button onClick={() => setActiveTab('grid')} className={`px-4 py-2 font-medium ${activeTab === 'grid' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📊 Kanal Sayısı</button>
+                                        <button onClick={() => setActiveTab('channels')} className={`px-4 py-2 font-medium ${activeTab === 'channels' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📺 Kanalları Düzenle</button>
+                                    </div>
+                                </div>
+
+                                {activeTab === 'grid' && (
+                                    <div className="space-y-6">
+                                        <div>
+                                            <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Grid Boyutu Seçin</h3>
+                                            <div className="grid grid-cols-3 gap-3">
+                                                {Object.keys(gridLayouts).map((sizeStr) => {
+                                                    const size = Number(sizeStr);
+                                                    const layout = gridLayouts[size];
+                                                    if (!layout) return null;
+                                                    return (
+                                                        <button
+                                                            key={size}
+                                                            onClick={() => setGridSize(size)}
+                                                            className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === size ? 'bg-primary-500 text-white shadow-lg scale-105' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'}`}
+                                                            title={`${size} kanal (${layout.cols}x${layout.rows} grid)`}
+                                                        >
+                                                            <span className="text-lg">{size}</span>
+                                                            <span className="text-xs opacity-75">{layout.cols}×{layout.rows}</span>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                                                <input type="checkbox" checked={autoplay} onChange={(e) => setAutoplay(e.target.checked)} className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                                                🔊 Otomatik oynatma
+                                            </label>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-4">
-                                        <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                                            <input type="checkbox" checked={autoplay} onChange={(e): void => setAutoplay(e.target.checked)} className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
-                                            🔊 Otomatik oynatma
-                                        </label>
-                                    </div>
-                                </div>
-                            )}
+                                )}
 
-                            {activeTab === 'channels' && (
-                                <div className="space-y-6">
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Kanal adresi bölümüne YouTube video ID&apos;sini girmelisiniz. (Örnek: qnpfhjMhMKY)</p>
-                                    <div className="space-y-4 max-h-96 overflow-y-auto">
-                                        {channels.map((ch) => (
-                                            <div key={ch.id} className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
-                                                <div>
-                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">📺 Kanal Adı</label>
-                                                    <input type="text" value={ch.name} onChange={(e): void => updateChannel(ch.id, e.target.value, ch.url)} className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white focus:ring-2 focus:ring-primary-500" />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">🔗 Video ID</label>
-                                                    <input type="text" value={ch.url} onChange={(e): void => updateChannel(ch.id, ch.name, e.target.value)} className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white font-mono text-sm focus:ring-2 focus:ring-primary-500" placeholder="qnpfhjMhMKY" />
-                                                </div>
-                                                <div className="flex items-end">
-                                                    <button onClick={(): void => removeChannel(ch.id)} className="w-full md:w-auto bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">🗑️ Sil</button>
-                                                </div>
+                                {activeTab === 'channels' && (
+                                    <div className="space-y-6">
+                                        {/* Hızlı Kanal Ekleme */}
+                                        <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                            <div className="flex flex-col gap-2">
+                                                <input type="text" placeholder="YouTube video linkini veya ID'sini yapıştırın..." value={newChannelUrl} onChange={(e) => setNewChannelUrl(e.target.value)} onKeyPress={handleKeyPress} className="w-full p-3 border rounded-lg dark:bg-gray-600 dark:border-gray-500 dark:text-white text-sm focus:ring-2 focus:ring-primary-500" disabled={isLoading} />
+                                                <button onClick={addChannel} disabled={isLoading || !newChannelUrl.trim()} className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-semibold">{isLoading ? '⏳' : '➕ Ekle'}</button>
                                             </div>
-                                        ))}
-                                    </div>
-                                    <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
-                                        <button onClick={(): void => { const nc: Channel = { id: Date.now().toString(), name: 'Yeni Kanal', url: '', width: 400, height: 300, x: 0, y: 0 }; setChannels((prev: Array<Channel>): Array<Channel> => [...prev, nc]); }} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">➕ Yeni Kanal Ekle</button>
-                                        <button onClick={saveSettings} className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg">💾 Ayarları Kaydet</button>
-                                        <button onClick={(): void => setFailedVideos((): Set<string> => new Set())} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg">🔄 Hataları Temizle</button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
+                                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Video linkini yapıştırın, başlık otomatik çekilecek.</p>
+                                        </div>
 
-                    {/* Video Grid */}
-                    <div className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-2 md:gap-4 min-h-[60vh]`}>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">Kanal adresi bölümüne YouTube video ID'sini girmelisiniz. (Örnek: qnpfhjMhMKY)</p>
+                                        <div className="space-y-4 max-h-96 overflow-y-auto">
+                                            {channels.map((ch) => (
+                                                <div key={ch.id} className="grid grid-cols-1 gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">📺 Kanal Adı</label>
+                                                        <input type="text" value={ch.name} onChange={(e) => updateChannel(ch.id, e.target.value, ch.url)} className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white focus:ring-2 focus:ring-primary-500" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">🔗 Video ID</label>
+                                                        <input type="text" value={ch.url} onChange={(e) => updateChannel(ch.id, ch.name, e.target.value)} className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white font-mono text-sm focus:ring-2 focus:ring-primary-500" placeholder="qnpfhjMhMKY" />
+                                                    </div>
+                                                    <div className="flex justify-end">
+                                                        <button onClick={() => removeChannel(ch.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">🗑️ Sil</button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex flex-col gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
+                                            <button onClick={() => { const nc: Channel = { id: Date.now().toString(), name: 'Yeni Kanal', url: '', width: 400, height: 300, x: 0, y: 0 }; setChannels((prev: Array<Channel>) => [...prev, nc]); }} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">➕ Yeni Kanal Ekle</button>
+                                            <button onClick={saveSettings} className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg">💾 Ayarları Kaydet</button>
+                                            <button onClick={() => setFailedVideos(() => new Set())} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg">🔄 Hataları Temizle</button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {/* Full Screen Video Grid */}
+                <div className="h-screen w-full p-2">
+                    <div className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-1 h-full w-full`}>
                         {displayedChannels.map((channel) => (
                             <div
                                 key={channel.id}
@@ -351,11 +385,13 @@ export default function MultiTVPage(): JSX.Element {
                                 onDragOver={handleDragOver}
                                 onDrop={(e) => handleDrop(e, channel.id)}
                             >
-                                <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-2 md:px-3 py-1 text-xs md:text-sm font-medium flex justify-between items-center flex-shrink-0">
-                                    <span className="truncate flex-1">{channel.name}</span>
-                                    <div className="flex items-center gap-1 md:gap-2 ml-2">
-                                        <span className="text-red-500 animate-pulse text-xs">● CANLI</span>
-                                        {failedVideos.has(channel.url) && <span className="text-yellow-500 text-xs">⚠️</span>}
+                                <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-2 md:px-3 py-1 text-xs font-medium flex justify-between items-center flex-shrink-0">
+                                    <span className="truncate flex-1 font-semibold">{channel.name}</span>
+                                    <div className="flex items-center gap-1 ml-2">
+                                        <span className="text-red-500 animate-pulse text-xs font-bold">● CANLI</span>
+                                        {failedVideos.has(channel.url) && (
+                                            <span className="text-yellow-500 text-xs">⚠️</span>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex-grow relative w-full h-full">
@@ -364,15 +400,17 @@ export default function MultiTVPage(): JSX.Element {
                             </div>
                         ))}
                     </div>
+                </div>
 
-                    {channels.length === 0 && (
-                        <div className="text-center py-20">
+                {channels.length === 0 && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center">
                             <div className="text-6xl mb-4">📺</div>
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Henüz kanal eklenmedi</h2>
-                            <p className="text-gray-600 dark:text-gray-400">Yukarıdaki alana YouTube video linkini veya ID&apos;sini yapıştırarak başlayın</p>
+                            <p className="text-gray-600 dark:text-gray-400">Ayarlar butonuna tıklayarak kanal ekleyin</p>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </Layout.Default>
     );
