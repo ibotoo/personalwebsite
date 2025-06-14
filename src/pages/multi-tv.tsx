@@ -12,18 +12,11 @@ interface Channel {
 }
 
 const defaultChannels: Array<Channel> = [
-    { id: '1', name: 'NTV', url: 'NTVSpor', width: 400, height: 300, x: 0, y: 0 },
-    { id: '2', name: 'Habertürk', url: 'HaberturkTV', width: 400, height: 300, x: 420, y: 0 },
-    { id: '3', name: 'CNN Türk', url: 'cnnturk', width: 400, height: 300, x: 0, y: 320 },
-    { id: '4', name: 'TRT Haber', url: 'trthabertv', width: 400, height: 300, x: 420, y: 320 },
-    { id: '5', name: 'A Haber', url: 'ahabertv', width: 400, height: 300, x: 840, y: 0 },
-    { id: '6', name: 'Halk TV', url: 'HalkTV', width: 400, height: 300, x: 840, y: 320 },
-    { id: '7', name: '24 TV', url: '24tv', width: 400, height: 300, x: 0, y: 640 },
-    { id: '8', name: 'TGRT Haber', url: 'tgrthaber', width: 400, height: 300, x: 420, y: 640 },
-    { id: '9', name: 'Bloomberg HT', url: 'bloomberght', width: 400, height: 300, x: 840, y: 640 },
+    { id: '1', name: 'SÖZCÜ TV', url: 'https://www.youtube.com/embed/ztmY_cCtUl0', width: 800, height: 600, x: 50, y: 50 },
 ];
 
 const gridLayouts = {
+    1: 'grid-cols-1 grid-rows-1',
     4: 'grid-cols-2 grid-rows-2',
     6: 'grid-cols-3 grid-rows-2',
     9: 'grid-cols-3 grid-rows-3',
@@ -32,7 +25,7 @@ const gridLayouts = {
 
 export default function MultiTVPage(): JSX.Element {
     const [channels, setChannels] = useState<Array<Channel>>(defaultChannels);
-    const [gridSize, setGridSize] = useState<keyof typeof gridLayouts>(4);
+    const [gridSize, setGridSize] = useState<keyof typeof gridLayouts>(1);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [newChannelName, setNewChannelName] = useState('');
     const [newChannelUrl, setNewChannelUrl] = useState('');
@@ -59,6 +52,11 @@ export default function MultiTVPage(): JSX.Element {
     };
 
     const convertToEmbedUrl = (url: string): string => {
+        // Eğer tam embed URL'i ise direkt kullan
+        if (url.includes('youtube.com/embed/')) {
+            return url;
+        }
+
         // YouTube kanal adı ise direkt kullan
         if (!url.includes('http') && !url.includes('.')) {
             return url;
@@ -66,11 +64,11 @@ export default function MultiTVPage(): JSX.Element {
 
         if (url.includes('youtube.com/watch?v=')) {
             const videoId = url.split('v=')[1]?.split('&')[0];
-            return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+            return `https://www.youtube.com/embed/${videoId}`;
         }
         if (url.includes('youtu.be/')) {
             const videoId = url.split('youtu.be/')[1]?.split('?')[0];
-            return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+            return `https://www.youtube.com/embed/${videoId}`;
         }
         if (url.includes('youtube.com/channel/')) {
             const channelId = url.split('channel/')[1]?.split('/')[0];
@@ -193,7 +191,7 @@ export default function MultiTVPage(): JSX.Element {
                                     />
                                     <input
                                         type="text"
-                                        placeholder="YouTube Kanal Adı (örn: trthabertv)"
+                                        placeholder="YouTube URL (embed kodu veya video linki)"
                                         value={newChannelUrl}
                                         onChange={(e): void => setNewChannelUrl(e.target.value)}
                                         className="flex-1 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
@@ -206,7 +204,7 @@ export default function MultiTVPage(): JSX.Element {
                                     </button>
                                 </div>
                                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    YouTube kanal adını giriniz (örn: trthabertv, NTVSpor, HaberturkTV)
+                                    YouTube embed URL&apos;ini veya video linkini girebilirsiniz
                                 </p>
                             </div>
 
