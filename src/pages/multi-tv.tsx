@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Layout } from '~/layouts';
 
 interface Channel {
@@ -12,7 +12,7 @@ interface Channel {
 }
 
 const defaultChannels: Array<Channel> = [
-    { id: '1', name: 'SÖZCÜ TV', url: 'https://www.youtube.com/embed/ztmY_cCtUl0', width: 800, height: 600, x: 50, y: 50 },
+    { id: '1', name: 'SÖZCÜ TV Canlı Yayını', url: 'https://www.youtube-nocookie.com/embed/ztmY_cCtUl0?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0&fs=1', width: 800, height: 600, x: 50, y: 50 },
 ];
 
 const gridLayouts = {
@@ -27,54 +27,95 @@ export default function MultiTVPage(): JSX.Element {
     const [channels, setChannels] = useState<Array<Channel>>(defaultChannels);
     const [gridSize, setGridSize] = useState<keyof typeof gridLayouts>(1);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const [newChannelName, setNewChannelName] = useState('');
     const [newChannelUrl, setNewChannelUrl] = useState('');
     const [draggedChannel, setDraggedChannel] = useState<string | null>(null);
-    const [isGridMode, setIsGridMode] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const displayedChannels = channels.slice(0, gridSize);
 
-    const addChannel = (): void => {
-        if (newChannelName && newChannelUrl) {
+    const getVideoTitle = async (url: string): Promise<string> => {
+        try {
+            let videoId = '';
+
+            if (url.includes('youtube.com/watch?v=')) {
+                videoId = url.split('v=')[1]?.split('&')[0] || '';
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1]?.split('?')[0] || '';
+            } else if (url.includes('youtube.com/embed/')) {
+                videoId = url.split('embed/')[1]?.split('?')[0] || '';
+            }
+
+            if (!videoId) return 'Yeni Kanal';
+
+            // YouTube oembed API kullanarak başlık al
+            const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+            const data = await response.json();
+            return data.title || 'YouTube Video';
+        } catch (error) {
+            console.error('Başlık alınamadı:', error);
+            return 'YouTube Video';
+        }
+    };
+
+    const addChannel = async (): Promise<void> => {
+        if (!newChannelUrl.trim()) return;
+
+        setIsLoading(true);
+
+        try {
+            const title = await getVideoTitle(newChannelUrl);
+            const embedUrl = convertToEmbedUrl(newChannelUrl);
+
             const newChannel: Channel = {
                 id: Date.now().toString(),
-                name: newChannelName,
-                url: convertToEmbedUrl(newChannelUrl),
+                name: title,
+                url: embedUrl,
                 width: 400,
                 height: 300,
                 x: Math.random() * 200,
                 y: Math.random() * 200,
             };
+
             setChannels([...channels, newChannel]);
-            setNewChannelName('');
             setNewChannelUrl('');
+        } catch (error) {
+            console.error('Kanal eklenirken hata:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const convertToEmbedUrl = (url: string): string => {
-        // Eğer tam embed URL'i ise direkt kullan
-        if (url.includes('youtube.com/embed/')) {
-            return url;
-        }
-
-        // YouTube kanal adı ise direkt kullan
-        if (!url.includes('http') && !url.includes('.')) {
-            return url;
-        }
+        // YouTube nocookie domain kullan (engellenme sorununu çözer)
+        let embedUrl = '';
 
         if (url.includes('youtube.com/watch?v=')) {
             const videoId = url.split('v=')[1]?.split('&')[0];
-            return `https://www.youtube.com/embed/${videoId}`;
-        }
-        if (url.includes('youtu.be/')) {
+            embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`;
+        } else if (url.includes('youtu.be/')) {
             const videoId = url.split('youtu.be/')[1]?.split('?')[0];
-            return `https://www.youtube.com/embed/${videoId}`;
+            embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`;
+        } else if (url.includes('youtube.com/embed/')) {
+            // Mevcut embed URL'ini nocookie'ye çevir
+            embedUrl = url.replace('youtube.com', 'youtube-nocookie.com');
+        } else {
+            // Varsayılan olarak nocookie domain kullan
+            embedUrl = `https://www.youtube-nocookie.com/embed/${url}`;
         }
-        if (url.includes('youtube.com/channel/')) {
-            const channelId = url.split('channel/')[1]?.split('/')[0];
-            return channelId;
-        }
-        return url;
+
+        // Engellenme sorununu çözen parametreler ekle
+        const params = new URLSearchParams({
+            autoplay: '1',
+            mute: '1',
+            controls: '1',
+            modestbranding: '1',
+            rel: '0',
+            fs: '1',
+            enablejsapi: '1',
+            origin: window.location.origin
+        });
+
+        return `${embedUrl}?${params.toString()}`;
     };
 
     const removeChannel = (id: string): void => {
@@ -107,24 +148,10 @@ export default function MultiTVPage(): JSX.Element {
         setDraggedChannel(null);
     };
 
-    const updateChannelPosition = (id: string, x: number, y: number): void => {
-        setChannels(prev => prev.map(channel =>
-            channel.id === id ? { ...channel, x, y } : channel
-        ));
-    };
-
-    const updateChannelSize = (id: string, width: number, height: number): void => {
-        setChannels(prev => prev.map(channel =>
-            channel.id === id ? { ...channel, width, height } : channel
-        ));
-    };
-
-    const getYouTubeEmbedUrl = (channel: Channel): string => {
-        if (channel.url.startsWith('http')) {
-            return channel.url;
+    const handleKeyPress = (e: React.KeyboardEvent): void => {
+        if (e.key === 'Enter') {
+            addChannel();
         }
-        // YouTube kanal adını kullanarak embed URL oluştur
-        return `https://www.youtube.com/embed/live_stream?channel=${channel.url}&autoplay=1&mute=1`;
     };
 
     return (
@@ -135,20 +162,37 @@ export default function MultiTVPage(): JSX.Element {
                         <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
                             Multi TV
                         </h1>
-                        <div className="flex gap-4">
+                        <button
+                            onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                        >
+                            ⚙️ Ayarlar
+                        </button>
+                    </div>
+
+                    {/* Hızlı Kanal Ekleme */}
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg mb-8">
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                placeholder="YouTube video linkini buraya yapıştırın..."
+                                value={newChannelUrl}
+                                onChange={(e): void => setNewChannelUrl(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                className="flex-1 p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-lg"
+                                disabled={isLoading}
+                            />
                             <button
-                                onClick={(): void => setIsGridMode(!isGridMode)}
-                                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                                onClick={addChannel}
+                                disabled={isLoading || !newChannelUrl.trim()}
+                                className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg transition-colors duration-200 text-lg font-semibold"
                             >
-                                {isGridMode ? '🎯 Serbest Mod' : '📱 Grid Mod'}
-                            </button>
-                            <button
-                                onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
-                                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200"
-                            >
-                                ⚙️ Ayarlar
+                                {isLoading ? '⏳ Ekleniyor...' : '➕ Ekle'}
                             </button>
                         </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                            YouTube video linkini yapıştırın, başlık otomatik olarak çekilecek
+                        </p>
                     </div>
 
                     {isSettingsOpen && (
@@ -159,75 +203,48 @@ export default function MultiTVPage(): JSX.Element {
 
                             <div className="mb-6">
                                 <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-                                    Kanal Sayısı (Grid Modunda)
+                                    Ekran Düzeni
                                 </h3>
                                 <div className="flex flex-wrap gap-2">
                                     {Object.keys(gridLayouts).map((size) => (
                                         <button
                                             key={size}
                                             onClick={(): void => setGridSize(Number(size) as keyof typeof gridLayouts)}
-                                            className={`px-3 py-1 rounded ${gridSize === Number(size)
+                                            className={`px-4 py-2 rounded-lg ${gridSize === Number(size)
                                                 ? 'bg-blue-500 text-white'
                                                 : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                                                 }`}
                                         >
-                                            {size}
+                                            {size} Kanal
                                         </button>
                                     ))}
                                 </div>
                             </div>
 
-                            <div className="mb-6">
-                                <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-                                    Yeni Kanal Ekle
-                                </h3>
-                                <div className="flex gap-2 mb-2">
-                                    <input
-                                        type="text"
-                                        placeholder="Kanal Adı"
-                                        value={newChannelName}
-                                        onChange={(e): void => setNewChannelName(e.target.value)}
-                                        className="flex-1 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="YouTube URL (embed kodu veya video linki)"
-                                        value={newChannelUrl}
-                                        onChange={(e): void => setNewChannelUrl(e.target.value)}
-                                        className="flex-1 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                    />
-                                    <button
-                                        onClick={addChannel}
-                                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-                                    >
-                                        Ekle
-                                    </button>
-                                </div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    YouTube embed URL&apos;ini veya video linkini girebilirsiniz
-                                </p>
-                            </div>
-
                             <div>
                                 <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-                                    Aktif Kanallar
+                                    Aktif Kanallar ({channels.length})
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                                     {channels.map((channel) => (
                                         <div
                                             key={channel.id}
-                                            className="flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded"
+                                            className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg"
                                             draggable
                                             onDragStart={(e): void => handleDragStart(e, channel.id)}
                                             onDragOver={handleDragOver}
                                             onDrop={(e): void => handleDrop(e, channel.id)}
                                         >
-                                            <span className="text-gray-900 dark:text-white cursor-move">
-                                                🎥 {channel.name}
-                                            </span>
+                                            <div className="flex items-center gap-2 cursor-move">
+                                                <span className="text-xl">🎥</span>
+                                                <span className="text-gray-900 dark:text-white font-medium">
+                                                    {channel.name}
+                                                </span>
+                                            </div>
                                             <button
                                                 onClick={(): void => removeChannel(channel.id)}
-                                                className="text-red-500 hover:text-red-700"
+                                                className="text-red-500 hover:text-red-700 p-1 rounded"
+                                                title="Kanalı sil"
                                             >
                                                 🗑️
                                             </button>
@@ -238,73 +255,53 @@ export default function MultiTVPage(): JSX.Element {
                         </div>
                     )}
 
-                    {isGridMode ? (
-                        <div className={`grid ${gridLayouts[gridSize]} gap-4 h-screen max-h-[80vh]`}>
-                            {displayedChannels.map((channel) => (
-                                <div
-                                    key={channel.id}
-                                    className="bg-black rounded-lg overflow-hidden shadow-lg cursor-move"
-                                    draggable
-                                    onDragStart={(e): void => handleDragStart(e, channel.id)}
-                                    onDragOver={handleDragOver}
-                                    onDrop={(e): void => handleDrop(e, channel.id)}
-                                >
-                                    <div className="bg-gray-800 text-white px-3 py-1 text-sm font-medium flex justify-between">
-                                        <span>{channel.name}</span>
-                                        <span className="text-red-500">● CANLI</span>
+                    {/* Video Grid */}
+                    <div className={`grid ${gridLayouts[gridSize]} gap-4 h-screen max-h-[80vh]`}>
+                        {displayedChannels.map((channel) => (
+                            <div
+                                key={channel.id}
+                                className="bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                                draggable
+                                onDragStart={(e): void => handleDragStart(e, channel.id)}
+                                onDragOver={handleDragOver}
+                                onDrop={(e): void => handleDrop(e, channel.id)}
+                            >
+                                <div className="bg-gray-800 text-white px-3 py-2 text-sm font-medium flex justify-between items-center">
+                                    <span className="truncate">{channel.name}</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-red-500 animate-pulse">● CANLI</span>
+                                        <button
+                                            onClick={(): void => removeChannel(channel.id)}
+                                            className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            title="Kanalı sil"
+                                        >
+                                            ✕
+                                        </button>
                                     </div>
-                                    <iframe
-                                        src={getYouTubeEmbedUrl(channel)}
-                                        title={channel.name}
-                                        className="w-full h-full"
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        allowFullScreen
-                                        referrerPolicy="strict-origin-when-cross-origin"
-                                    />
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="relative w-full h-screen bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden">
-                            {channels.map((channel) => (
-                                <div
-                                    key={channel.id}
-                                    className="absolute bg-black rounded-lg overflow-hidden shadow-lg resize cursor-move"
-                                    style={{
-                                        left: channel.x,
-                                        top: channel.y,
-                                        width: channel.width,
-                                        height: channel.height,
-                                        minWidth: '200px',
-                                        minHeight: '150px',
-                                    }}
-                                    draggable
-                                    onDragStart={(e): void => handleDragStart(e, channel.id)}
-                                >
-                                    <div className="bg-gray-800 text-white px-3 py-1 text-xs font-medium flex justify-between cursor-move">
-                                        <span>{channel.name}</span>
-                                        <div className="flex gap-2">
-                                            <span className="text-red-500">● CANLI</span>
-                                            <button
-                                                onClick={(): void => removeChannel(channel.id)}
-                                                className="text-red-500 hover:text-red-700"
-                                            >
-                                                ✕
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <iframe
-                                        src={getYouTubeEmbedUrl(channel)}
-                                        title={channel.name}
-                                        className="w-full h-full"
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        allowFullScreen
-                                        referrerPolicy="strict-origin-when-cross-origin"
-                                    />
-                                </div>
-                            ))}
+                                <iframe
+                                    src={channel.url}
+                                    title={channel.name}
+                                    className="w-full h-full"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                                    allowFullScreen
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                    loading="lazy"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {channels.length === 0 && (
+                        <div className="text-center py-20">
+                            <div className="text-6xl mb-4">📺</div>
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                                Henüz kanal eklenmedi
+                            </h2>
+                            <p className="text-gray-600 dark:text-gray-400">
+                                Yukarıdaki alana YouTube video linkini yapıştırarak başlayın
+                            </p>
                         </div>
                     )}
                 </div>
