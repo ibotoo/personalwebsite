@@ -265,7 +265,7 @@ export default function MultiTVPage(): JSX.Element {
                         rel="noopener noreferrer"
                         className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
                     >
-                        YouTube'da Aç
+                        YouTube&apos;da Aç
                     </a>
                 </div>
             </div>
@@ -421,7 +421,7 @@ export default function MultiTVPage(): JSX.Element {
                             {activeTab === 'channels' && (
                                 <div className="space-y-6">
                                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        Kanal adresi bölümüne YouTube video ID'sini girmelisiniz. (Örnek: qnpfhjMhMKY)
+                                        Kanal adresi bölümüne YouTube video ID&apos;sini girmelisiniz. (Örnek: qnpfhjMhMKY)
                                     </p>
                                     <div className="space-y-4 max-h-96 overflow-y-auto">
                                         {channels.map((channel) => (
