@@ -219,8 +219,8 @@ export default function MultiTVPage(): JSX.Element {
         <Layout.Default seo={{ title: 'Multi TV - Çoklu Haber Kanalı İzleme' }} background={false}>
             <div className="min-h-screen pt-32 pb-8">
                 {/* Sticky Header */}
-                <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 px-4 py-4">
-                    <div className="max-w-full mx-auto">
+                <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 py-4">
+                    <div className="max-w-7xl mx-auto">
                         <div className="flex justify-between items-center">
                             <div>
                                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">📺 Multi TV</h1>
@@ -242,7 +242,7 @@ export default function MultiTVPage(): JSX.Element {
                     </div>
                 </div>
 
-                <div className="max-w-full mx-auto px-4">
+                <div className="max-w-7xl mx-auto">
                     {isSettingsOpen && (
                         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8 border border-gray-200 dark:border-gray-700">
                             <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">⚙️ Multi TV Ayarları</h2>
