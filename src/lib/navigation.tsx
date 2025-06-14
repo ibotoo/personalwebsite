@@ -21,6 +21,12 @@ const staticMenuItems: Array<Array<NavigationItem>> = [
 			text: 'Zaman Çizelgesi',
 			href: '/zaman-cizelgesi',
 		},
+		{
+			type: NavigationItemType.LINK,
+			icon: 'feather:tv',
+			text: 'Multi TV',
+			href: '/multi-tv',
+		},
 	],
 	[
 		{
