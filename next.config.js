@@ -4,13 +4,19 @@ const { withAxiom } = require('next-axiom');
 const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline' cdn.splitbee.io data: blob:;
+  script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' cdn.splitbee.io data: blob:;
   style-src 'self' 'unsafe-inline' *.googleapis.com;
-  img-src * blob: data:;
-  font-src 'self';
+  style-src-elem 'self' 'unsafe-inline' *.googleapis.com;
+  style-src-attr 'self' 'unsafe-inline';
+  img-src 'self' data: blob: cdn.discordapp.com raw.githubusercontent.com i.scdn.co cdn-cf-east.streamable.com source.unsplash.com images.unsplash.com github.com avatars.githubusercontent.com;
+  font-src 'self' data: https://fonts.gstatic.com;
   connect-src *;
-  media-src 'none';
-  frame-src 'self' *.google.com https://www.youtube-nocookie.com streamable.com;
-  worker-src 'self' 'unsafe-inline' blob:;
+  media-src 'self' blob: data: https://www.youtube-nocookie.com *.youtube.com;
+  frame-src 'self' https://www.youtube-nocookie.com *.youtube.com streamable.com *.google.com;
+  worker-src 'self' blob:;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
 `;
 
 /**
