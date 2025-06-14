@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import { useTheme } from 'next-themes';
-
 import { usePersistantState } from '~/lib';
 
 import { NavigationItemType } from '~/types';
@@ -52,7 +49,6 @@ export function useNavigation(): {
 } {
 	const state = usePersistantState();
 	const { animations: background, sound } = state.get();
-	const { theme } = useTheme();
 
 	const menuItems: NavigationItems = [
 		...staticMenuItems,

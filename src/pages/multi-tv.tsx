@@ -8,7 +8,7 @@ interface Channel {
     url: string;
 }
 
-const defaultChannels: Channel[] = [
+const defaultChannels: Array<Channel> = [
     { id: '1', name: 'NTV', url: 'https://www.youtube.com/embed/live_stream?channel=UChKJJ-dpktKbP3Y-Yq2AE6g&autoplay=1&mute=1' },
     { id: '2', name: 'Habertürk', url: 'https://www.youtube.com/embed/live_stream?channel=UCGsXmb2FbuYJ7WFIGx3U8XQ&autoplay=1&mute=1' },
     { id: '3', name: 'Haber Global', url: 'https://www.youtube.com/embed/live_stream?channel=UC1LTnfTnrKBKPeBAT9cKx7Q&autoplay=1&mute=1' },
@@ -30,7 +30,7 @@ const gridLayouts = {
 };
 
 export default function MultiTVPage(): JSX.Element {
-    const [channels, setChannels] = useState<Channel[]>(defaultChannels);
+    const [channels, setChannels] = useState<Array<Channel>>(defaultChannels);
     const [gridSize, setGridSize] = useState<keyof typeof gridLayouts>(4);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [newChannelName, setNewChannelName] = useState('');
@@ -38,7 +38,7 @@ export default function MultiTVPage(): JSX.Element {
 
     const displayedChannels = channels.slice(0, gridSize);
 
-    const addChannel = () => {
+    const addChannel = (): void => {
         if (newChannelName && newChannelUrl) {
             const newChannel: Channel = {
                 id: Date.now().toString(),
@@ -67,7 +67,7 @@ export default function MultiTVPage(): JSX.Element {
         return url.includes('embed') ? url : `https://www.youtube.com/embed/${url}?autoplay=1&mute=1`;
     };
 
-    const removeChannel = (id: string) => {
+    const removeChannel = (id: string): void => {
         setChannels(channels.filter(channel => channel.id !== id));
     };
 
@@ -87,7 +87,7 @@ export default function MultiTVPage(): JSX.Element {
                                 Multi TV
                             </h1>
                             <button
-                                onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                                onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
                                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200"
                             >
                                 ⚙️ Ayarlar
@@ -108,7 +108,7 @@ export default function MultiTVPage(): JSX.Element {
                                         {Object.keys(gridLayouts).map((size) => (
                                             <button
                                                 key={size}
-                                                onClick={() => setGridSize(Number(size) as keyof typeof gridLayouts)}
+                                                onClick={(): void => setGridSize(Number(size) as keyof typeof gridLayouts)}
                                                 className={`px-3 py-1 rounded ${gridSize === Number(size)
                                                     ? 'bg-blue-500 text-white'
                                                     : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
@@ -129,14 +129,14 @@ export default function MultiTVPage(): JSX.Element {
                                             type="text"
                                             placeholder="Kanal Adı"
                                             value={newChannelName}
-                                            onChange={(e) => setNewChannelName(e.target.value)}
+                                            onChange={(e): void => setNewChannelName(e.target.value)}
                                             className="flex-1 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         />
                                         <input
                                             type="text"
                                             placeholder="YouTube URL veya Kanal ID"
                                             value={newChannelUrl}
-                                            onChange={(e) => setNewChannelUrl(e.target.value)}
+                                            onChange={(e): void => setNewChannelUrl(e.target.value)}
                                             className="flex-1 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         />
                                         <button
@@ -147,7 +147,7 @@ export default function MultiTVPage(): JSX.Element {
                                         </button>
                                     </div>
                                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        YouTube video linkini, kanal linkini veya video ID'sini girebilirsiniz
+                                        YouTube video linkini, kanal linkini veya video ID&apos;sini girebilirsiniz
                                     </p>
                                 </div>
 
@@ -163,7 +163,7 @@ export default function MultiTVPage(): JSX.Element {
                                             >
                                                 <span className="text-gray-900 dark:text-white">{channel.name}</span>
                                                 <button
-                                                    onClick={() => removeChannel(channel.id)}
+                                                    onClick={(): void => removeChannel(channel.id)}
                                                     className="text-red-500 hover:text-red-700"
                                                 >
                                                     🗑️
