@@ -204,7 +204,7 @@ export default function MultiTVPage(): JSX.Element {
 
         if (!embedUrl) {
             return (
-                <div className="relative aspect-video bg-gray-700 flex items-center justify-center text-white">
+                <div className="w-full h-full flex items-center justify-center text-white bg-gray-700">
                     <span>Video Kaynağı Bekleniyor... (Origin: {currentOrigin || 'henüz yok'})</span>
                 </div>
             );
@@ -213,7 +213,7 @@ export default function MultiTVPage(): JSX.Element {
         const isVideoFailed = failedVideos.has(channel.url);
         if (isVideoFailed) {
             return (
-                <div className="relative aspect-video bg-gray-900 flex flex-col items-center justify-center text-white p-4">
+                <div className="w-full h-full flex flex-col items-center justify-center text-white bg-gray-900 p-4">
                     <div className="text-center">
                         <div className="text-4xl mb-2">⚠️</div>
                         <p className="text-sm mb-3">Video yüklenemedi: {channel.name}</p>
@@ -227,19 +227,17 @@ export default function MultiTVPage(): JSX.Element {
         }
 
         return (
-            <div className="relative aspect-video bg-black flex items-center justify-center">
-                <iframe
-                    key={embedUrl} // key olarak embedUrl kullanmak iframe'in origin değiştiğinde yeniden render olmasını sağlar
-                    src={embedUrl}
-                    title={channel.name}
-                    className="w-full h-full"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                    allowFullScreen
-                    loading="lazy"
-                    onError={() => handleVideoError(channel.url, channel.name)}
-                />
-            </div>
+            <iframe
+                key={embedUrl} // key olarak embedUrl kullanmak iframe'in origin değiştiğinde yeniden render olmasını sağlar
+                src={embedUrl}
+                title={channel.name}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allowFullScreen
+                loading="lazy"
+                onError={() => handleVideoError(channel.url, channel.name)}
+            />
         );
     };
 
@@ -345,15 +343,24 @@ export default function MultiTVPage(): JSX.Element {
                     {/* Video Grid */}
                     <div className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-2 md:gap-4 min-h-[60vh]`}>
                         {displayedChannels.map((channel) => (
-                            <div key={channel.id} className="bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl group" draggable onDragStart={(e) => handleDragStart(e, channel.id)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, channel.id)}>
-                                <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-2 md:px-3 py-1 text-xs md:text-sm font-medium flex justify-between items-center">
+                            <div
+                                key={channel.id}
+                                className="rounded-lg overflow-hidden shadow-lg group aspect-video flex flex-col bg-black"
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, channel.id)}
+                                onDragOver={handleDragOver}
+                                onDrop={(e) => handleDrop(e, channel.id)}
+                            >
+                                <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-2 md:px-3 py-1 text-xs md:text-sm font-medium flex justify-between items-center flex-shrink-0">
                                     <span className="truncate flex-1">{channel.name}</span>
                                     <div className="flex items-center gap-1 md:gap-2 ml-2">
                                         <span className="text-red-500 animate-pulse text-xs">● CANLI</span>
                                         {failedVideos.has(channel.url) && <span className="text-yellow-500 text-xs">⚠️</span>}
                                     </div>
                                 </div>
-                                {renderVideoPlayer(channel)}
+                                <div className="flex-grow relative w-full h-full">
+                                    {renderVideoPlayer(channel)}
+                                </div>
                             </div>
                         ))}
                     </div>
