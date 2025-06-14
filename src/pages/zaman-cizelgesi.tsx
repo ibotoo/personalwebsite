@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import fs from 'fs';
 import path from 'path';
 import { memo } from 'react';
-import Link from 'next/link';
+
 import { useRouter } from 'next/router';
 
 import { Button, Pill } from '~/components';
@@ -97,7 +97,7 @@ export const getStaticProps: GetStaticProps<TimelineProps> = async () => {
 };
 
 export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): JSX.Element {
-    const timeline = rawTimeline.map((event) => {
+    const timeline = rawTimeline.map((event): TimelineEvent & { date: Date } => {
         // Son giriş için güncel tarihi kullan
         if (event.date === "current") {
             const today = new Date();
@@ -122,7 +122,7 @@ export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): 
             <div className="flex flex-grow min-h-screen pt-16 pb-12">
                 <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto px-3 sm:px-6 md:px-8">
                     <button
-                        onClick={() => router.back()}
+                        onClick={(): void => router.back()}
                         className="fixed top-4 left-4 z-50 flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
                         <Icon icon="feather:arrow-left" className="w-5 h-5 text-primary-500" />
                     </button>

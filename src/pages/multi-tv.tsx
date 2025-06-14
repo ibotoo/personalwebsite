@@ -11,68 +11,69 @@ interface Channel {
     y: number;
 }
 
-// Güncel ve çalışan canlı yayın ID'leri
+// Varsayılan kanallar (Test videosu ve NTV ile sınırlandırıldı)
 const defaultChannels: Array<Channel> = [
-    { id: '1', name: 'NTV', url: 'qnpfhjMhMKY', width: 800, height: 600, x: 50, y: 50 },
-    { id: '2', name: 'Habertürk', url: 'RNVNlJSUFoE', width: 400, height: 300, x: 420, y: 0 },
-    { id: '3', name: 'Haber Global', url: '6BX-NUzBSp8', width: 400, height: 300, x: 0, y: 320 },
-    { id: '4', name: 'TRT Haber', url: 'Fxzjb_17wP4', width: 400, height: 300, x: 420, y: 320 },
-    { id: '5', name: 'Halk TV', url: 'ZSWPj9szKb8', width: 400, height: 300, x: 840, y: 0 },
-    { id: '6', name: 'TGRT Haber', url: 'YEiKwOVmzrM', width: 400, height: 300, x: 840, y: 320 },
-    { id: '7', name: '24 TV', url: 'Ot0wdO02o8M', width: 400, height: 300, x: 0, y: 640 },
-    { id: '8', name: 'KRT TV', url: 'L4_qGUvKmWs', width: 400, height: 300, x: 420, y: 640 },
-    { id: '9', name: 'TELE 1', url: 'MzJLaOOXGpE', width: 400, height: 300, x: 840, y: 640 },
+    { id: 'test-1', name: 'Test Video (Me at the zoo)', url: 'jNQXAC9IVRw', width: 400, height: 300, x: 0, y: 0 },
+    { id: '1', name: 'NTV', url: '7K83N5tB2M0', width: 800, height: 600, x: 50, y: 50 },
+    // Diğer kanallar test için kaldırıldı, gerekirse eklenebilir.
 ];
 
-// 16:9 ekranlar için optimize edilmiş grid düzenleri
 const gridLayouts = {
     4: { cols: 2, rows: 2, class: 'grid-cols-2 grid-rows-2' },
-    6: { cols: 3, rows: 2, class: 'grid-cols-3 grid-rows-2' },
-    9: { cols: 3, rows: 3, class: 'grid-cols-3 grid-rows-3' },
-    12: { cols: 4, rows: 3, class: 'grid-cols-4 grid-rows-3' },
-    16: { cols: 4, rows: 4, class: 'grid-cols-4 grid-rows-4' },
-    20: { cols: 5, rows: 4, class: 'grid-cols-5 grid-rows-4' },
-    25: { cols: 5, rows: 5, class: 'grid-cols-5 grid-rows-5' },
+    // Test için sadece 2x2 grid bırakıldı, diğerleri eklenebilir.
+    // 6: { cols: 3, rows: 2, class: 'grid-cols-3 grid-rows-2' },
 };
 
 export default function MultiTVPage(): JSX.Element {
     const [channels, setChannels] = useState<Array<Channel>>(defaultChannels);
-    const [gridSize, setGridSize] = useState<keyof typeof gridLayouts>(9);
+    const [gridSize, setGridSize] = useState<keyof typeof gridLayouts>(4);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [newChannelUrl, setNewChannelUrl] = useState('');
     const [draggedChannel, setDraggedChannel] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'grid' | 'channels'>('grid');
     const [autoplay, setAutoplay] = useState(true);
-    const [embedMethod, setEmbedMethod] = useState<'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct'>('piped');
     const [failedVideos, setFailedVideos] = useState<Set<string>>(new Set());
+    const [currentOrigin, setCurrentOrigin] = useState<string | null>(null);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            // Kaydedilmiş ayarları yükle
+            const origin = window.location.origin;
+            setCurrentOrigin(origin);
+            console.log(`[MultiTV] useEffect: Origin set to: ${origin}`);
+
             const savedChannels = localStorage.getItem('multiTV_channels');
             const savedGridSize = localStorage.getItem('multiTV_gridSize');
             const savedAutoplay = localStorage.getItem('multiTV_autoplay');
-            const savedEmbedMethod = localStorage.getItem('multiTV_embedMethod');
 
             if (savedChannels) {
                 try {
-                    setChannels(JSON.parse(savedChannels));
+                    const parsedChannels = JSON.parse(savedChannels);
+                    if (Array.isArray(parsedChannels) && parsedChannels.length > 0) {
+                        setChannels(parsedChannels);
+                        console.log('[MultiTV] useEffect: Loaded channels from localStorage:', parsedChannels);
+                    } else {
+                        console.log('[MultiTV] useEffect: No valid channels in localStorage, using default.');
+                        // setChannels(defaultChannels); // localStorage boşsa default kullanma, test için böyle kalsın
+                    }
                 } catch (e) {
-                    console.error('Kaydedilmiş kanallar yüklenemedi:', e);
+                    console.error('[MultiTV] useEffect: Error parsing channels from localStorage.', e);
+                    // setChannels(defaultChannels); // Hata durumunda default kullanma
                 }
+            } else {
+                console.log('[MultiTV] useEffect: No channels in localStorage, using default.');
             }
 
             if (savedGridSize && savedGridSize in gridLayouts) {
                 setGridSize(Number(savedGridSize) as keyof typeof gridLayouts);
+                console.log(`[MultiTV] useEffect: Grid size set to: ${savedGridSize}`);
+            } else {
+                setGridSize(4);
+                console.log(`[MultiTV] useEffect: No saved grid size or invalid, defaulting to: 4`);
             }
-
             if (savedAutoplay !== null) {
                 setAutoplay(savedAutoplay === 'true');
-            }
-
-            if (savedEmbedMethod) {
-                setEmbedMethod(savedEmbedMethod as 'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct');
+                console.log(`[MultiTV] useEffect: Autoplay set to: ${savedAutoplay}`);
             }
         }
     }, []);
@@ -80,199 +81,117 @@ export default function MultiTVPage(): JSX.Element {
     const displayedChannels = channels.slice(0, gridSize);
 
     const getVideoTitle = async (url: string): Promise<string> => {
+        const videoId = extractVideoId(url);
+        if (!videoId) return 'Yeni Kanal';
         try {
-            let videoId = '';
-
-            if (url.includes('youtube.com/watch?v=')) {
-                videoId = url.split('v=')[1]?.split('&')[0] || '';
-            } else if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1]?.split('?')[0] || '';
-            } else if (url.includes('youtube.com/embed/')) {
-                videoId = url.split('embed/')[1]?.split('?')[0] || '';
-            } else {
-                videoId = url;
-            }
-
-            if (!videoId) return 'Yeni Kanal';
-
-            try {
-                const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
-                const data = await response.json();
-                return data.title || 'YouTube Video';
-            } catch (e) {
-                return 'YouTube Video';
-            }
-        } catch (error) {
-            console.error('Başlık alınamadı:', error);
-            return 'YouTube Video';
-        }
+            const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+            const data = await response.json();
+            return data.title || 'YouTube Video';
+        } catch (e) { return 'YouTube Video'; }
     };
 
     const addChannel = async (): Promise<void> => {
         if (!newChannelUrl.trim()) return;
-
         setIsLoading(true);
-
         try {
             const title = await getVideoTitle(newChannelUrl);
             const videoId = extractVideoId(newChannelUrl);
-
-            const newChannel: Channel = {
-                id: Date.now().toString(),
-                name: title,
-                url: videoId,
-                width: 400,
-                height: 300,
-                x: Math.random() * 200,
-                y: Math.random() * 200,
-            };
-
-            setChannels([...channels, newChannel]);
+            const newChannel: Channel = { id: Date.now().toString(), name: title, url: videoId, width: 400, height: 300, x: 0, y: 0 };
+            setChannels(prevChannels => [...prevChannels, newChannel]);
             setNewChannelUrl('');
-        } catch (error) {
-            console.error('Kanal eklenirken hata:', error);
-        } finally {
-            setIsLoading(false);
-        }
+        } catch (error) { console.error('[MultiTV] addChannel: Error adding channel:', error); }
+        finally { setIsLoading(false); }
     };
 
     const extractVideoId = (url: string): string => {
-        if (url.includes('youtube.com/watch?v=')) {
-            return url.split('v=')[1]?.split('&')[0] || url;
-        } else if (url.includes('youtu.be/')) {
-            return url.split('youtu.be/')[1]?.split('?')[0] || url;
-        } else if (url.includes('youtube.com/embed/')) {
-            return url.split('embed/')[1]?.split('?')[0] || url;
+        const patterns = [
+            /(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/|live\/)([a-zA-Z0-9_-]{11})/,
+            /(?:https?:\/\/)?(?:www\.)?youtu\.be\/([a-zA-Z0-9_-]{11})/
+        ];
+        for (const pattern of patterns) {
+            const match = url.match(pattern);
+            if (match && match[1]) return match[1];
         }
         return url;
     };
 
     const updateChannel = (id: string, name: string, videoId: string): void => {
-        setChannels(prev => prev.map(channel =>
-            channel.id === id ? { ...channel, name, url: videoId } : channel
-        ));
+        setChannels(prev => prev.map(ch => ch.id === id ? { ...ch, name, url: videoId } : ch));
     };
-
-    const removeChannel = (id: string): void => {
-        setChannels(channels.filter(channel => channel.id !== id));
-    };
-
-    const handleDragStart = (e: React.DragEvent, channelId: string): void => {
-        setDraggedChannel(channelId);
-        e.dataTransfer.effectAllowed = 'move';
-    };
-
-    const handleDragOver = (e: React.DragEvent): void => {
+    const removeChannel = (id: string): void => setChannels(channels.filter(ch => ch.id !== id));
+    const handleDragStart = (e: React.DragEvent, id: string): void => { e.dataTransfer.effectAllowed = 'move'; setDraggedChannel(id); };
+    const handleDragOver = (e: React.DragEvent): void => e.preventDefault();
+    const handleDrop = (e: React.DragEvent, targetId: string): void => {
         e.preventDefault();
-    };
-
-    const handleDrop = (e: React.DragEvent, targetChannelId: string): void => {
-        e.preventDefault();
-        if (!draggedChannel || draggedChannel === targetChannelId) return;
-
-        const draggedIndex = channels.findIndex(c => c.id === draggedChannel);
-        const targetIndex = channels.findIndex(c => c.id === targetChannelId);
-
-        if (draggedIndex !== -1 && targetIndex !== -1) {
-            const newChannels = [...channels];
-            const draggedItem = newChannels[draggedIndex];
-            newChannels.splice(draggedIndex, 1);
-            newChannels.splice(targetIndex, 0, draggedItem);
-            setChannels(newChannels);
-        }
+        if (!draggedChannel || draggedChannel === targetId) return;
+        const draggedIdx = channels.findIndex(c => c.id === draggedChannel);
+        const targetIdx = channels.findIndex(c => c.id === targetId);
+        if (draggedIdx === -1 || targetIdx === -1) return;
+        const newCh = [...channels];
+        const [draggedItem] = newCh.splice(draggedIdx, 1);
+        newCh.splice(targetIdx, 0, draggedItem);
+        setChannels(newCh);
         setDraggedChannel(null);
     };
-
-    const handleKeyPress = (e: React.KeyboardEvent): void => {
-        if (e.key === 'Enter') {
-            addChannel();
-        }
-    };
+    const handleKeyPress = (e: React.KeyboardEvent): void => { if (e.key === 'Enter') addChannel(); };
 
     const saveSettings = (): void => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('multiTV_channels', JSON.stringify(channels));
             localStorage.setItem('multiTV_gridSize', gridSize.toString());
             localStorage.setItem('multiTV_autoplay', autoplay.toString());
-            localStorage.setItem('multiTV_embedMethod', embedMethod);
             alert('Ayarlar kaydedildi!');
         }
     };
 
-    // Alternatif YouTube frontend'leri ve proxy'ler
-    const getVideoEmbedUrl = (videoId: string): string => {
-        const baseParams = {
+    const getVideoEmbedUrl = (videoId: string): string | null => {
+        if (!currentOrigin) {
+            console.log(`[MultiTV] getVideoEmbedUrl: Origin not ready for video ID: ${videoId}. Returning null.`);
+            return null;
+        }
+
+        const params = new URLSearchParams({
             autoplay: autoplay ? '1' : '0',
             mute: '1',
             controls: '1',
             rel: '0',
-            modestbranding: '1'
-        };
+            modestbranding: '1',
+            fs: '1',
+            enablejsapi: '1'
+        });
+        params.append('origin', currentOrigin);
 
-        const params = new URLSearchParams(baseParams);
-
-        switch (embedMethod) {
-            case 'piped':
-                // Piped - En güvenilir alternatif
-                return `https://piped.video/embed/${videoId}?${params.toString()}`;
-            case 'invidious':
-                // Invidious - Popüler alternatif
-                return `https://yewtu.be/embed/${videoId}?${params.toString()}`;
-            case 'viewtube':
-                // ViewTube - Modern alternatif
-                return `https://viewtube.io/embed/${videoId}?${params.toString()}`;
-            case 'youtube':
-                // YouTube No-Cookie
-                return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
-            case 'direct':
-            default:
-                // Doğrudan YouTube
-                return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-        }
+        const finalUrl = `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
+        console.log(`[MultiTV] getVideoEmbedUrl: Video ID: ${videoId}, Origin: ${currentOrigin}, Final Embed URL: ${finalUrl}`);
+        return finalUrl;
     };
 
-    const handleVideoError = (videoId: string): void => {
-        setFailedVideos(prev => new Set([...prev, videoId]));
+    const handleVideoError = (videoId: string, channelName: string): void => {
+        console.error(`[MultiTV] handleVideoError: Error loading video ID: ${videoId} (Channel: ${channelName}), Origin: ${currentOrigin || 'N/A'}`);
+        setFailedVideos(prev => new Set(prev).add(videoId));
     };
 
     const renderVideoPlayer = (channel: Channel): JSX.Element => {
-        const isVideoFailed = failedVideos.has(channel.url);
+        const embedUrl = getVideoEmbedUrl(channel.url);
 
+        if (!embedUrl) {
+            return (
+                <div className="relative aspect-video bg-gray-700 flex items-center justify-center text-white">
+                    <span>Video Kaynağı Bekleniyor... (Origin: {currentOrigin || 'henüz yok'})</span>
+                </div>
+            );
+        }
+
+        const isVideoFailed = failedVideos.has(channel.url);
         if (isVideoFailed) {
             return (
                 <div className="relative aspect-video bg-gray-900 flex flex-col items-center justify-center text-white p-4">
                     <div className="text-center">
                         <div className="text-4xl mb-2">⚠️</div>
-                        <p className="text-sm mb-3">Video yüklenemedi</p>
+                        <p className="text-sm mb-3">Video yüklenemedi: {channel.name}</p>
                         <div className="flex flex-col gap-2">
-                            <a
-                                href={`https://www.youtube.com/watch?v=${channel.url}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700 transition-colors"
-                            >
-                                YouTube&apos;da Aç
-                            </a>
-                            <a
-                                href={`https://piped.video/watch?v=${channel.url}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors"
-                            >
-                                Piped&apos;de Aç
-                            </a>
-                            <button
-                                onClick={() => {
-                                    setFailedVideos(prev => {
-                                        const newSet = new Set(prev);
-                                        newSet.delete(channel.url);
-                                        return newSet;
-                                    });
-                                }}
-                                className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors"
-                            >
-                                Tekrar Dene
-                            </button>
+                            <a href={`https://www.youtube.com/watch?v=${channel.url}`} target="_blank" rel="noopener noreferrer" className="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700">YouTube&apos;da Aç</a>
+                            <button onClick={() => setFailedVideos(prev => { const n = new Set(prev); n.delete(channel.url); return n; })} className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700">Tekrar Dene</button>
                         </div>
                     </div>
                 </div>
@@ -282,30 +201,16 @@ export default function MultiTVPage(): JSX.Element {
         return (
             <div className="relative aspect-video bg-black">
                 <iframe
-                    src={getVideoEmbedUrl(channel.url)}
+                    key={embedUrl}
+                    src={embedUrl}
                     title={channel.name}
                     className="w-full h-full"
                     frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                     allowFullScreen
                     loading="lazy"
-                    onError={() => handleVideoError(channel.url)}
-                    style={{ border: 'none' }}
+                    onError={() => handleVideoError(channel.url, channel.name)}
                 />
-                {/* Fallback için alternatif yükleyici */}
-                <div className="absolute top-2 right-2 opacity-0 hover:opacity-100 transition-opacity">
-                    <select
-                        value={embedMethod}
-                        onChange={(e) => setEmbedMethod(e.target.value as 'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct')}
-                        className="text-xs bg-black/70 text-white border-none rounded px-2 py-1"
-                    >
-                        <option value="piped">Piped</option>
-                        <option value="invidious">Invidious</option>
-                        <option value="viewtube">ViewTube</option>
-                        <option value="youtube">YouTube</option>
-                        <option value="direct">Direct</option>
-                    </select>
-                </div>
             </div>
         );
     };
@@ -318,57 +223,21 @@ export default function MultiTVPage(): JSX.Element {
                     <div className="max-w-full mx-auto">
                         <div className="flex justify-between items-center">
                             <div>
-                                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                                    📺 Multi TV
-                                </h1>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                    Aynı anda birden fazla haber kanalını izleyebileceğiniz çoklu ekran uygulaması
-                                </p>
+                                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">📺 Multi TV</h1>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Aynı anda birden fazla haber kanalını izleyebileceğiniz çoklu ekran uygulaması</p>
                             </div>
-                            <div className="flex gap-2">
-                                <select
-                                    value={embedMethod}
-                                    onChange={(e) => setEmbedMethod(e.target.value as 'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct')}
-                                    className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 rounded-lg text-sm border border-gray-300 dark:border-gray-600"
-                                >
-                                    <option value="piped">🔧 Piped</option>
-                                    <option value="invidious">🔧 Invidious</option>
-                                    <option value="viewtube">🔧 ViewTube</option>
-                                    <option value="youtube">🔧 YouTube</option>
-                                    <option value="direct">🔧 Direct</option>
-                                </select>
-                                <button
-                                    onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
-                                    className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
-                                >
-                                    ⚙️ Ayarlar
-                                </button>
+                            <div className="flex gap-2 items-center">
+                                {/* Embed yöntemi seçimi tamamen kaldırıldı */}
+                                <button onClick={(): void => setIsSettingsOpen(!isSettingsOpen)} className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-xl">⚙️ Ayarlar</button>
                             </div>
                         </div>
-
                         {/* Hızlı Kanal Ekleme */}
                         <div className="mt-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-sm">
                             <div className="flex gap-2">
-                                <input
-                                    type="text"
-                                    placeholder="YouTube video linkini buraya yapıştırın..."
-                                    value={newChannelUrl}
-                                    onChange={(e): void => setNewChannelUrl(e.target.value)}
-                                    onKeyPress={handleKeyPress}
-                                    className="flex-1 p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    disabled={isLoading}
-                                />
-                                <button
-                                    onClick={addChannel}
-                                    disabled={isLoading || !newChannelUrl.trim()}
-                                    className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg transition-colors duration-200 text-lg font-semibold"
-                                >
-                                    {isLoading ? '⏳' : '➕ Ekle'}
-                                </button>
+                                <input type="text" placeholder="YouTube video linkini veya ID'sini yapıştırın..." value={newChannelUrl} onChange={(e): void => setNewChannelUrl(e.target.value)} onKeyPress={handleKeyPress} className="flex-1 p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-lg focus:ring-2 focus:ring-primary-500" disabled={isLoading} />
+                                <button onClick={addChannel} disabled={isLoading || !newChannelUrl.trim()} className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg text-lg font-semibold">{isLoading ? '⏳' : '➕ Ekle'}</button>
                             </div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                                YouTube video linkini yapıştırın, başlık otomatik olarak çekilecek
-                            </p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Video linkini yapıştırın, başlık otomatik çekilecek.</p>
                         </div>
                     </div>
                 </div>
@@ -376,174 +245,61 @@ export default function MultiTVPage(): JSX.Element {
                 <div className="max-w-full mx-auto px-4">
                     {isSettingsOpen && (
                         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8 border border-gray-200 dark:border-gray-700">
-                            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-                                ⚙️ Multi TV Ayarları
-                            </h2>
-
-                            {/* Tab Menu */}
+                            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">⚙️ Multi TV Ayarları</h2>
                             <div className="mb-6">
                                 <div className="flex border-b border-gray-200 dark:border-gray-600">
-                                    <button
-                                        onClick={(): void => setActiveTab('grid')}
-                                        className={`px-4 py-2 font-medium transition-colors ${activeTab === 'grid'
-                                            ? 'text-primary-600 border-b-2 border-primary-600'
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
-                                    >
-                                        📊 Kanal Sayısı
-                                    </button>
-                                    <button
-                                        onClick={(): void => setActiveTab('channels')}
-                                        className={`px-4 py-2 font-medium transition-colors ${activeTab === 'channels'
-                                            ? 'text-primary-600 border-b-2 border-primary-600'
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
-                                    >
-                                        📺 Kanalları Düzenle
-                                    </button>
+                                    <button onClick={(): void => setActiveTab('grid')} className={`px-4 py-2 font-medium ${activeTab === 'grid' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📊 Kanal Sayısı</button>
+                                    <button onClick={(): void => setActiveTab('channels')} className={`px-4 py-2 font-medium ${activeTab === 'channels' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📺 Kanalları Düzenle</button>
                                 </div>
                             </div>
 
                             {activeTab === 'grid' && (
                                 <div className="space-y-6">
                                     <div>
-                                        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
-                                            Grid Boyutu Seçin
-                                        </h3>
+                                        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Grid Boyutu Seçin</h3>
                                         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
-                                            {Object.entries(gridLayouts).map(([size, layout]) => (
-                                                <button
-                                                    key={size}
-                                                    onClick={(): void => setGridSize(Number(size) as keyof typeof gridLayouts)}
-                                                    className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === Number(size)
-                                                            ? 'bg-primary-500 text-white shadow-lg scale-105'
-                                                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'
-                                                        }`}
-                                                    title={`${layout.cols}x${layout.rows} grid`}
-                                                >
+                                            {Object.keys(gridLayouts).map((size) => (
+                                                <button key={size} onClick={(): void => setGridSize(Number(size) as keyof typeof gridLayouts)} className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === Number(size) ? 'bg-primary-500 text-white shadow-lg scale-105' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'}`} title={`${gridLayouts[Number(size) as keyof typeof gridLayouts].cols}x${gridLayouts[Number(size) as keyof typeof gridLayouts].rows} grid`}>
                                                     <span className="text-lg">{size}</span>
-                                                    <span className="text-xs opacity-75">{layout.cols}×{layout.rows}</span>
+                                                    <span className="text-xs opacity-75">{gridLayouts[Number(size) as keyof typeof gridLayouts].cols}×{gridLayouts[Number(size) as keyof typeof gridLayouts].rows}</span>
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
-
-                                    {/* Embed Yöntemi Seçimi */}
-                                    <div>
-                                        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
-                                            🔧 Video Yükleme Yöntemi
-                                        </h3>
-                                        <div className="space-y-2">
-                                            {[
-                                                { value: 'piped', label: 'Piped (En Güvenilir)', desc: 'Açık kaynak YouTube alternatifi, en az engelleme' },
-                                                { value: 'invidious', label: 'Invidious (Popüler)', desc: 'Gizlilik odaklı YouTube frontend' },
-                                                { value: 'viewtube', label: 'ViewTube (Modern)', desc: 'Modern YouTube alternatifi' },
-                                                { value: 'youtube', label: 'YouTube No-Cookie', desc: 'YouTube resmi no-cookie versiyonu' },
-                                                { value: 'direct', label: 'Doğrudan YouTube', desc: 'Standart YouTube embed (en çok engellenir)' }
-                                            ].map((method) => (
-                                                <label key={method.value} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                                                    <input
-                                                        type="radio"
-                                                        name="embedMethod"
-                                                        value={method.value}
-                                                        checked={embedMethod === method.value}
-                                                        onChange={(e): void => setEmbedMethod(e.target.value as 'piped' | 'invidious' | 'viewtube' | 'youtube' | 'direct')}
-                                                        className="mt-1 text-primary-600 focus:ring-primary-500"
-                                                    />
-                                                    <div>
-                                                        <div className="font-medium text-gray-900 dark:text-white">{method.label}</div>
-                                                        <div className="text-sm text-gray-600 dark:text-gray-400">{method.desc}</div>
-                                                    </div>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-
                                     <div className="flex items-center gap-4">
                                         <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                                            <input
-                                                type="checkbox"
-                                                checked={autoplay}
-                                                onChange={(e): void => setAutoplay(e.target.checked)}
-                                                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                                            />
+                                            <input type="checkbox" checked={autoplay} onChange={(e): void => setAutoplay(e.target.checked)} className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                                             🔊 Otomatik oynatma
                                         </label>
                                     </div>
+                                    {/* Embed yöntemi seçimi tamamen kaldırıldı */}
                                 </div>
                             )}
 
                             {activeTab === 'channels' && (
                                 <div className="space-y-6">
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        Kanal adresi bölümüne YouTube video ID&apos;sini girmelisiniz. (Örnek: qnpfhjMhMKY)
-                                    </p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">Kanal adresi bölümüne YouTube video ID&apos;sini girmelisiniz. (Örnek: qnpfhjMhMKY)</p>
                                     <div className="space-y-4 max-h-96 overflow-y-auto">
-                                        {channels.map((channel) => (
-                                            <div key={channel.id} className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                        {channels.map((ch) => (
+                                            <div key={ch.id} className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                        📺 Kanal Adı
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        value={channel.name}
-                                                        onChange={(e): void => updateChannel(channel.id, e.target.value, channel.url)}
-                                                        className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                                    />
+                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">📺 Kanal Adı</label>
+                                                    <input type="text" value={ch.name} onChange={(e): void => updateChannel(ch.id, e.target.value, ch.url)} className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white focus:ring-2 focus:ring-primary-500" />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                        🔗 Video ID
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        value={channel.url}
-                                                        onChange={(e): void => updateChannel(channel.id, channel.name, e.target.value)}
-                                                        className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white font-mono text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                                        placeholder="qnpfhjMhMKY"
-                                                    />
+                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">🔗 Video ID</label>
+                                                    <input type="text" value={ch.url} onChange={(e): void => updateChannel(ch.id, ch.name, e.target.value)} className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white font-mono text-sm focus:ring-2 focus:ring-primary-500" placeholder="qnpfhjMhMKY" />
                                                 </div>
                                                 <div className="flex items-end">
-                                                    <button
-                                                        onClick={(): void => removeChannel(channel.id)}
-                                                        className="w-full md:w-auto bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors"
-                                                    >
-                                                        🗑️ Sil
-                                                    </button>
+                                                    <button onClick={(): void => removeChannel(ch.id)} className="w-full md:w-auto bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">🗑️ Sil</button>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-
                                     <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
-                                        <button
-                                            onClick={(): void => {
-                                                const newChannel: Channel = {
-                                                    id: Date.now().toString(),
-                                                    name: 'Yeni Kanal',
-                                                    url: '',
-                                                    width: 400,
-                                                    height: 300,
-                                                    x: 0,
-                                                    y: 0,
-                                                };
-                                                setChannels([...channels, newChannel]);
-                                            }}
-                                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
-                                        >
-                                            ➕ Yeni Kanal Ekle
-                                        </button>
-                                        <button
-                                            onClick={saveSettings}
-                                            className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors"
-                                        >
-                                            💾 Ayarları Kaydet
-                                        </button>
-                                        <button
-                                            onClick={(): void => setFailedVideos(new Set())}
-                                            className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors"
-                                        >
-                                            🔄 Hataları Temizle
-                                        </button>
+                                        <button onClick={(): void => { const nc: Channel = { id: Date.now().toString(), name: 'Yeni Kanal', url: '', width: 400, height: 300, x: 0, y: 0 }; setChannels((prev: Array<Channel>): Array<Channel> => [...prev, nc]); }} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">➕ Yeni Kanal Ekle</button>
+                                        <button onClick={saveSettings} className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg">💾 Ayarları Kaydet</button>
+                                        <button onClick={(): void => setFailedVideos((): Set<string> => new Set())} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg">🔄 Hataları Temizle</button>
                                     </div>
                                 </div>
                             )}
@@ -553,22 +309,13 @@ export default function MultiTVPage(): JSX.Element {
                     {/* Video Grid */}
                     <div className={`grid ${gridLayouts[gridSize].class} gap-2 md:gap-4 min-h-[60vh]`}>
                         {displayedChannels.map((channel) => (
-                            <div
-                                key={channel.id}
-                                className="bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group border border-gray-300 dark:border-gray-600"
-                                draggable
-                                onDragStart={(e): void => handleDragStart(e, channel.id)}
-                                onDragOver={handleDragOver}
-                                onDrop={(e): void => handleDrop(e, channel.id)}
-                            >
-                                <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-2 md:px-3 py-1 md:py-2 text-xs md:text-sm font-medium flex justify-between items-center">
+                            <div key={channel.id} className="bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl group border border-gray-300 dark:border-gray-600" draggable onDragStart={(e) => handleDragStart(e, channel.id)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, channel.id)}>
+                                <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-2 md:px-3 py-1 text-xs md:text-sm font-medium flex justify-between items-center">
                                     <span className="truncate flex-1">{channel.name}</span>
                                     <div className="flex items-center gap-1 md:gap-2 ml-2">
                                         <span className="text-red-500 animate-pulse text-xs">● CANLI</span>
-                                        {failedVideos.has(channel.url) && (
-                                            <span className="text-yellow-500 text-xs">⚠️</span>
-                                        )}
-                                        <span className="text-xs opacity-75">{embedMethod}</span>
+                                        {failedVideos.has(channel.url) && <span className="text-yellow-500 text-xs">⚠️</span>}
+                                        {/* Embed yöntemi göstergesi kaldırıldı */}
                                     </div>
                                 </div>
                                 {renderVideoPlayer(channel)}
@@ -579,12 +326,8 @@ export default function MultiTVPage(): JSX.Element {
                     {channels.length === 0 && (
                         <div className="text-center py-20">
                             <div className="text-6xl mb-4">📺</div>
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                                Henüz kanal eklenmedi
-                            </h2>
-                            <p className="text-gray-600 dark:text-gray-400">
-                                Yukarıdaki alana YouTube video linkini yapıştırarak başlayın
-                            </p>
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Henüz kanal eklenmedi</h2>
+                            <p className="text-gray-600 dark:text-gray-400">Yukarıdaki alana YouTube video linkini veya ID&apos;sini yapıştırarak başlayın</p>
                         </div>
                     )}
                 </div>
