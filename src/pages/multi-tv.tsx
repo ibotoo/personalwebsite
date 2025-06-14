@@ -191,15 +191,19 @@ export default function MultiTVPage(): JSX.Element {
         }
     };
 
-    // Orijinal Multi TV projesindeki basit ve çalışan embed yöntemi
+    // W3Schools rehberine göre düzeltilmiş embed yöntemi
     const getYouTubeEmbedUrl = (videoId: string): string => {
-        // Basit parametreler - orijinal projede çalışan yöntem
+        // W3Schools önerisi: autoplay=1&mute=1 birlikte kullan
         const params = new URLSearchParams({
             autoplay: autoplay ? '1' : '0',
-            mute: '1',
-            controls: '1',
-            rel: '0',
-            modestbranding: '1'
+            mute: '1', // Autoplay için gerekli
+            controls: '1', // Kontrolleri göster
+            rel: '0', // İlgili videoları gizle
+            modestbranding: '1', // YouTube logosunu küçült
+            fs: '1', // Tam ekran izin ver
+            cc_load_policy: '0', // Altyazıları gizle
+            iv_load_policy: '3', // Açıklamaları gizle
+            disablekb: '1' // Klavye kısayollarını devre dışı bırak
         });
 
         return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
@@ -296,8 +300,8 @@ export default function MultiTVPage(): JSX.Element {
                                                     key={size}
                                                     onClick={(): void => setGridSize(Number(size) as keyof typeof gridLayouts)}
                                                     className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === Number(size)
-                                                            ? 'bg-primary-500 text-white shadow-lg scale-105'
-                                                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'
+                                                        ? 'bg-primary-500 text-white shadow-lg scale-105'
+                                                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'
                                                         }`}
                                                     title={`${layout.cols}x${layout.rows} grid`}
                                                 >
@@ -418,9 +422,10 @@ export default function MultiTVPage(): JSX.Element {
                                         title={channel.name}
                                         className="w-full h-full"
                                         frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                         allowFullScreen
                                         loading="lazy"
+                                        referrerPolicy="strict-origin-when-cross-origin"
                                     />
                                 </div>
                             </div>
