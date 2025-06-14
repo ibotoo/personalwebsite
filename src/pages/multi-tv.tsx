@@ -43,19 +43,14 @@ export default function MultiTVPage(): JSX.Element {
     const [draggedChannel, setDraggedChannel] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'grid' | 'channels'>('grid');
-    const [currentOrigin, setCurrentOrigin] = useState('');
     const [autoplay, setAutoplay] = useState(true);
-    const [embedMethod, setEmbedMethod] = useState<'nocookie' | 'proxy' | 'direct'>('nocookie');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            setCurrentOrigin(window.location.origin);
-
             // Kaydedilmiş ayarları yükle
             const savedChannels = localStorage.getItem('multiTV_channels');
             const savedGridSize = localStorage.getItem('multiTV_gridSize');
             const savedAutoplay = localStorage.getItem('multiTV_autoplay');
-            const savedEmbedMethod = localStorage.getItem('multiTV_embedMethod');
 
             if (savedChannels) {
                 try {
@@ -71,10 +66,6 @@ export default function MultiTVPage(): JSX.Element {
 
             if (savedAutoplay !== null) {
                 setAutoplay(savedAutoplay === 'true');
-            }
-
-            if (savedEmbedMethod) {
-                setEmbedMethod(savedEmbedMethod as 'nocookie' | 'proxy' | 'direct');
             }
         }
     }, []);
@@ -97,24 +88,13 @@ export default function MultiTVPage(): JSX.Element {
 
             if (!videoId) return 'Yeni Kanal';
 
-            // Alternatif API'ler dene
-            try {
-                const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
-                const data = await response.json();
-                if (data.title) return data.title;
-            } catch (e) {
-                console.log('Noembed API başarısız, YouTube OEmbed deneniyor...');
-            }
-
             try {
                 const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
                 const data = await response.json();
                 return data.title || 'YouTube Video';
             } catch (e) {
-                console.log('YouTube OEmbed başarısız');
+                return 'YouTube Video';
             }
-
-            return 'YouTube Video';
         } catch (error) {
             console.error('Başlık alınamadı:', error);
             return 'YouTube Video';
@@ -207,69 +187,22 @@ export default function MultiTVPage(): JSX.Element {
             localStorage.setItem('multiTV_channels', JSON.stringify(channels));
             localStorage.setItem('multiTV_gridSize', gridSize.toString());
             localStorage.setItem('multiTV_autoplay', autoplay.toString());
-            localStorage.setItem('multiTV_embedMethod', embedMethod);
             alert('Ayarlar kaydedildi!');
         }
     };
 
-    // Çoklu embed yöntemi - engelleme sorununu çözmek için
+    // Orijinal Multi TV projesindeki basit ve çalışan embed yöntemi
     const getYouTubeEmbedUrl = (videoId: string): string => {
-        const baseParams = {
+        // Basit parametreler - orijinal projede çalışan yöntem
+        const params = new URLSearchParams({
+            autoplay: autoplay ? '1' : '0',
             mute: '1',
             controls: '1',
-            modestbranding: '1',
             rel: '0',
-            fs: '1',
-            enablejsapi: '1',
-            playsinline: '1',
-            ...(autoplay && { autoplay: '1' }),
-            ...(currentOrigin && { origin: currentOrigin })
-        };
+            modestbranding: '1'
+        });
 
-        const params = new URLSearchParams(baseParams);
-
-        switch (embedMethod) {
-            case 'nocookie':
-                return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
-            case 'proxy':
-                // Proxy sunucu üzerinden (CORS bypass)
-                return `https://cors-anywhere.herokuapp.com/https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-            case 'direct':
-            default:
-                return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-        }
-    };
-
-    // Alternatif embed yöntemi - iframe yerine object kullan
-    const renderVideoPlayer = (channel: Channel): JSX.Element => {
-        const embedUrl = getYouTubeEmbedUrl(channel.url);
-
-        return (
-            <div className="relative aspect-video bg-black">
-                <iframe
-                    src={embedUrl}
-                    title={channel.name}
-                    className="w-full h-full"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                    allowFullScreen
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    loading="lazy"
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                />
-                {/* Fallback için alternatif link */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity">
-                    <a
-                        href={`https://www.youtube.com/watch?v=${channel.url}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                    >
-                        YouTube&apos;da Aç
-                    </a>
-                </div>
-            </div>
-        );
+        return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
     };
 
     return (
@@ -363,43 +296,14 @@ export default function MultiTVPage(): JSX.Element {
                                                     key={size}
                                                     onClick={(): void => setGridSize(Number(size) as keyof typeof gridLayouts)}
                                                     className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === Number(size)
-                                                        ? 'bg-primary-500 text-white shadow-lg scale-105'
-                                                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'
+                                                            ? 'bg-primary-500 text-white shadow-lg scale-105'
+                                                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'
                                                         }`}
                                                     title={`${layout.cols}x${layout.rows} grid`}
                                                 >
                                                     <span className="text-lg">{size}</span>
                                                     <span className="text-xs opacity-75">{layout.cols}×{layout.rows}</span>
                                                 </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Embed Yöntemi Seçimi */}
-                                    <div>
-                                        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
-                                            🔧 Video Yükleme Yöntemi
-                                        </h3>
-                                        <div className="space-y-2">
-                                            {[
-                                                { value: 'nocookie', label: 'YouTube No-Cookie (Önerilen)', desc: 'Gizlilik odaklı, çoğu engellemeyi aşar' },
-                                                { value: 'direct', label: 'Doğrudan YouTube', desc: 'Standart YouTube embed' },
-                                                { value: 'proxy', label: 'Proxy Üzerinden', desc: 'Engelleme durumunda deneyin' }
-                                            ].map((method) => (
-                                                <label key={method.value} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                                                    <input
-                                                        type="radio"
-                                                        name="embedMethod"
-                                                        value={method.value}
-                                                        checked={embedMethod === method.value}
-                                                        onChange={(e): void => setEmbedMethod(e.target.value as 'nocookie' | 'proxy' | 'direct')}
-                                                        className="mt-1 text-primary-600 focus:ring-primary-500"
-                                                    />
-                                                    <div>
-                                                        <div className="font-medium text-gray-900 dark:text-white">{method.label}</div>
-                                                        <div className="text-sm text-gray-600 dark:text-gray-400">{method.desc}</div>
-                                                    </div>
-                                                </label>
                                             ))}
                                         </div>
                                     </div>
@@ -508,7 +412,17 @@ export default function MultiTVPage(): JSX.Element {
                                         <span className="text-red-500 animate-pulse text-xs">● CANLI</span>
                                     </div>
                                 </div>
-                                {renderVideoPlayer(channel)}
+                                <div className="relative aspect-video bg-black">
+                                    <iframe
+                                        src={getYouTubeEmbedUrl(channel.url)}
+                                        title={channel.name}
+                                        className="w-full h-full"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        loading="lazy"
+                                    />
+                                </div>
                             </div>
                         ))}
                     </div>
