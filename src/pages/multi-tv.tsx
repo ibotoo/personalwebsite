@@ -11,22 +11,47 @@ interface Channel {
     y: number;
 }
 
-// Varsayılan kanallar (Test videosu ve NTV ile sınırlandırıldı)
+// Varsayılan kanallar güncelleniyor ve genişletiliyor
 const defaultChannels: Array<Channel> = [
-    { id: 'test-1', name: 'Test Video (Me at the zoo)', url: 'jNQXAC9IVRw', width: 400, height: 300, x: 0, y: 0 },
-    { id: '1', name: 'NTV', url: '7K83N5tB2M0', width: 800, height: 600, x: 50, y: 50 },
-    // Diğer kanallar test için kaldırıldı, gerekirse eklenebilir.
+    { id: '1', name: 'NTV', url: '7K83N5tB2M0', width: 0, height: 0, x: 0, y: 0 },
+    { id: '2', name: 'Habertürk', url: 'SqEFj93oQMg', width: 0, height: 0, x: 0, y: 0 },
+    { id: '3', name: 'Haber Global', url: 'Cj21_y9Z1oU', width: 0, height: 0, x: 0, y: 0 },
+    { id: '4', name: 'TRT Haber', url: 'g0_N0L3n5qY', width: 0, height: 0, x: 0, y: 0 },
+    { id: '5', name: 'TV 100', url: 'VNX0FJx_N5o', width: 0, height: 0, x: 0, y: 0 },
+    { id: '6', name: 'Halk TV', url: '3fH47nYaNnk', width: 0, height: 0, x: 0, y: 0 },
+    { id: '7', name: '24 TV', url: 'PVOUp92OUAU', width: 0, height: 0, x: 0, y: 0 },
+    { id: '8', name: 'TGRT Haber', url: 'kC6QnFqjNFY', width: 0, height: 0, x: 0, y: 0 },
+    { id: '9', name: 'KRT TV', url: 'k4Z0L_V4G_Q', width: 0, height: 0, x: 0, y: 0 },
+    { id: '10', name: 'TELE 1', url: 'Qcic-0GvJq4', width: 0, height: 0, x: 0, y: 0 },
+    { id: '11', name: 'Bengü Türk', url: 'XTRx8H2o75M', width: 0, height: 0, x: 0, y: 0 },
+    { id: '12', name: 'Bloomberg HT', url: 'yvqQwM-ycyY', width: 0, height: 0, x: 0, y: 0 },
+    { id: '13', name: 'Ulusal Kanal', url: 'E0aW3Kq2_y0', width: 0, height: 0, x: 0, y: 0 },
+    { id: '14', name: 'Artı TV', url: '_AF2P0nSClU', width: 0, height: 0, x: 0, y: 0 },
+    { id: '15', name: 'TVNET', url: '47G2aZ9mZ2I', width: 0, height: 0, x: 0, y: 0 },
+    { id: '16', name: 'Ülke TV', url: 'w_86sXkBGqU', width: 0, height: 0, x: 0, y: 0 },
+    { id: '17', name: 'Flash Haber TV', url: 'RgwZqK_E9M4', width: 0, height: 0, x: 0, y: 0 },
 ];
 
-const gridLayouts = {
+// Grid layout seçenekleri güncelleniyor ve genişletiliyor
+const gridLayouts: { [key: number]: { cols: number; rows: number; class: string; } } = {
+    1: { cols: 1, rows: 1, class: 'grid-cols-1 grid-rows-1' },
+    2: { cols: 2, rows: 1, class: 'grid-cols-2 grid-rows-1' },
+    3: { cols: 3, rows: 1, class: 'grid-cols-3 grid-rows-1' },
     4: { cols: 2, rows: 2, class: 'grid-cols-2 grid-rows-2' },
-    // Test için sadece 2x2 grid bırakıldı, diğerleri eklenebilir.
-    // 6: { cols: 3, rows: 2, class: 'grid-cols-3 grid-rows-2' },
+    6: { cols: 3, rows: 2, class: 'grid-cols-3 grid-rows-2' },
+    8: { cols: 4, rows: 2, class: 'grid-cols-4 grid-rows-2' },
+    9: { cols: 3, rows: 3, class: 'grid-cols-3 grid-rows-3' },
+    10: { cols: 5, rows: 2, class: 'grid-cols-5 grid-rows-2' },
+    12: { cols: 4, rows: 3, class: 'grid-cols-4 grid-rows-3' },
+    15: { cols: 5, rows: 3, class: 'grid-cols-5 grid-rows-3' },
+    16: { cols: 4, rows: 4, class: 'grid-cols-4 grid-rows-4' },
+    20: { cols: 5, rows: 4, class: 'grid-cols-5 grid-rows-4' },
+    25: { cols: 5, rows: 5, class: 'grid-cols-5 grid-rows-5' },
 };
 
 export default function MultiTVPage(): JSX.Element {
     const [channels, setChannels] = useState<Array<Channel>>(defaultChannels);
-    const [gridSize, setGridSize] = useState<keyof typeof gridLayouts>(4);
+    const [gridSize, setGridSize] = useState<number>(4); // gridSize state'i number olarak güncellendi
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [newChannelUrl, setNewChannelUrl] = useState('');
     const [draggedChannel, setDraggedChannel] = useState<string | null>(null);
@@ -53,22 +78,25 @@ export default function MultiTVPage(): JSX.Element {
                         setChannels(parsedChannels);
                         console.log('[MultiTV] useEffect: Loaded channels from localStorage:', parsedChannels);
                     } else {
+                        // localStorage boşsa veya geçersizse varsayılan kanalları yükle
+                        setChannels(defaultChannels);
                         console.log('[MultiTV] useEffect: No valid channels in localStorage, using default.');
-                        // setChannels(defaultChannels); // localStorage boşsa default kullanma, test için böyle kalsın
                     }
                 } catch (e) {
-                    console.error('[MultiTV] useEffect: Error parsing channels from localStorage.', e);
-                    // setChannels(defaultChannels); // Hata durumunda default kullanma
+                    console.error('[MultiTV] useEffect: Error parsing channels from localStorage, using default.', e);
+                    setChannels(defaultChannels); // Hata durumunda varsayılan kanalları yükle
                 }
             } else {
+                setChannels(defaultChannels); // localStorage'da kanal yoksa varsayılanları yükle
                 console.log('[MultiTV] useEffect: No channels in localStorage, using default.');
             }
 
-            if (savedGridSize && savedGridSize in gridLayouts) {
-                setGridSize(Number(savedGridSize) as keyof typeof gridLayouts);
+            // Grid size yükleme mantığı güncellendi
+            if (savedGridSize && gridLayouts[Number(savedGridSize)]) {
+                setGridSize(Number(savedGridSize));
                 console.log(`[MultiTV] useEffect: Grid size set to: ${savedGridSize}`);
             } else {
-                setGridSize(4);
+                setGridSize(4); // Varsayılan olarak 4 kanalı ayarla (veya listedeki ilk uygun değer)
                 console.log(`[MultiTV] useEffect: No saved grid size or invalid, defaulting to: 4`);
             }
             if (savedAutoplay !== null) {
@@ -257,13 +285,23 @@ export default function MultiTVPage(): JSX.Element {
                                 <div className="space-y-6">
                                     <div>
                                         <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Grid Boyutu Seçin</h3>
-                                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
-                                            {Object.keys(gridLayouts).map((size) => (
-                                                <button key={size} onClick={(): void => setGridSize(Number(size) as keyof typeof gridLayouts)} className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === Number(size) ? 'bg-primary-500 text-white shadow-lg scale-105' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'}`} title={`${gridLayouts[Number(size) as keyof typeof gridLayouts].cols}x${gridLayouts[Number(size) as keyof typeof gridLayouts].rows} grid`}>
-                                                    <span className="text-lg">{size}</span>
-                                                    <span className="text-xs opacity-75">{gridLayouts[Number(size) as keyof typeof gridLayouts].cols}×{gridLayouts[Number(size) as keyof typeof gridLayouts].rows}</span>
-                                                </button>
-                                            ))}
+                                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-3"> {/* Daha fazla buton sığması için md ve lg artırıldı */}
+                                            {Object.keys(gridLayouts).map((sizeStr) => {
+                                                const size = Number(sizeStr);
+                                                const layout = gridLayouts[size];
+                                                if (!layout) return null; // Ekstra güvenlik
+                                                return (
+                                                    <button
+                                                        key={size}
+                                                        onClick={() => setGridSize(size)}
+                                                        className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === size ? 'bg-primary-500 text-white shadow-lg scale-105' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'}`}
+                                                        title={`${size} kanal (${layout.cols}x${layout.rows} grid)`}
+                                                    >
+                                                        <span className="text-lg">{size}</span>
+                                                        <span className="text-xs opacity-75">{layout.cols}×{layout.rows}</span>
+                                                    </button>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4">
@@ -307,9 +345,9 @@ export default function MultiTVPage(): JSX.Element {
                     )}
 
                     {/* Video Grid */}
-                    <div className={`grid ${gridLayouts[gridSize].class} gap-2 md:gap-4 min-h-[60vh]`}>
+                    <div className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-2 md:gap-4 min-h-[60vh]`}> {/* gridSize geçersizse varsayılan grid class */}
                         {displayedChannels.map((channel) => (
-                            <div key={channel.id} className="bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl group border border-gray-300 dark:border-gray-600" draggable onDragStart={(e) => handleDragStart(e, channel.id)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, channel.id)}>
+                            <div key={channel.id} className="bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl group" draggable onDragStart={(e) => handleDragStart(e, channel.id)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, channel.id)}> {/* border sınıfları kaldırıldı */}
                                 <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-2 md:px-3 py-1 text-xs md:text-sm font-medium flex justify-between items-center">
                                     <span className="truncate flex-1">{channel.name}</span>
                                     <div className="flex items-center gap-1 md:gap-2 ml-2">
