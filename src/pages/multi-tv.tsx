@@ -44,6 +44,8 @@ export default function MultiTVPage(): JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'grid' | 'channels'>('grid');
     const [autoplay, setAutoplay] = useState(true);
+    const [embedMethod, setEmbedMethod] = useState<'nocookie' | 'invidious' | 'direct' | 'proxy'>('nocookie');
+    const [failedVideos, setFailedVideos] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -51,6 +53,7 @@ export default function MultiTVPage(): JSX.Element {
             const savedChannels = localStorage.getItem('multiTV_channels');
             const savedGridSize = localStorage.getItem('multiTV_gridSize');
             const savedAutoplay = localStorage.getItem('multiTV_autoplay');
+            const savedEmbedMethod = localStorage.getItem('multiTV_embedMethod');
 
             if (savedChannels) {
                 try {
@@ -66,6 +69,10 @@ export default function MultiTVPage(): JSX.Element {
 
             if (savedAutoplay !== null) {
                 setAutoplay(savedAutoplay === 'true');
+            }
+
+            if (savedEmbedMethod) {
+                setEmbedMethod(savedEmbedMethod as 'nocookie' | 'invidious' | 'direct' | 'proxy');
             }
         }
     }, []);
@@ -187,26 +194,98 @@ export default function MultiTVPage(): JSX.Element {
             localStorage.setItem('multiTV_channels', JSON.stringify(channels));
             localStorage.setItem('multiTV_gridSize', gridSize.toString());
             localStorage.setItem('multiTV_autoplay', autoplay.toString());
+            localStorage.setItem('multiTV_embedMethod', embedMethod);
             alert('Ayarlar kaydedildi!');
         }
     };
 
-    // W3Schools rehberine göre düzeltilmiş embed yöntemi
+    // Çoklu alternatif embed yöntemleri
     const getYouTubeEmbedUrl = (videoId: string): string => {
-        // W3Schools önerisi: autoplay=1&mute=1 birlikte kullan
-        const params = new URLSearchParams({
+        const baseParams = {
             autoplay: autoplay ? '1' : '0',
-            mute: '1', // Autoplay için gerekli
-            controls: '1', // Kontrolleri göster
-            rel: '0', // İlgili videoları gizle
-            modestbranding: '1', // YouTube logosunu küçült
-            fs: '1', // Tam ekran izin ver
-            cc_load_policy: '0', // Altyazıları gizle
-            iv_load_policy: '3', // Açıklamaları gizle
-            disablekb: '1' // Klavye kısayollarını devre dışı bırak
-        });
+            mute: '1',
+            controls: '1',
+            rel: '0',
+            modestbranding: '1',
+            fs: '1',
+            cc_load_policy: '0',
+            iv_load_policy: '3',
+            disablekb: '1'
+        };
 
-        return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+        const params = new URLSearchParams(baseParams);
+
+        switch (embedMethod) {
+            case 'nocookie':
+                return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
+            case 'invidious':
+                // Invidious alternatif frontend
+                return `https://invidious.io/embed/${videoId}?${params.toString()}`;
+            case 'proxy':
+                // CORS proxy ile
+                return `https://cors-anywhere.herokuapp.com/https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+            case 'direct':
+            default:
+                return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+        }
+    };
+
+    const handleVideoError = (videoId: string): void => {
+        setFailedVideos(prev => new Set([...prev, videoId]));
+    };
+
+    const renderVideoPlayer = (channel: Channel): JSX.Element => {
+        const isVideoFailed = failedVideos.has(channel.url);
+
+        if (isVideoFailed) {
+            return (
+                <div className="relative aspect-video bg-gray-900 flex flex-col items-center justify-center text-white p-4">
+                    <div className="text-center">
+                        <div className="text-4xl mb-2">⚠️</div>
+                        <p className="text-sm mb-3">Video yüklenemedi</p>
+                        <div className="flex flex-col gap-2">
+                            <a
+                                href={`https://www.youtube.com/watch?v=${channel.url}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700 transition-colors"
+                            >
+                                YouTube&apos;da Aç
+                            </a>
+                            <button
+                                onClick={() => {
+                                    setFailedVideos(prev => {
+                                        const newSet = new Set(prev);
+                                        newSet.delete(channel.url);
+                                        return newSet;
+                                    });
+                                }}
+                                className="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors"
+                            >
+                                Tekrar Dene
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="relative aspect-video bg-black">
+                <iframe
+                    src={getYouTubeEmbedUrl(channel.url)}
+                    title={channel.name}
+                    className="w-full h-full"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    onError={() => handleVideoError(channel.url)}
+                    sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
+                />
+            </div>
+        );
     };
 
     return (
@@ -312,6 +391,36 @@ export default function MultiTVPage(): JSX.Element {
                                         </div>
                                     </div>
 
+                                    {/* Embed Yöntemi Seçimi */}
+                                    <div>
+                                        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
+                                            🔧 Video Yükleme Yöntemi
+                                        </h3>
+                                        <div className="space-y-2">
+                                            {[
+                                                { value: 'nocookie', label: 'YouTube No-Cookie (Önerilen)', desc: 'Gizlilik odaklı, çoğu engellemeyi aşar' },
+                                                { value: 'invidious', label: 'Invidious Frontend', desc: 'Alternatif YouTube frontend' },
+                                                { value: 'direct', label: 'Doğrudan YouTube', desc: 'Standart YouTube embed' },
+                                                { value: 'proxy', label: 'Proxy Üzerinden', desc: 'CORS proxy ile engelleme aşma' }
+                                            ].map((method) => (
+                                                <label key={method.value} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                                    <input
+                                                        type="radio"
+                                                        name="embedMethod"
+                                                        value={method.value}
+                                                        checked={embedMethod === method.value}
+                                                        onChange={(e): void => setEmbedMethod(e.target.value as 'nocookie' | 'invidious' | 'direct' | 'proxy')}
+                                                        className="mt-1 text-primary-600 focus:ring-primary-500"
+                                                    />
+                                                    <div>
+                                                        <div className="font-medium text-gray-900 dark:text-white">{method.label}</div>
+                                                        <div className="text-sm text-gray-600 dark:text-gray-400">{method.desc}</div>
+                                                    </div>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+
                                     <div className="flex items-center gap-4">
                                         <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                                             <input
@@ -393,6 +502,12 @@ export default function MultiTVPage(): JSX.Element {
                                         >
                                             💾 Ayarları Kaydet
                                         </button>
+                                        <button
+                                            onClick={(): void => setFailedVideos(new Set())}
+                                            className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors"
+                                        >
+                                            🔄 Hataları Temizle
+                                        </button>
                                     </div>
                                 </div>
                             )}
@@ -414,20 +529,12 @@ export default function MultiTVPage(): JSX.Element {
                                     <span className="truncate flex-1">{channel.name}</span>
                                     <div className="flex items-center gap-1 md:gap-2 ml-2">
                                         <span className="text-red-500 animate-pulse text-xs">● CANLI</span>
+                                        {failedVideos.has(channel.url) && (
+                                            <span className="text-yellow-500 text-xs">⚠️</span>
+                                        )}
                                     </div>
                                 </div>
-                                <div className="relative aspect-video bg-black">
-                                    <iframe
-                                        src={getYouTubeEmbedUrl(channel.url)}
-                                        title={channel.name}
-                                        className="w-full h-full"
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        allowFullScreen
-                                        loading="lazy"
-                                        referrerPolicy="strict-origin-when-cross-origin"
-                                    />
-                                </div>
+                                {renderVideoPlayer(channel)}
                             </div>
                         ))}
                     </div>
