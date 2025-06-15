@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Layout } from '~/layouts';
+import { NextSeo } from 'next-seo';
 
 interface Channel {
     id: string;
@@ -51,7 +51,7 @@ const gridLayouts: { [key: number]: { cols: number; rows: number; class: string;
 
 export default function MultiTVPage(): JSX.Element {
     const [channels, setChannels] = useState<Array<Channel>>(defaultChannels);
-    const [gridSize, setGridSize] = useState<number>(4); // Varsayılan 4 kanal
+    const [gridSize, setGridSize] = useState<number>(4); // Varsayılan 4 kanal - sabit
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [newChannelUrl, setNewChannelUrl] = useState('');
     const [draggedChannel, setDraggedChannel] = useState<string | null>(null);
@@ -90,6 +90,7 @@ export default function MultiTVPage(): JSX.Element {
                 console.log('[MultiTV] useEffect: No channels in localStorage, using default.');
             }
 
+            // Grid boyutu her zaman 4 olarak başlasın
             if (savedGridSize && gridLayouts[Number(savedGridSize)]) {
                 setGridSize(Number(savedGridSize));
                 console.log(`[MultiTV] useEffect: Grid size set to: ${savedGridSize}`);
@@ -259,8 +260,12 @@ export default function MultiTVPage(): JSX.Element {
     };
 
     return (
-        <Layout.Default seo={{ title: 'Multi TV - Çoklu Haber Kanalı İzleme' }} background={false}>
-            <div className="min-h-screen relative bg-black">
+        <>
+            <NextSeo
+                title="Multi TV - Çoklu Haber Kanalı İzleme"
+                description="Birden fazla haber kanalını aynı anda izleyin"
+            />
+            <div className="fixed inset-0 bg-black overflow-hidden">
                 {/* Floating Settings Button - Sağ Orta */}
                 <button
                     onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
@@ -452,7 +457,7 @@ export default function MultiTVPage(): JSX.Element {
                 )}
 
                 {/* Full Screen Video Grid - 16:9 Aspect Ratio */}
-                <div className="h-screen w-full p-1">
+                <div className="w-full h-full p-1">
                     <div className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-1 h-full w-full`}>
                         {displayedChannels.map((channel) => (
                             <div
@@ -498,6 +503,6 @@ export default function MultiTVPage(): JSX.Element {
                     background: #9CA3AF;
                 }
             `}</style>
-        </Layout.Default>
+        </>
     );
 }
