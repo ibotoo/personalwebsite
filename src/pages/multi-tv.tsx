@@ -265,7 +265,7 @@ export default function MultiTVPage(): JSX.Element {
             <div className="min-h-screen relative">
                 {/* Floating Settings Button */}
                 <button
-                    onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                    onClick={(): void => setIsSettingsOpen(!isSettingsOpen)}
                     className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50 bg-primary-500 hover:bg-primary-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all"
                 >
                     ⚙️
@@ -277,7 +277,7 @@ export default function MultiTVPage(): JSX.Element {
                         {/* Backdrop */}
                         <div
                             className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                            onClick={() => setIsSettingsOpen(false)}
+                            onClick={(): void => setIsSettingsOpen(false)}
                         />
 
                         {/* Settings Panel */}
@@ -286,7 +286,7 @@ export default function MultiTVPage(): JSX.Element {
                                 <div className="flex justify-between items-center mb-6">
                                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">⚙️ Ayarlar</h2>
                                     <button
-                                        onClick={() => setIsSettingsOpen(false)}
+                                        onClick={(): void => setIsSettingsOpen(false)}
                                         className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                                     >
                                         ✕
@@ -295,8 +295,8 @@ export default function MultiTVPage(): JSX.Element {
 
                                 <div className="mb-6">
                                     <div className="flex border-b border-gray-200 dark:border-gray-600">
-                                        <button onClick={() => setActiveTab('grid')} className={`px-4 py-2 font-medium ${activeTab === 'grid' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📊 Kanal Sayısı</button>
-                                        <button onClick={() => setActiveTab('channels')} className={`px-4 py-2 font-medium ${activeTab === 'channels' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📺 Kanalları Düzenle</button>
+                                        <button onClick={(): void => setActiveTab('grid')} className={`px-4 py-2 font-medium ${activeTab === 'grid' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📊 Kanal Sayısı</button>
+                                        <button onClick={(): void => setActiveTab('channels')} className={`px-4 py-2 font-medium ${activeTab === 'channels' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>📺 Kanalları Düzenle</button>
                                     </div>
                                 </div>
 
@@ -312,7 +312,7 @@ export default function MultiTVPage(): JSX.Element {
                                                     return (
                                                         <button
                                                             key={size}
-                                                            onClick={() => setGridSize(size)}
+                                                            onClick={(): void => setGridSize(size)}
                                                             className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-lg transition-all ${gridSize === size ? 'bg-primary-500 text-white shadow-lg scale-105' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-105'}`}
                                                             title={`${size} kanal (${layout.cols}x${layout.rows} grid)`}
                                                         >
@@ -325,7 +325,7 @@ export default function MultiTVPage(): JSX.Element {
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                                                <input type="checkbox" checked={autoplay} onChange={(e) => setAutoplay(e.target.checked)} className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                                                <input type="checkbox" checked={autoplay} onChange={(e): void => setAutoplay(e.target.checked)} className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                                                 🔊 Otomatik oynatma
                                             </label>
                                         </div>
@@ -337,34 +337,92 @@ export default function MultiTVPage(): JSX.Element {
                                         {/* Hızlı Kanal Ekleme */}
                                         <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                                             <div className="flex flex-col gap-2">
-                                                <input type="text" placeholder="YouTube video linkini veya ID'sini yapıştırın..." value={newChannelUrl} onChange={(e) => setNewChannelUrl(e.target.value)} onKeyPress={handleKeyPress} className="w-full p-3 border rounded-lg dark:bg-gray-600 dark:border-gray-500 dark:text-white text-sm focus:ring-2 focus:ring-primary-500" disabled={isLoading} />
-                                                <button onClick={addChannel} disabled={isLoading || !newChannelUrl.trim()} className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-semibold">{isLoading ? '⏳' : '➕ Ekle'}</button>
+                                                <input
+                                                    type="text"
+                                                    placeholder="YouTube video linkini veya ID&apos;sini yapıştırın..."
+                                                    value={newChannelUrl}
+                                                    onChange={(e): void => setNewChannelUrl(e.target.value)}
+                                                    onKeyPress={handleKeyPress}
+                                                    className="w-full p-3 border rounded-lg dark:bg-gray-600 dark:border-gray-500 dark:text-white text-sm focus:ring-2 focus:ring-primary-500"
+                                                    disabled={isLoading}
+                                                />
+                                                <button
+                                                    onClick={addChannel}
+                                                    disabled={isLoading || !newChannelUrl.trim()}
+                                                    className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors"
+                                                >
+                                                    {isLoading ? '⏳ Ekleniyor...' : '➕ Kanal Ekle'}
+                                                </button>
                                             </div>
                                             <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Video linkini yapıştırın, başlık otomatik çekilecek.</p>
                                         </div>
 
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Kanal adresi bölümüne YouTube video ID'sini girmelisiniz. (Örnek: qnpfhjMhMKY)</p>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                            YouTube video ID&apos;sini girmelisiniz. (Örnek: qnpfhjMhMKY)
+                                        </p>
                                         <div className="space-y-4 max-h-96 overflow-y-auto">
                                             {channels.map((ch) => (
                                                 <div key={ch.id} className="grid grid-cols-1 gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">📺 Kanal Adı</label>
-                                                        <input type="text" value={ch.name} onChange={(e) => updateChannel(ch.id, e.target.value, ch.url)} className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white focus:ring-2 focus:ring-primary-500" />
+                                                        <input
+                                                            type="text"
+                                                            value={ch.name}
+                                                            onChange={(e): void => updateChannel(ch.id, e.target.value, ch.url)}
+                                                            className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white text-sm focus:ring-2 focus:ring-primary-500"
+                                                        />
                                                     </div>
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">🔗 Video ID</label>
-                                                        <input type="text" value={ch.url} onChange={(e) => updateChannel(ch.id, ch.name, e.target.value)} className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white font-mono text-sm focus:ring-2 focus:ring-primary-500" placeholder="qnpfhjMhMKY" />
+                                                        <input
+                                                            type="text"
+                                                            value={ch.url}
+                                                            onChange={(e): void => updateChannel(ch.id, ch.name, e.target.value)}
+                                                            className="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white font-mono text-sm focus:ring-2 focus:ring-primary-500"
+                                                            placeholder="qnpfhjMhMKY"
+                                                        />
                                                     </div>
                                                     <div className="flex justify-end">
-                                                        <button onClick={() => removeChannel(ch.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">🗑️ Sil</button>
+                                                        <button
+                                                            onClick={(): void => removeChannel(ch.id)}
+                                                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                                                        >
+                                                            🗑️ Sil
+                                                        </button>
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
                                         <div className="flex flex-col gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
-                                            <button onClick={() => { const nc: Channel = { id: Date.now().toString(), name: 'Yeni Kanal', url: '', width: 400, height: 300, x: 0, y: 0 }; setChannels((prev: Array<Channel>) => [...prev, nc]); }} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">➕ Yeni Kanal Ekle</button>
-                                            <button onClick={saveSettings} className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg">💾 Ayarları Kaydet</button>
-                                            <button onClick={() => setFailedVideos(() => new Set())} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg">🔄 Hataları Temizle</button>
+                                            <button
+                                                onClick={(): void => {
+                                                    const newChannel: Channel = {
+                                                        id: Date.now().toString(),
+                                                        name: 'Yeni Kanal',
+                                                        url: '',
+                                                        width: 400,
+                                                        height: 300,
+                                                        x: 0,
+                                                        y: 0
+                                                    };
+                                                    setChannels((prev: Array<Channel>): Array<Channel> => [...prev, newChannel]);
+                                                }}
+                                                className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+                                            >
+                                                ➕ Yeni Kanal Ekle
+                                            </button>
+                                            <button
+                                                onClick={saveSettings}
+                                                className="w-full bg-primary-500 hover:bg-primary-600 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+                                            >
+                                                💾 Ayarları Kaydet
+                                            </button>
+                                            <button
+                                                onClick={(): void => setFailedVideos((): Set<string> => new Set())}
+                                                className="w-full bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+                                            >
+                                                🔄 Hataları Temizle
+                                            </button>
                                         </div>
                                     </div>
                                 )}
@@ -381,9 +439,9 @@ export default function MultiTVPage(): JSX.Element {
                                 key={channel.id}
                                 className="rounded-lg overflow-hidden shadow-lg group aspect-video flex flex-col bg-black"
                                 draggable
-                                onDragStart={(e) => handleDragStart(e, channel.id)}
+                                onDragStart={(e): void => handleDragStart(e, channel.id)}
                                 onDragOver={handleDragOver}
-                                onDrop={(e) => handleDrop(e, channel.id)}
+                                onDrop={(e): void => handleDrop(e, channel.id)}
                             >
                                 <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-2 md:px-3 py-1 text-xs font-medium flex justify-between items-center flex-shrink-0">
                                     <span className="truncate flex-1 font-semibold">{channel.name}</span>
