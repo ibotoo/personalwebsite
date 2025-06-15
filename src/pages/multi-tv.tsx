@@ -451,20 +451,19 @@ export default function MultiTVPage(): JSX.Element {
                     </>
                 )}
 
-                {/* Full Screen Video Grid - 16:9 Aspect Ratio */}
+                {/* Full Screen Video Grid - Responsive ve Tam Ekran */}
                 <div className="w-full h-full p-1">
                     <div className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-1 h-full w-full`}>
                         {displayedChannels.map((channel) => (
                             <div
                                 key={channel.id}
-                                className="rounded-lg overflow-hidden shadow-2xl group bg-black relative"
-                                style={{ aspectRatio: '16/9' }}
+                                className="rounded-lg overflow-hidden shadow-2xl group bg-black relative w-full h-full"
                                 draggable
                                 onDragStart={(e): void => handleDragStart(e, channel.id)}
                                 onDragOver={handleDragOver}
                                 onDrop={(e): void => handleDrop(e, channel.id)}
                             >
-                                {/* Video Player - Başlık kaldırıldı */}
+                                {/* Video Player - Tam Ekran Uyumlu */}
                                 <div className="w-full h-full">
                                     {renderVideoPlayer(channel)}
                                 </div>
@@ -488,6 +487,32 @@ export default function MultiTVPage(): JSX.Element {
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                     background: #9CA3AF;
+                }
+                
+                /* Grid düzenleri için özel CSS */
+                .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+                .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+                .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+                .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+                
+                .grid-rows-1 { grid-template-rows: repeat(1, minmax(0, 1fr)); }
+                .grid-rows-2 { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+                .grid-rows-3 { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+                .grid-rows-4 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+                .grid-rows-5 { grid-template-rows: repeat(5, minmax(0, 1fr)); }
+                
+                /* Video container'ların tam boyut alması */
+                .grid > div {
+                    min-height: 0;
+                    min-width: 0;
+                }
+                
+                /* iframe'lerin responsive olması */
+                iframe {
+                    width: 100% !important;
+                    height: 100% !important;
+                    object-fit: cover;
                 }
             `}</style>
         </>
