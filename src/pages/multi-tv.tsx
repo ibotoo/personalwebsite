@@ -68,7 +68,6 @@ export default function MultiTVPage(): JSX.Element {
             console.log(`[MultiTV] useEffect: Origin set to: ${origin}`);
 
             const savedChannels = localStorage.getItem('multiTV_channels');
-            const savedGridSize = localStorage.getItem('multiTV_gridSize');
             const savedAutoplay = localStorage.getItem('multiTV_autoplay');
 
             if (savedChannels) {
@@ -90,14 +89,10 @@ export default function MultiTVPage(): JSX.Element {
                 console.log('[MultiTV] useEffect: No channels in localStorage, using default.');
             }
 
-            // Grid boyutu her zaman 4 olarak başlasın
-            if (savedGridSize && gridLayouts[Number(savedGridSize)]) {
-                setGridSize(Number(savedGridSize));
-                console.log(`[MultiTV] useEffect: Grid size set to: ${savedGridSize}`);
-            } else {
-                setGridSize(4); // Varsayılan 4 kanal
-                console.log(`[MultiTV] useEffect: No saved grid size or invalid, defaulting to: 4`);
-            }
+            // Grid boyutu her zaman 4 olarak sabitlendi
+            setGridSize(4);
+            console.log(`[MultiTV] useEffect: Grid size forced to: 4`);
+
             if (savedAutoplay !== null) {
                 setAutoplay(savedAutoplay === 'true');
                 console.log(`[MultiTV] useEffect: Autoplay set to: ${savedAutoplay}`);
@@ -304,8 +299,8 @@ export default function MultiTVPage(): JSX.Element {
                                         <button
                                             onClick={(): void => setActiveTab('grid')}
                                             className={`flex-1 px-4 py-3 font-medium rounded-md transition-all duration-200 ${activeTab === 'grid'
-                                                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                                                    : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                                                : 'text-gray-400 hover:text-white hover:bg-gray-700'
                                                 }`}
                                         >
                                             📊 Grid Boyutu
@@ -313,8 +308,8 @@ export default function MultiTVPage(): JSX.Element {
                                         <button
                                             onClick={(): void => setActiveTab('channels')}
                                             className={`flex-1 px-4 py-3 font-medium rounded-md transition-all duration-200 ${activeTab === 'channels'
-                                                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                                                    : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                                                : 'text-gray-400 hover:text-white hover:bg-gray-700'
                                                 }`}
                                         >
                                             📺 Kanallar
@@ -336,8 +331,8 @@ export default function MultiTVPage(): JSX.Element {
                                                             key={size}
                                                             onClick={(): void => setGridSize(size)}
                                                             className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-xl transition-all duration-300 transform hover:scale-105 ${gridSize === size
-                                                                    ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl scale-105 ring-2 ring-blue-400'
-                                                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white shadow-lg'
+                                                                ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl scale-105 ring-2 ring-blue-400'
+                                                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white shadow-lg'
                                                                 }`}
                                                             title={`${size} kanal (${layout.cols}x${layout.rows} grid)`}
                                                         >
@@ -469,15 +464,7 @@ export default function MultiTVPage(): JSX.Element {
                                 onDragOver={handleDragOver}
                                 onDrop={(e): void => handleDrop(e, channel.id)}
                             >
-                                {/* Kanal Başlığı */}
-                                <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 to-transparent text-white px-3 py-2 text-sm font-medium flex justify-between items-center z-10">
-                                    <span className="truncate flex-1 font-semibold">{channel.name}</span>
-                                    <div className="flex items-center gap-2 ml-2">
-                                        <span className="text-red-500 animate-pulse text-xs font-bold">● CANLI</span>
-                                    </div>
-                                </div>
-
-                                {/* Video Player */}
+                                {/* Video Player - Başlık kaldırıldı */}
                                 <div className="w-full h-full">
                                     {renderVideoPlayer(channel)}
                                 </div>
