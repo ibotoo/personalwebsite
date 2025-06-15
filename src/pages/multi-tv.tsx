@@ -227,10 +227,10 @@ export default function MultiTVPage(): JSX.Element {
                                 rel="noopener noreferrer"
                                 className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition-colors"
                             >
-                                YouTube'da Aç
+                                YouTube&apos;da Aç
                             </a>
                             <button
-                                onClick={() => setFailedVideos(prev => {
+                                onClick={(): void => setFailedVideos((prev: Set<string>): Set<string> => {
                                     const newSet = new Set(prev);
                                     newSet.delete(channel.url);
                                     return newSet;
@@ -255,7 +255,7 @@ export default function MultiTVPage(): JSX.Element {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                 allowFullScreen
                 loading="lazy"
-                onError={() => handleVideoError(channel.url, channel.name)}
+                onError={(): void => handleVideoError(channel.url, channel.name)}
             />
         );
     };
