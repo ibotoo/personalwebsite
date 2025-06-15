@@ -32,22 +32,25 @@ const defaultChannels: Array<Channel> = [
     { id: '17', name: 'CNBC-e', url: 'XihyuKSyUD0', width: 0, height: 0, x: 0, y: 0 },
 ];
 
-// Grid layout seçenekleri
-const gridLayouts: { [key: number]: { cols: number; rows: number; class: string; } } = {
-    1: { cols: 1, rows: 1, class: 'grid-cols-1 grid-rows-1' },
-    2: { cols: 2, rows: 1, class: 'grid-cols-2 grid-rows-1' },
-    3: { cols: 3, rows: 1, class: 'grid-cols-3 grid-rows-1' },
-    4: { cols: 2, rows: 2, class: 'grid-cols-2 grid-rows-2' },
-    6: { cols: 3, rows: 2, class: 'grid-cols-3 grid-rows-2' },
-    8: { cols: 4, rows: 2, class: 'grid-cols-4 grid-rows-2' },
-    9: { cols: 3, rows: 3, class: 'grid-cols-3 grid-rows-3' },
-    10: { cols: 5, rows: 2, class: 'grid-cols-5 grid-rows-2' },
-    12: { cols: 4, rows: 3, class: 'grid-cols-4 grid-rows-3' },
-    15: { cols: 5, rows: 3, class: 'grid-cols-5 grid-rows-3' },
-    16: { cols: 4, rows: 4, class: 'grid-cols-4 grid-rows-4' },
-    20: { cols: 5, rows: 4, class: 'grid-cols-5 grid-rows-4' },
-    25: { cols: 5, rows: 5, class: 'grid-cols-5 grid-rows-5' },
+// Grid layout seçenekleri - 16:9 ekranlar için optimize edildi (mertskaplan/multitv referansı)
+const gridLayouts: { [key: number]: { cols: number; rows: number; class: string; aspectRatio: string; } } = {
+    1: { cols: 1, rows: 1, class: 'grid-cols-1 grid-rows-1', aspectRatio: '16/9' },
+    2: { cols: 2, rows: 1, class: 'grid-cols-2 grid-rows-1', aspectRatio: '32/9' },
+    3: { cols: 3, rows: 1, class: 'grid-cols-3 grid-rows-1', aspectRatio: '48/9' },
+    4: { cols: 2, rows: 2, class: 'grid-cols-2 grid-rows-2', aspectRatio: '16/9' },
+    6: { cols: 3, rows: 2, class: 'grid-cols-3 grid-rows-2', aspectRatio: '24/9' },
+    8: { cols: 4, rows: 2, class: 'grid-cols-4 grid-rows-2', aspectRatio: '32/9' },
+    9: { cols: 3, rows: 3, class: 'grid-cols-3 grid-rows-3', aspectRatio: '16/9' },
+    10: { cols: 5, rows: 2, class: 'grid-cols-5 grid-rows-2', aspectRatio: '40/9' },
+    12: { cols: 4, rows: 3, class: 'grid-cols-4 grid-rows-3', aspectRatio: '21.33/9' },
+    15: { cols: 5, rows: 3, class: 'grid-cols-5 grid-rows-3', aspectRatio: '26.67/9' },
+    16: { cols: 4, rows: 4, class: 'grid-cols-4 grid-rows-4', aspectRatio: '16/9' },
+    20: { cols: 5, rows: 4, class: 'grid-cols-5 grid-rows-4', aspectRatio: '20/9' },
+    25: { cols: 5, rows: 5, class: 'grid-cols-5 grid-rows-5', aspectRatio: '16/9' },
 };
+
+// 16:9 ekranlarla tam uyumlu kanal sayıları (referans projeden)
+const compatibleChannelCounts = [1, 4, 9, 16, 25];
 
 export default function MultiTVPage(): JSX.Element {
     const [channels, setChannels] = useState<Array<Channel>>(defaultChannels);
@@ -321,21 +324,30 @@ export default function MultiTVPage(): JSX.Element {
                                     <div className="space-y-8">
                                         <div>
                                             <h3 className="text-xl font-semibold mb-6 text-white">Grid Boyutu Seçin</h3>
+                                            <p className="text-sm text-gray-400 mb-4">
+                                                ⭐ 16:9 ekranlarla tam uyumlu: {compatibleChannelCounts.join(', ')} kanal
+                                            </p>
                                             <div className="grid grid-cols-3 gap-4">
                                                 {Object.keys(gridLayouts).map((sizeStr) => {
                                                     const size = Number(sizeStr);
                                                     const layout = gridLayouts[size];
+                                                    const isCompatible = compatibleChannelCounts.includes(size);
                                                     if (!layout) return null;
                                                     return (
                                                         <button
                                                             key={size}
                                                             onClick={(): void => setGridSize(size)}
-                                                            className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-xl transition-all duration-300 transform hover:scale-105 ${gridSize === size
+                                                            className={`aspect-square flex flex-col items-center justify-center text-sm font-bold rounded-xl transition-all duration-300 transform hover:scale-105 relative ${gridSize === size
                                                                 ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl scale-105 ring-2 ring-blue-400'
-                                                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white shadow-lg'
+                                                                : isCompatible
+                                                                    ? 'bg-gradient-to-br from-green-600 to-emerald-600 text-white shadow-lg hover:from-green-700 hover:to-emerald-700'
+                                                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white shadow-lg'
                                                                 }`}
-                                                            title={`${size} kanal (${layout.cols}x${layout.rows} grid)`}
+                                                            title={`${size} kanal (${layout.cols}x${layout.rows} grid)${isCompatible ? ' - 16:9 Uyumlu' : ''}`}
                                                         >
+                                                            {isCompatible && (
+                                                                <span className="absolute -top-1 -right-1 text-xs">⭐</span>
+                                                            )}
                                                             <span className="text-2xl font-bold">{size}</span>
                                                             <span className="text-xs opacity-80 mt-1">{layout.cols}×{layout.rows}</span>
                                                         </button>
@@ -451,19 +463,31 @@ export default function MultiTVPage(): JSX.Element {
                     </>
                 )}
 
-                {/* Full Screen Video Grid - Responsive ve Tam Ekran */}
+                {/* Full Screen Video Grid - 16:9 Optimized */}
                 <div className="w-full h-full p-1">
-                    <div className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-1 h-full w-full`}>
+                    <div
+                        className={`grid ${gridLayouts[gridSize]?.class || gridLayouts[4].class} gap-1 h-full w-full`}
+                        style={{
+                            aspectRatio: gridLayouts[gridSize]?.aspectRatio || '16/9',
+                            maxHeight: '100vh',
+                            maxWidth: '100vw'
+                        }}
+                    >
                         {displayedChannels.map((channel) => (
                             <div
                                 key={channel.id}
                                 className="rounded-lg overflow-hidden shadow-2xl group bg-black relative w-full h-full"
+                                style={{
+                                    aspectRatio: '16/9',
+                                    minHeight: 0,
+                                    minWidth: 0
+                                }}
                                 draggable
                                 onDragStart={(e): void => handleDragStart(e, channel.id)}
                                 onDragOver={handleDragOver}
                                 onDrop={(e): void => handleDrop(e, channel.id)}
                             >
-                                {/* Video Player - Tam Ekran Uyumlu */}
+                                {/* Video Player - 16:9 Optimized */}
                                 <div className="w-full h-full">
                                     {renderVideoPlayer(channel)}
                                 </div>
@@ -489,7 +513,7 @@ export default function MultiTVPage(): JSX.Element {
                     background: #9CA3AF;
                 }
                 
-                /* Grid düzenleri için özel CSS */
+                /* 16:9 Optimized Grid düzenleri (mertskaplan/multitv referansı) */
                 .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
                 .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
                 .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -502,17 +526,44 @@ export default function MultiTVPage(): JSX.Element {
                 .grid-rows-4 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
                 .grid-rows-5 { grid-template-rows: repeat(5, minmax(0, 1fr)); }
                 
-                /* Video container'ların tam boyut alması */
+                /* Video container'ların 16:9 uyumluluğu */
                 .grid > div {
                     min-height: 0;
                     min-width: 0;
+                    aspect-ratio: 16/9;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
                 
-                /* iframe'lerin responsive olması */
+                /* iframe'lerin 16:9 responsive optimizasyonu */
                 iframe {
                     width: 100% !important;
                     height: 100% !important;
                     object-fit: cover;
+                    aspect-ratio: 16/9;
+                }
+                
+                /* Grid container'ın ekrana tam sığması */
+                .grid {
+                    width: 100%;
+                    height: 100%;
+                    max-width: 100vw;
+                    max-height: 100vh;
+                    overflow: hidden;
+                }
+                
+                /* Responsive breakpoints için optimizasyon */
+                @media (max-width: 768px) {
+                    .grid {
+                        gap: 0.25rem;
+                    }
+                }
+                
+                @media (min-width: 1920px) {
+                    .grid {
+                        gap: 0.5rem;
+                    }
                 }
             `}</style>
         </>
