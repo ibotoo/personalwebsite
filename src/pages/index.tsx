@@ -172,20 +172,18 @@ export default function HomePage(): JSX.Element {
 						<div className="absolute bottom-16 sm:bottom-20 w-full flex justify-center px-4">
 							<Animate
 								animation={{
-									y: [30, 0],
+									y: [20, 0],
 									opacity: [0, 1],
-									scale: [0.9, 1],
 								}}
 								transition={{
-									delay: 1.5,
-									duration: 0.6,
+									delay: 3.0,
+									duration: 0.8,
 								}}
 								className="group">
 								<Link href="/iletisim">
-									<a className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out backdrop-blur-sm border border-white/20">
-										<Icon className="mr-3 w-5 h-5" icon="feather:mail" />
-										<span className="text-base">Benimle İletişime Geç</span>
-										<Icon className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" icon="feather:arrow-right" />
+									<a className="inline-flex items-center justify-center px-6 py-3 bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-800/80 dark:hover:bg-gray-700/80 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white font-medium rounded-lg border border-gray-200/50 dark:border-gray-600/50 hover:border-gray-300/70 dark:hover:border-gray-500/70 shadow-sm hover:shadow-md transform hover:scale-102 transition-all duration-200 ease-out backdrop-blur-sm">
+										<Icon className="mr-2 w-4 h-4" icon="feather:mail" />
+										<span className="text-sm">İletişim</span>
 									</a>
 								</Link>
 							</Animate>

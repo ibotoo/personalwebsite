@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { NextSeo } from 'next-seo';
 
 import { Layout } from '~/layouts';
-import { Animate, Button } from '~/components';
+import { Button } from '~/components';
 
 interface FormData {
     name: string;
@@ -121,47 +121,35 @@ export default function ContactPage(): JSX.Element {
     return (
         <>
             <NextSeo {...seoProps} />
-            <Layout.Default>
-                <div className="min-h-screen pt-20 pb-12 px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-4xl mx-auto">
+            <Layout.Default background={true}>
+                <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 overflow-y-auto">
+                    <div className="max-w-6xl mx-auto">
 
                         {/* Header */}
-                        <Animate
-                            as="div"
-                            animation={{
-                                opacity: [0, 1],
-                                y: [50, 0],
-                            }}
-                            className="text-center mb-12">
-                            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                        <div className="text-center mb-8 pt-16">
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
                                 İletişim
                             </h1>
-                            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                                 Sosyal medya pazarlama, e-ticaret danışmanlığı ve dijital pazarlama konularında
                                 benimle iletişime geçebilirsiniz. Size en kısa sürede dönüş yapacağım.
                             </p>
-                        </Animate>
+                        </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
                             {/* Contact Info */}
-                            <Animate
-                                animation={{
-                                    opacity: [0, 1],
-                                    x: [-50, 0],
-                                }}
-                                transition={{ delay: 0.2 }}
-                                className="space-y-8">
+                            <div className="space-y-6 lg:space-y-8">
 
                                 <div>
-                                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
+                                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-4 lg:mb-6">
                                         İletişim Bilgileri
                                     </h2>
 
-                                    <div className="space-y-4">
+                                    <div className="space-y-3 lg:space-y-4">
                                         <div className="flex items-center space-x-3">
-                                            <Icon icon="feather:mail" className="w-5 h-5 text-blue-500" />
-                                            <span className="text-gray-700 dark:text-gray-300">
+                                            <Icon icon="feather:mail" className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                                            <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
                                                 <a href="mailto:mail@ibrahimsancar.com" className="hover:text-blue-500 transition-colors">
                                                     mail@ibrahimsancar.com
                                                 </a>
@@ -169,8 +157,8 @@ export default function ContactPage(): JSX.Element {
                                         </div>
 
                                         <div className="flex items-center space-x-3">
-                                            <Icon icon="feather:mail" className="w-5 h-5 text-blue-500" />
-                                            <span className="text-gray-700 dark:text-gray-300">
+                                            <Icon icon="feather:mail" className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                                            <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
                                                 <a href="mailto:iletisim@ibrahimsancar.com" className="hover:text-blue-500 transition-colors">
                                                     iletisim@ibrahimsancar.com
                                                 </a>
@@ -178,8 +166,8 @@ export default function ContactPage(): JSX.Element {
                                         </div>
 
                                         <div className="flex items-center space-x-3">
-                                            <Icon icon="feather:instagram" className="w-5 h-5 text-blue-500" />
-                                            <span className="text-gray-700 dark:text-gray-300">
+                                            <Icon icon="feather:instagram" className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                                            <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
                                                 <a href="https://instagram.com/ibrahimsancar0" target="_blank" rel="noopener noreferrer"
                                                     className="hover:text-blue-500 transition-colors">
                                                     @ibrahimsancar0
@@ -188,8 +176,8 @@ export default function ContactPage(): JSX.Element {
                                         </div>
 
                                         <div className="flex items-center space-x-3">
-                                            <Icon icon="simple-icons:x" className="w-5 h-5 text-blue-500" />
-                                            <span className="text-gray-700 dark:text-gray-300">
+                                            <Icon icon="simple-icons:x" className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                                            <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
                                                 <a href="https://x.com/ibrahimsancar0" target="_blank" rel="noopener noreferrer"
                                                     className="hover:text-blue-500 transition-colors">
                                                     @ibrahimsancar0
@@ -201,115 +189,109 @@ export default function ContactPage(): JSX.Element {
 
                                 {/* Services */}
                                 <div>
-                                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 lg:mb-4">
                                         Hizmetlerim
                                     </h3>
-                                    <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                                    <ul className="space-y-2 text-gray-600 dark:text-gray-300 text-sm sm:text-base">
                                         <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500" />
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>Sosyal Medya Pazarlama</span>
                                         </li>
                                         <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500" />
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>Shopify Mağaza Kurulumu</span>
                                         </li>
                                         <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500" />
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>E-Ticaret Danışmanlığı</span>
                                         </li>
                                         <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500" />
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>Instagram & YouTube Marketing</span>
                                         </li>
                                         <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500" />
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>Dijital Strateji Geliştirme</span>
                                         </li>
                                     </ul>
                                 </div>
 
                                 {/* Company Info */}
-                                <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                                <div className="bg-gray-50/80 dark:bg-gray-800/80 p-4 sm:p-6 rounded-lg backdrop-blur-sm">
+                                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3">
                                         Rage Medya
                                     </h3>
-                                    <p className="text-gray-600 dark:text-gray-300 text-sm">
+                                    <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm leading-relaxed">
                                         2021 yılında kurduğum Rage Medya ile sosyal medya pazarlama ve e-ticaret
                                         alanında yüzlerce başarılı proje gerçekleştirdim. Şirketinizin dijital
                                         dönüşümünde size yardımcı olmaktan mutluluk duyarım.
                                     </p>
                                 </div>
-                            </Animate>
+                            </div>
 
                             {/* Contact Form */}
-                            <Animate
-                                animation={{
-                                    opacity: [0, 1],
-                                    x: [50, 0],
-                                }}
-                                transition={{ delay: 0.4 }}
-                                className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+                            <div className="bg-white/80 dark:bg-gray-800/80 p-6 sm:p-8 rounded-lg shadow-lg backdrop-blur-sm">
 
-                                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
+                                <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
                                     Mesaj Gönder
                                 </h2>
 
                                 {submitStatus === 'success' && (
-                                    <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                                    <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                                         <div className="flex items-center space-x-2">
-                                            <Icon icon="feather:check-circle" className="w-5 h-5 text-green-500" />
-                                            <span className="text-green-700 dark:text-green-300">{submitMessage}</span>
+                                            <Icon icon="feather:check-circle" className="w-5 h-5 text-green-500 flex-shrink-0" />
+                                            <span className="text-green-700 dark:text-green-300 text-sm sm:text-base">{submitMessage}</span>
                                         </div>
                                     </div>
                                 )}
 
                                 {submitStatus === 'error' && (
-                                    <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                                    <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                                         <div className="flex items-center space-x-2">
-                                            <Icon icon="feather:x-circle" className="w-5 h-5 text-red-500" />
-                                            <span className="text-red-700 dark:text-red-300">{submitMessage}</span>
+                                            <Icon icon="feather:alert-circle" className="w-5 h-5 text-red-500 flex-shrink-0" />
+                                            <span className="text-red-700 dark:text-red-300 text-sm sm:text-base">{submitMessage}</span>
                                         </div>
                                     </div>
                                 )}
 
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                         <div>
-                                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                                                 Ad Soyad *
                                             </label>
                                             <input
                                                 type="text"
                                                 id="name"
                                                 name="name"
+                                                required
                                                 value={formData.name}
                                                 onChange={handleChange}
-                                                required
-                                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                                                 placeholder="Adınız ve soyadınız"
                                             />
                                         </div>
 
                                         <div>
-                                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                                                 E-posta *
                                             </label>
                                             <input
                                                 type="email"
                                                 id="email"
                                                 name="email"
+                                                required
                                                 value={formData.email}
                                                 onChange={handleChange}
-                                                required
-                                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                                                 placeholder="ornek@email.com"
                                             />
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                         <div>
-                                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                                                 Telefon
                                             </label>
                                             <input
@@ -318,13 +300,13 @@ export default function ContactPage(): JSX.Element {
                                                 name="phone"
                                                 value={formData.phone}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                                placeholder="+90 555 123 4567"
+                                                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                                                placeholder="+90 5XX XXX XX XX"
                                             />
                                         </div>
 
                                         <div>
-                                            <label htmlFor="company" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <label htmlFor="company" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                                                 Şirket
                                             </label>
                                             <input
@@ -333,86 +315,87 @@ export default function ContactPage(): JSX.Element {
                                                 name="company"
                                                 value={formData.company}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                                                 placeholder="Şirket adınız"
                                             />
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label htmlFor="service" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                            İlgilendiğiniz Hizmet
+                                        <label htmlFor="service" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
+                                            Hizmet Türü
                                         </label>
                                         <select
                                             id="service"
                                             name="service"
                                             value={formData.service}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                            <option value="">Hizmet seçin</option>
-                                            {SERVICES.map(service => (
-                                                <option key={service} value={service}>{service}</option>
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                        >
+                                            <option value="">Hizmet seçiniz</option>
+                                            {SERVICES.map((service) => (
+                                                <option key={service} value={service}>
+                                                    {service}
+                                                </option>
                                             ))}
                                         </select>
                                     </div>
 
                                     <div>
-                                        <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                                             Konu *
                                         </label>
                                         <input
                                             type="text"
                                             id="subject"
                                             name="subject"
+                                            required
                                             value={formData.subject}
                                             onChange={handleChange}
-                                            required
-                                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                                             placeholder="Mesajınızın konusu"
                                         />
                                     </div>
 
                                     <div>
-                                        <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                                             Mesaj *
                                         </label>
                                         <textarea
                                             id="message"
                                             name="message"
+                                            required
+                                            rows={4}
                                             value={formData.message}
                                             onChange={handleChange}
-                                            required
-                                            rows={5}
-                                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none"
                                             placeholder="Mesajınızı buraya yazın..."
                                         />
                                     </div>
 
-                                    <Button.Outline
+                                    <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full">
+                                        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors duration-200 text-sm sm:text-base flex items-center justify-center space-x-2"
+                                    >
                                         {isSubmitting ? (
                                             <>
-                                                <Icon icon="feather:loader" className="mr-2 animate-spin" />
-                                                Gönderiliyor...
+                                                <Icon icon="feather:loader" className="w-4 h-4 animate-spin" />
+                                                <span>Gönderiliyor...</span>
                                             </>
                                         ) : (
                                             <>
-                                                <Icon icon="feather:send" className="mr-2" />
-                                                Mesaj Gönder
+                                                <Icon icon="feather:send" className="w-4 h-4" />
+                                                <span>Mesaj Gönder</span>
                                             </>
                                         )}
-                                    </Button.Outline>
-
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-                                        * ile işaretli alanlar zorunludur. Mesajınız
-                                        <span className="font-medium"> mail@ibrahimsancar.com</span> ve
-                                        <span className="font-medium"> iletisim@ibrahimsancar.com</span> adreslerine gönderilecektir.
-                                    </p>
+                                    </button>
                                 </form>
-                            </Animate>
+                            </div>
                         </div>
+
+                        {/* Bottom spacing */}
+                        <div className="h-8"></div>
                     </div>
                 </div>
             </Layout.Default>
