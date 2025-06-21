@@ -45,6 +45,23 @@ export default function ContactPage(): JSX.Element {
     const seoProps = {
         title: 'İletişim - İbrahim Can Sancar | Rage Medya',
         description: 'İbrahim Can Sancar ile iletişime geçin. Sosyal medya pazarlama, Shopify e-ticaret danışmanlığı ve dijital pazarlama hizmetleri için doğrudan ulaşın.',
+        canonical: 'https://ibrahimsancar.com/iletisim',
+        openGraph: {
+            type: 'website',
+            locale: 'tr_TR',
+            url: 'https://ibrahimsancar.com/iletisim',
+            site_name: 'İbrahim Can Sancar',
+            title: 'İletişim - İbrahim Can Sancar | Rage Medya',
+            description: 'İbrahim Can Sancar ile iletişime geçin. Sosyal medya pazarlama, Shopify e-ticaret danışmanlığı ve dijital pazarlama hizmetleri için doğrudan ulaşın.',
+            images: [
+                {
+                    url: 'https://ibrahimsancar.com/og-image.jpg',
+                    width: 1200,
+                    height: 630,
+                    alt: 'İbrahim Can Sancar - Girişimci ve E-Ticaret Uzmanı',
+                },
+            ],
+        },
         additionalMetaTags: [
             {
                 name: 'keywords',

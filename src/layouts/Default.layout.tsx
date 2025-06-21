@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import { NextSeo } from 'next-seo';
 
 import { Navbar } from '~/components';
-import { usePersistantState, useSeoProps } from '~/lib';
+import { usePersistantState } from '~/lib';
 
 import type { WithChildren, WithProps } from '~/types';
 
@@ -28,7 +28,29 @@ export function DefaultLayout({
 	const { animations: background } = usePersistantState().get();
 	const showBackground = overrideBackground ?? background;
 
-	const seo = useSeoProps(customSeo);
+	const defaultSeo = {
+		title: 'İbrahim Can Sancar - Girişimci, Reklamcı & E-Ticaret Uzmanı | Rage Medya Kurucusu',
+		description: "İbrahim Can Sancar - 2003 doğumlu girişimci, Akdeniz Üniversitesi Reklamcılık öğrencisi. Rage Medya kurucusu, sosyal medya uzmanı, Shopify e-ticaret danışmanı. Snug Sneakers eski ortağı. Yapay zeka ve dijital pazarlama konularında uzman.",
+		canonical: 'https://ibrahimsancar.com',
+		openGraph: {
+			type: 'website',
+			locale: 'tr_TR',
+			url: 'https://ibrahimsancar.com',
+			site_name: 'İbrahim Can Sancar',
+			title: 'İbrahim Can Sancar - Girişimci, Reklamcı & E-Ticaret Uzmanı | Rage Medya Kurucusu',
+			description: "İbrahim Can Sancar - 2003 doğumlu girişimci, Akdeniz Üniversitesi Reklamcılık öğrencisi. Rage Medya kurucusu, sosyal medya uzmanı, Shopify e-ticaret danışmanı. Snug Sneakers eski ortağı. Yapay zeka ve dijital pazarlama konularında uzman.",
+			images: [
+				{
+					url: 'https://ibrahimsancar.com/og-image.jpg',
+					width: 1200,
+					height: 630,
+					alt: 'İbrahim Can Sancar - Girişimci ve E-Ticaret Uzmanı',
+				},
+			],
+		},
+	};
+
+	const seo = customSeo ? { ...defaultSeo, ...customSeo } : defaultSeo;
 
 	return (
 		<>
