@@ -20,6 +20,12 @@ const staticMenuItems: Array<Array<NavigationItem>> = [
 		},
 		{
 			type: NavigationItemType.LINK,
+			href: '/iletisim',
+			icon: 'feather:mail',
+			text: 'İletişim',
+		},
+		{
+			type: NavigationItemType.LINK,
 			icon: 'feather:tv',
 			text: 'Multi TV',
 			href: '/multi-tv',

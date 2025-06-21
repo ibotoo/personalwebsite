@@ -4,11 +4,13 @@ import { Icon } from '@iconify/react';
 import fs from 'fs';
 import path from 'path';
 import { memo } from 'react';
+import { NextSeo } from 'next-seo';
 
 import { useRouter } from 'next/router';
 
 import { Button, Pill } from '~/components';
 import { Layout } from '~/layouts';
+import { useSeoProps } from '~/lib';
 
 import type { GetStaticProps } from 'next';
 
@@ -117,29 +119,81 @@ export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): 
 
     const router = useRouter();
 
+    const timelineSeoProps = useSeoProps({
+        title: 'İbrahim Can Sancar Zaman Çizelgesi - Girişimcilik Yolculuğu | 2003-2025',
+        description: 'İbrahim Can Sancar\'ın detaylı zaman çizelgesi. 2003 yılında Ağrı\'da doğumundan başlayarak girişimcilik yolculuğu, Rage Medya kurulumu, Snug Sneakers ortaklığı, üniversite hayatı ve başarıları.',
+        additionalMetaTags: [
+            {
+                name: 'keywords',
+                content: 'İbrahim Sancar zaman çizelgesi, ibrahim can sancar timeline, girişimcilik yolculuğu, rage medya kuruluş tarihi, snug sneakers ortaklık, akdeniz üniversitesi, 2003 doğumlu girişimci, shopify uzmanı geçmişi, sosyal medya uzmanı timeline, r10.net üyelik, denizli osb teknik koleji, makine teknolojisi mezunu, şirket kuruluş tarihi, yapay zeka uzmanı yolculuk, dijital pazarlama geçmişi, career timeline, business journey, entrepreneur story, startup founder history, success story',
+            },
+            {
+                name: 'content-type',
+                content: 'Timeline, Biography, Career History, Success Story',
+            },
+            {
+                name: 'timeline-span',
+                content: '2003-2025, 22 yıllık yaşam hikayesi',
+            },
+            {
+                name: 'milestones',
+                content: 'Doğum 2003, Sosyal medya başlangıç 2020, Rage Medya kuruluş 2021, Lise mezuniyet 2021, Şirket kuruluş 2021, Üniversite başlangıç 2022, Shopify hizmetleri 2023, Snug Sneakers 2023, Yapay zeka odaklanma 2024',
+            },
+            {
+                name: 'achievements-count',
+                content: '10+ önemli başarı, 5+ yıl iş deneyimi, 2 şirket kurulumu, 1 başarılı ortaklık',
+            },
+            {
+                name: 'career-highlights',
+                content: 'En genç şirket kurucuları arasında, Başarılı e-ticaret danışmanı, Sosyal medya uzmanı, Üniversite öğrencisi girişimci',
+            },
+        ],
+        openGraph: {
+            type: 'article',
+            article: {
+                publishedTime: '2024-01-01T00:00:00.000Z',
+                modifiedTime: new Date().toISOString(),
+                authors: ['İbrahim Can Sancar'],
+                section: 'Biography',
+                tags: ['timeline', 'biography', 'entrepreneur', 'success story', 'career'],
+            },
+            images: [
+                {
+                    url: 'https://ibrahimsancar.com/og-timeline.jpg',
+                    width: 1200,
+                    height: 630,
+                    alt: 'İbrahim Can Sancar Zaman Çizelgesi - Girişimcilik Yolculuğu',
+                },
+            ],
+        },
+    });
+
     return (
-        <Layout.Default seo={{ title: 'İbrahim Can Sancar ─ Zaman Çizelgesi' }}>
-            <div className="flex flex-grow min-h-screen pt-16 pb-12">
-                <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto px-3 sm:px-6 md:px-8">
-                    <button
-                        onClick={(): void => router.back()}
-                        className="fixed top-4 left-4 z-50 flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
-                        <Icon icon="feather:arrow-left" className="w-5 h-5 text-primary-500" />
-                    </button>
-                    <div className="flex items-center justify-center mb-4 sm:mb-8 md:mb-12">
-                        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">Zaman Çizelgem</h1>
+        <>
+            <NextSeo {...timelineSeoProps} />
+            <Layout.Default>
+                <div className="flex flex-grow min-h-screen pt-16 pb-12">
+                    <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto px-3 sm:px-6 md:px-8">
+                        <button
+                            onClick={(): void => router.back()}
+                            className="fixed top-4 left-4 z-50 flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
+                            <Icon icon="feather:arrow-left" className="w-5 h-5 text-primary-500" />
+                        </button>
+                        <div className="flex items-center justify-center mb-4 sm:mb-8 md:mb-12">
+                            <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">Zaman Çizelgem</h1>
+                        </div>
+                        <ul className="-mb-8 w-full" role="list">
+                            {timeline.map((event, index) => (
+                                <TimelineItem
+                                    key={event.title}
+                                    event={event}
+                                    isLast={index === timeline.length - 1}
+                                />
+                            ))}
+                        </ul>
                     </div>
-                    <ul className="-mb-8 w-full" role="list">
-                        {timeline.map((event, index) => (
-                            <TimelineItem
-                                key={event.title}
-                                event={event}
-                                isLast={index === timeline.length - 1}
-                            />
-                        ))}
-                    </ul>
                 </div>
-            </div>
-        </Layout.Default>
+            </Layout.Default>
+        </>
     );
 } 

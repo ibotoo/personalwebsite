@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schema.org Markup Test - İbrahim Can Sancar</title>
+    <meta name="description" content="İbrahim Can Sancar için Schema.org structured data test sayfası">
+</head>
+
+<body>
+    <h1>Schema.org Markup Test Sayfası</h1>
+
+    <h2>Test Edilecek Araçlar:</h2>
+    <ul>
+        <li><strong>Google Rich Results Test:</strong> https://search.google.com/test/rich-results</li>
+        <li><strong>Schema.org Validator:</strong> https://validator.schema.org/</li>
+        <li><strong>Google Search Console:</strong> Core Web Vitals bölümü</li>
+        <li><strong>Bing Webmaster Tools:</strong> Markup Validator</li>
+    </ul>
+
+    <h2>Kullanılan Schema.org Markupları:</h2>
+
+    <h3>1. Person Schema</h3>
+    <pre><code>
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "İbrahim Can Sancar",
+  "alternateName": ["İbrahim Sancar", "ibrahim sancar", "ibrahim can sancar"],
+  "description": "Girişimci, Reklamcı ve E-Ticaret Uzmanı",
+  "url": "https://ibrahimsancar.com",
+  "birthDate": "2003-08-01",
+  "birthPlace": {
+    "@type": "Place",
+    "name": "Ağrı, Türkiye"
+  },
+  "nationality": "Turkish",
+  "jobTitle": ["Girişimci", "Reklamcı", "E-Ticaret Uzmanı", "Sosyal Medya Uzmanı"],
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Rage Medya",
+    "foundingDate": "2021"
+  }
+}
+    </code></pre>
+
+    <h3>2. Organization Schema</h3>
+    <pre><code>
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Rage Medya",
+  "url": "https://ibrahimsancar.com",
+  "description": "Sosyal medya pazarlama ve e-ticaret danışmanlık hizmetleri",
+  "foundingDate": "2021",
+  "founder": {
+    "@type": "Person",
+    "name": "İbrahim Can Sancar"
+  },
+  "serviceType": [
+    "Sosyal Medya Pazarlama",
+    "E-Ticaret Danışmanlığı",
+    "Shopify Mağaza Kurulumu",
+    "Dijital Reklamcılık"
+  ]
+}
+    </code></pre>
+
+    <h3>3. Website Schema</h3>
+    <pre><code>
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "İbrahim Can Sancar",
+  "url": "https://ibrahimsancar.com",
+  "description": "İbrahim Can Sancar kişisel web sitesi - Girişimci, reklamcı ve e-ticaret uzmanı",
+  "inLanguage": "tr-TR",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://ibrahimsancar.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+    </code></pre>
+
+    <h2>Test Adımları:</h2>
+    <ol>
+        <li>Ana sayfa URL'sini Rich Results Test'e girin</li>
+        <li>Her sayfa için ayrı ayrı test edin (Ana sayfa, Timeline, Multi TV)</li>
+        <li>Hataları kaydedin ve düzeltin</li>
+        <li>Schema.org validator ile çapraz kontrol yapın</li>
+        <li>Mobile ve desktop testlerini ayrı yapın</li>
+    </ol>
+
+    <h2>Beklenen Sonuçlar:</h2>
+    <ul>
+        <li>✅ Person markup tanınmalı</li>
+        <li>✅ Organization markup tanınmalı</li>
+        <li>✅ Website markup tanınmalı</li>
+        <li>✅ Hata olmamalı</li>
+        <li>✅ Rich snippets görünmeli</li>
+    </ul>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Schema.org Test Sayfası",
+        "description": "İbrahim Can Sancar için Schema.org markup test sayfası",
+        "url": "https://ibrahimsancar.com/schema-test.html",
+        "author": {
+            "@type": "Person",
+            "name": "İbrahim Can Sancar"
+        },
+        "dateCreated": "2025-01-15",
+        "inLanguage": "tr-TR"
+    }
+    </script>
+</body>
+
+</html>

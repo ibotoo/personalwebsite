@@ -1,6 +1,7 @@
 export * as Background from './Background';
 export * as Button from './Button';
 export * as List from './List';
+export * as Logo from './Logo';
 export * as Navbar from './Navbar';
 export * as Pill from './Pill';
 

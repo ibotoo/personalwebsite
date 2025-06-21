@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NextSeo } from 'next-seo';
+import { useSeoProps } from '~/lib';
 
 interface Channel {
     id: string;
@@ -53,6 +54,63 @@ const gridLayouts: { [key: number]: { cols: number; rows: number; class: string;
 const compatibleChannelCounts = [1, 4, 9, 16, 25];
 
 export default function MultiTVPage(): JSX.Element {
+    const multiTvSeoProps = useSeoProps({
+        title: 'Multi TV - Türkiye\'nin En Gelişmiş Çoklu Canlı TV Platformu | İbrahim Can Sancar Multi TV',
+        description: 'İbrahim Can Sancar Multi TV - Türkiye\'nin en gelişmiş çoklu canlı TV izleme platformu. 4K kalitede birden fazla haber, spor ve eğlence kanalını aynı anda izleyin. Ücretsiz online multi-channel TV streaming hizmeti. Advanced multi-screen TV viewing experience.',
+        additionalMetaTags: [
+            {
+                name: 'keywords',
+                content: 'Multi TV, çoklu tv izle, canlı tv, online tv izle, İbrahim Sancar multi tv, ibrahim can sancar multi tv, türkiye multi tv, en iyi multi tv, ücretsiz multi tv, haber kanalları, spor kanalları, eğlence kanalları, canlı yayın, televizyon izle, online tv platformu, streaming tv, web tv, internet tv, digital tv, smart tv, multiple tv streaming, live tv streaming, multi channel tv, türk tv kanalları online, news channels turkey, sports channels turkey, entertainment channels turkey, ibrahim sancar tv, multichannel tv viewing, simultaneous tv streaming, concurrent tv viewing, tv mosaic, grid tv viewing, dashboard tv, tv wall, multi monitor tv, multi screen tv, 4k tv streaming, hd tv online, youtube tv, live youtube streams, turkish live tv, tv streaming service, broadcast tv, television online, watch tv online, online television, streaming television, live television',
+            },
+            {
+                name: 'application-type',
+                content: 'Multi-Channel TV Streaming Platform',
+            },
+            {
+                name: 'platform-features',
+                content: 'Çoklu kanal izleme, Grid görünüm, Drag & drop, Otomatik oynatma, Ayarlanabilir grid boyutu, Kanal yönetimi, Canlı streaming',
+            },
+            {
+                name: 'supported-channels',
+                content: 'YouTube Live Streams, Haber Kanalları, Spor Kanalları, Eğlence Kanalları, Müzik Kanalları, Belgesel Kanalları',
+            },
+            {
+                name: 'streaming-quality',
+                content: '4K, HD, Adaptive Quality, Multi-Resolution Support',
+            },
+            {
+                name: 'device-compatibility',
+                content: 'Desktop, Mobile, Tablet, Smart TV, All Devices, Cross-Platform',
+            },
+            {
+                name: 'unique-features',
+                content: 'Simultaneous multi-channel viewing, Customizable grid layout, Real-time channel switching, Advanced video controls',
+            },
+            {
+                name: 'target-audience',
+                content: 'TV enthusiasts, News followers, Sports fans, Entertainment seekers, Multi-taskers, Content creators',
+            },
+        ],
+        openGraph: {
+            title: 'Multi TV - Türkiye\'nin En Gelişmiş Çoklu Canlı TV Platformu | İbrahim Can Sancar',
+            description: 'İbrahim Can Sancar Multi TV - 4K kalitede birden fazla TV kanalını aynı anda izleyin. Türkiye\'nin en gelişmiş multi-channel streaming platformu. Ücretsiz ve gelişmiş özelliklerle.',
+            type: 'website',
+            images: [
+                {
+                    url: 'https://ibrahimsancar.com/og-multi-tv.jpg',
+                    alt: 'İbrahim Can Sancar Multi TV - Çoklu Canlı TV İzleme Platformu',
+                    width: 1200,
+                    height: 630,
+                },
+            ],
+        },
+        twitter: {
+            cardType: 'summary_large_image',
+            handle: '@ibrahimsancar0',
+            site: '@ibrahimsancar0',
+        },
+    });
+
     const [channels, setChannels] = useState<Array<Channel>>(defaultChannels);
     const [gridSize, setGridSize] = useState<number>(4); // Varsayılan 4 kanal - sabit
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);

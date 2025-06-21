@@ -23,92 +23,133 @@ const ContentSecurityPolicy = `
  * @type {import('next').NextConfig}
  */
 const config = {
+	// Core Web Vitals Optimizasyonları - 2025
+
+	// Image Optimization
 	images: {
-		domains: [
-			// Discord assets
-			'cdn.discordapp.com',
-
-			// GitHub assets
-			'raw.githubusercontent.com',
-
-			// Spotify Album Art
-			'i.scdn.co',
-
-			// Streamable thumbnails
-			'cdn-cf-east.streamable.com',
-
-			// Unsplash
-			'source.unsplash.com',
-			'images.unsplash.com',
-
-			// Additional GitHub assets
-			'github.com',
-			'avatars.githubusercontent.com',
-		],
+		domains: ['ibrahimsancar.com', 'images.unsplash.com', 'cdn.shopify.com'],
+		formats: ['image/webp', 'image/avif'],
+		minimumCacheTTL: 31536000, // 1 yıl
+		dangerouslyAllowSVG: true,
+		contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+		deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+		path: '/_next/image',
+		loader: 'default',
 	},
-	// Inspired by: https://github.com/leerob/leerob.io/blob/main/next.config.js#L44-L81
+
+	// Performance Optimizations
+	swcMinify: true,
+	experimental: {
+		// Modern bundling for better performance
+		esmExternals: true,
+		// Server Components (if using App Router in future)
+		serverComponentsExternalPackages: [],
+	},
+
+	// Compression
+	compress: true,
+
+	// Headers for Performance
 	async headers() {
 		return [
 			{
 				source: '/(.*)',
 				headers: [
-					// https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+					// Security Headers
 					{
-						key: 'Content-Security-Policy',
-						value: ContentSecurityPolicy.replace(/\n/g, ''),
-					},
-					// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
-					{
-						key: 'Referrer-Policy',
-						value: 'strict-origin-when-cross-origin',
-					},
-					// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
-					{
-						key: 'Strict-Transport-Security',
-						value: 'max-age=31536000; includeSubDomains; preload',
-					},
-					// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
-					// Opt-out of Google FLoC: https://amifloced.org/
-					{
-						key: 'Permissions-Policy',
-						value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+						key: 'X-Frame-Options',
+						value: 'DENY'
 					},
 					{
 						key: 'X-Content-Type-Options',
-						value: 'nosniff',
+						value: 'nosniff'
 					},
 					{
-						key: 'X-Frame-Options',
-						value: 'SAMEORIGIN',
+						key: 'Referrer-Policy',
+						value: 'strict-origin-when-cross-origin'
 					},
 					{
-						key: 'X-XSS-Protection',
-						value: '1; mode=block',
+						key: 'Permissions-Policy',
+						value: 'camera=(), microphone=(), geolocation=()'
+					},
+					// Performance Headers
+					{
+						key: 'X-DNS-Prefetch-Control',
+						value: 'on'
 					},
 				],
 			},
-		];
-	},
-	reactStrictMode: true,
-	swcMinify: true,
-	async rewrites() {
-		return [
+			// Cache Headers for Static Assets
 			{
-				source: '/sitemap.xml',
-				destination: '/api/sitemap',
+				source: '/favicon.ico',
+				headers: [
+					{
+						key: 'Cache-Control',
+						value: 'public, max-age=31536000, immutable'
+					}
+				]
 			},
-		];
+			{
+				source: '/_next/static/(.*)',
+				headers: [
+					{
+						key: 'Cache-Control',
+						value: 'public, max-age=31536000, immutable'
+					}
+				]
+			},
+			// Font Optimization
+			{
+				source: '/fonts/(.*)',
+				headers: [
+					{
+						key: 'Cache-Control',
+						value: 'public, max-age=31536000, immutable'
+					}
+				]
+			}
+		]
 	},
+
+	// Redirects for SEO
+	async redirects() {
+		return [
+			// Old URL redirects
+			{
+				source: '/ibrahim-sancar',
+				destination: '/',
+				permanent: true,
+			},
+			{
+				source: '/about',
+				destination: '/',
+				permanent: true,
+			},
+		]
+	},
+
+	// Webpack optimizations
 	webpack: (config, { dev, isServer }) => {
-		// TODO: Temp disabled as since upgrading `next` to v12.2.3 production builds fail & this seems to be the cause
-		// Replace React with Preact only in client production build
-		// if (!dev && !isServer) {
-		// 	Object.assign(config.resolve.alias, {
-		// 		react: 'preact/compat',
-		// 		'react-dom/test-utils': 'preact/test-utils',
-		// 		'react-dom': 'preact/compat',
-		// 	});
-		// }
+		if (!dev && !isServer) {
+			// Bundle analyzer for production builds
+			config.optimization.splitChunks = {
+				chunks: 'all',
+				cacheGroups: {
+					vendor: {
+						test: /[\\/]node_modules[\\/]/,
+						name: 'vendors',
+						chunks: 'all',
+					},
+				},
+			}
+		}
+
+		// SVG handling
+		config.module.rules.push({
+			test: /\.svg$/,
+			use: ['@svgr/webpack']
+		});
 
 		config.plugins.push(new WindiCSS());
 
@@ -127,6 +168,15 @@ const config = {
 		config.optimization.minimize = true;
 
 		return config;
+	},
+
+	// PWA Configuration (if using next-pwa)
+	reactStrictMode: true,
+
+	// Environment variables
+	env: {
+		SITE_URL: 'https://ibrahimsancar.com',
+		SITE_NAME: 'İbrahim Can Sancar',
 	},
 };
 

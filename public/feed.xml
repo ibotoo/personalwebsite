@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>İbrahim Can Sancar - Girişimci ve E-Ticaret Uzmanı</title>
+    <link>https://ibrahimsancar.com</link>
+    <description>İbrahim Can Sancar'ın girişimcilik yolculuğu, e-ticaret deneyimleri ve dijital pazarlama insights'ları</description>
+    <language>tr-tr</language>
+    <lastBuildDate>Mon, 20 Jan 2025 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://ibrahimsancar.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <managingEditor>info@ibrahimsancar.com (İbrahim Can Sancar)</managingEditor>
+    <webMaster>info@ibrahimsancar.com (İbrahim Can Sancar)</webMaster>
+    <copyright>Copyright © 2025 İbrahim Can Sancar. Tüm hakları saklıdır.</copyright>
+    <category>Business/Entrepreneurship</category>
+    <generator>İbrahim Can Sancar Personal Website</generator>
+    <image>
+      <url>https://ibrahimsancar.com/og-image.jpg</url>
+      <title>İbrahim Can Sancar</title>
+      <link>https://ibrahimsancar.com</link>
+      <width>1200</width>
+      <height>630</height>
+    </image>
+    
+    <item>
+      <title>Yapay Zeka ve E-Ticaret Odağı - 2024 Güncellemeleri</title>
+      <link>https://ibrahimsancar.com/zaman-cizelgesi</link>
+      <description>Yapay zeka teknolojileri üzerine yoğunlaşarak kendimi geliştiriyorum. Bu web sitesini de tamamen yapay zeka aracılığıyla oluşturdum.</description>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <guid>https://ibrahimsancar.com/zaman-cizelgesi#current</guid>
+      <category>Yapay Zeka</category>
+      <category>E-Ticaret</category>
+    </item>
+    
+    <item>
+      <title>Multi TV Platform Lansmanı</title>
+      <link>https://ibrahimsancar.com/multi-tv</link>
+      <description>Türkiye'nin en gelişmiş çoklu canlı TV izleme platformu Multi TV'yi kullanıma açtık. Birden fazla TV kanalını aynı anda izleme imkanı.</description>
+      <pubDate>Sun, 01 Oct 2023 00:00:00 GMT</pubDate>
+      <guid>https://ibrahimsancar.com/multi-tv</guid>
+      <category>Teknoloji</category>
+      <category>Platform</category>
+    </item>
+    
+    <item>
+      <title>Snug Sneakers E-Ticaret Deneyimi</title>
+      <link>https://ibrahimsancar.com/zaman-cizelgesi</link>
+      <description>3 ortaklı online ayakkabı mağazası Snug Sneakers'ı kurduk. Yaklaşık 1 yıl işlettikten sonra tüm hakları ve mağazayı sattık.</description>
+      <pubDate>Sun, 10 Sep 2023 00:00:00 GMT</pubDate>
+      <guid>https://ibrahimsancar.com/zaman-cizelgesi#snug-sneakers</guid>
+      <category>E-Ticaret</category>
+      <category>Girişimcilik</category>
+    </item>
+    
+    <item>
+      <title>Profesyonel Shopify Hizmetleri Başladı</title>
+      <link>https://ibrahimsancar.com/zaman-cizelgesi</link>
+      <description>Profesyonel Anahtar Teslim Shopify Site Kurulum hizmeti vermeye başladım. E-ticaret alanında uzmanlaşma.</description>
+      <pubDate>Thu, 30 Mar 2023 00:00:00 GMT</pubDate>
+      <guid>https://ibrahimsancar.com/zaman-cizelgesi#shopify</guid>
+      <category>Shopify</category>
+      <category>E-Ticaret</category>
+    </item>
+    
+    <item>
+      <title>Akdeniz Üniversitesi Reklamcılık Bölümü</title>
+      <link>https://ibrahimsancar.com/zaman-cizelgesi</link>
+      <description>Akdeniz Üniversitesi İletişim Fakültesi Reklamcılık Bölümü'ne başladım. Akademik hayat ve girişimcilik dengesi.</description>
+      <pubDate>Mon, 22 Aug 2022 00:00:00 GMT</pubDate>
+      <guid>https://ibrahimsancar.com/zaman-cizelgesi#university</guid>
+      <category>Eğitim</category>
+      <category>Reklamcılık</category>
+    </item>
+    
+    <item>
+      <title>Rage Medya Kuruldu - Girişimcilik Başlangıcı</title>
+      <link>https://ibrahimsancar.com/zaman-cizelgesi</link>
+      <description>Rage Medya adında sosyal medya işletmesini kurup bu alanda hizmet vermeye başladım. İlk ciddi girişimcilik adımı.</description>
+      <pubDate>Tue, 01 Jun 2021 00:00:00 GMT</pubDate>
+      <guid>https://ibrahimsancar.com/zaman-cizelgesi#rage-medya</guid>
+      <category>Girişimcilik</category>
+      <category>Sosyal Medya</category>
+    </item>
+    
+  </channel>
+</rss> 

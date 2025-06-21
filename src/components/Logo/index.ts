@@ -1,0 +1,1 @@
+export { Logo, RageMediaLogo } from './Logo.component'; 
