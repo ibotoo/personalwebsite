@@ -3,19 +3,31 @@ namespace NodeJS {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	interface ProcessEnv extends NodeJS.ProcessEnv {
 		/**
-		 * Discord ID
+		 * Resend API Key
 		 *
-		 * @description Your personal Discord account ID
-		 *
-		 * @see https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
+		 * @description API key for Resend email service
 		 */
-		NEXT_PUBLIC_DISCORD_ID: string;
+		RESEND_API_KEY: string;
 
 		/**
-		 * GitHub Personal Access Token (PAT)
+		 * From Email Address
 		 *
-		 * @description Token used for fetching repositories
+		 * @description Email address to send from
 		 */
-		GITHUB_PAT: string;
+		FROM_EMAIL: string;
+
+		/**
+		 * To Email Addresses
+		 *
+		 * @description Comma-separated list of email addresses to send to
+		 */
+		TO_EMAILS: string;
+
+		/**
+		 * Site URL
+		 *
+		 * @description Base URL of the website
+		 */
+		NEXT_PUBLIC_SITE_URL: string;
 	}
 }

@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { NextSeo } from 'next-seo';
 
 import { Layout } from '~/layouts';
-import { Button } from '~/components';
+import { Button, Navbar } from '~/components';
 
 interface FormData {
     name: string;
@@ -121,22 +121,23 @@ export default function ContactPage(): JSX.Element {
     return (
         <>
             <NextSeo {...seoProps} />
+            <Navbar.NavigationButtons />
             <Layout.Default background={true}>
-                <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 overflow-y-auto">
-                    <div className="max-w-6xl mx-auto">
+                <div className="min-h-screen py-4 px-4 sm:px-6 lg:px-8 overflow-y-auto lg:overflow-hidden">
+                    <div className="max-w-7xl mx-auto h-full lg:h-screen lg:flex lg:flex-col lg:justify-center">
 
                         {/* Header */}
-                        <div className="text-center mb-8 pt-16">
-                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                        <div className="text-center mb-4 lg:mb-6 pt-8 lg:pt-4">
+                            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-2 lg:mb-3">
                                 İletişim
                             </h1>
-                            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                                 Sosyal medya pazarlama, e-ticaret danışmanlığı ve dijital pazarlama konularında
                                 benimle iletişime geçebilirsiniz. Size en kısa sürede dönüş yapacağım.
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 flex-1 lg:max-h-[calc(100vh-200px)]">
 
                             {/* Contact Info */}
                             <div className="space-y-6 lg:space-y-8">

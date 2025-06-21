@@ -8,7 +8,7 @@ import { NextSeo } from 'next-seo';
 
 import { useRouter } from 'next/router';
 
-import { Button, Pill } from '~/components';
+import { Button, Pill, Navbar } from '~/components';
 import { Layout } from '~/layouts';
 import { useSeoProps } from '~/lib';
 
@@ -171,14 +171,10 @@ export default function TimelinePage({ timeline: rawTimeline }: TimelineProps): 
     return (
         <>
             <NextSeo {...timelineSeoProps} />
+            <Navbar.NavigationButtons />
             <Layout.Default>
                 <div className="flex flex-grow min-h-screen pt-16 pb-12">
                     <div className="flex-grow flex flex-col justify-center max-w-xs sm:max-w-sm md:max-w-2xl w-full mx-auto px-3 sm:px-6 md:px-8">
-                        <button
-                            onClick={(): void => router.back()}
-                            className="fixed top-4 left-4 z-50 flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
-                            <Icon icon="feather:arrow-left" className="w-5 h-5 text-primary-500" />
-                        </button>
                         <div className="flex items-center justify-center mb-4 sm:mb-8 md:mb-12">
                             <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">Zaman Çizelgem</h1>
                         </div>

@@ -176,8 +176,8 @@ export default function HomePage(): JSX.Element {
 									opacity: [0, 1],
 								}}
 								transition={{
-									delay: 3.0,
-									duration: 0.8,
+									delay: 0.8,
+									duration: 0.6,
 								}}
 								className="group">
 								<Link href="/iletisim">
