@@ -143,7 +143,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       resend.emails.send({
         from: `İletişim Formu <${FROM_EMAIL}>`,
         to: TO_EMAIL,
-        reply_to: email,
+        replyTo: email,
         subject: `Yeni Mesaj: ${subject}`,
         html: notificationEmailHtml,
       }),
