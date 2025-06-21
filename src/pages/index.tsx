@@ -166,6 +166,31 @@ export default function HomePage(): JSX.Element {
 								})}
 							</div>
 						</div>
+
+						{/* İletişim Butonu */}
+						<div className="absolute bottom-16 sm:bottom-20 w-full flex justify-center px-4">
+							<Animate
+								animation={{
+									y: [30, 0],
+									opacity: [0, 1],
+									scale: [0.9, 1],
+								}}
+								transition={{
+									delay: 1.5,
+									duration: 0.6,
+									ease: [0.25, 0.46, 0.45, 0.94],
+								}}
+								className="group">
+								<a
+									href="/iletisim"
+									className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out backdrop-blur-sm border border-white/20">
+									<Icon className="mr-3 w-5 h-5" icon="feather:mail" />
+									<span className="text-base">Benimle İletişime Geç</span>
+									<Icon className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" icon="feather:arrow-right" />
+								</a>
+							</Animate>
+						</div>
+
 						<div className="absolute bottom-4 sm:bottom-6 w-full text-center">
 							<p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm font-medium text-center mx-auto">
 								© {new Date().getFullYear() > 2025 ? new Date().getFullYear() : 2025} İbrahim Can Sancar. Tüm hakları saklıdır.
