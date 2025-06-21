@@ -1,11 +1,15 @@
 {
 	"private": true,
-	"name": "nuro.dev",
+	"name": "ibrahim-sancar-website",
 	"version": "2.1.1",
-	"description": "Personal Website for nuro.dev",
-	"repository": "https://github.com/nurodev/nuro.dev.git",
-	"author": "nurodev <me@nuro.dev>",
+	"description": "İbrahim Can Sancar Kişisel Web Sitesi",
+	"repository": "https://github.com/ibotoo/personalwebsite.git",
+	"author": "İbrahim Can Sancar <mail@ibrahimsancar.com>",
 	"license": "MIT",
+	"engines": {
+		"node": ">=16",
+		"pnpm": ">=8"
+	},
 	"prettier": {
 		"arrowParens": "always",
 		"bracketSpacing": true,

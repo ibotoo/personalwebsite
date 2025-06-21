@@ -1,20 +1,24 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
 	"version": 2,
-	"alias": "nuro.dev",
+	"alias": "ibrahimsancar.com",
 	"cleanUrls": true,
 	"public": true,
-	"regions": ["lhr1"],
+	"regions": [
+		"lhr1"
+	],
 	"redirects": [
-		{ "source": "/cv", "destination": "https://read.cv/nuro" },
-		{ "source": "/github", "destination": "https://github.com/nurodev" },
-		{ "source": "/linkedin", "destination": "https://www.linkedin.com/in/nurodev" },
-		{ "source": "/portfolio", "destination": "/projects" },
-		{ "source": "/resume", "destination": "https://read.cv/nuro" },
-		{ "source": "/twitter", "destination": "https://twitter.com/nurodev" },
 		{
-			"source": "/contact",
-			"destination": "https://twitter.com/direct_messages/create/nurodev"
+			"source": "/portfolio",
+			"destination": "/"
+		},
+		{
+			"source": "/blog",
+			"destination": "/"
 		}
-	]
+	],
+	"buildCommand": "pnpm install --no-frozen-lockfile && pnpm run build",
+	"outputDirectory": ".next",
+	"framework": "nextjs",
+	"installCommand": "pnpm install --no-frozen-lockfile"
 }
