@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { Icon } from '@iconify/react';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 interface NavigationButtonsProps {
@@ -29,21 +28,31 @@ export function NavigationButtons({ className = '' }: NavigationButtonsProps): J
         });
     };
 
+    const handleBackClick = () => {
+        if (window.history.length > 1) {
+            router.back();
+        } else {
+            router.push('/');
+        }
+    };
+
+    const handleMenuClick = () => {
+        // Ana sayfaya git
+        router.push('/');
+    };
+
     const buttons = [
         {
             icon: 'feather:arrow-left',
-            onClick: () => router.back(),
+            onClick: handleBackClick,
             label: 'Geri',
             ariaLabel: 'Önceki sayfaya dön'
         },
         {
-            icon: 'feather:menu',
-            onClick: () => {
-                // Menu toggle functionality - şimdilik console log
-                console.log('Menu clicked');
-            },
-            label: 'Menü',
-            ariaLabel: 'Menüyü aç'
+            icon: 'feather:home',
+            onClick: handleMenuClick,
+            label: 'Ana Sayfa',
+            ariaLabel: 'Ana sayfaya git'
         }
     ];
 

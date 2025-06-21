@@ -123,34 +123,34 @@ export default function ContactPage(): JSX.Element {
             <NextSeo {...seoProps} />
             <Navbar.NavigationButtons />
             <Layout.Default background={true}>
-                <div className="h-screen overflow-hidden lg:overflow-hidden">
-                    <div className="max-w-7xl mx-auto h-full flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-4 lg:py-0">
+                <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 lg:py-0">
+                    <div className="max-w-6xl w-full">
 
                         {/* Header */}
-                        <div className="text-center mb-3 lg:mb-4">
-                            <h1 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                        <div className="text-center mb-8 lg:mb-12">
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
                                 İletişim
                             </h1>
-                            <p className="text-sm sm:text-base lg:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                            <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                                 Sosyal medya pazarlama, e-ticaret danışmanlığı ve dijital pazarlama konularında
                                 benimle iletişime geçebilirsiniz. Size en kısa sürede dönüş yapacağım.
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 flex-1 min-h-0 overflow-y-auto lg:overflow-hidden">
+                        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
 
-                            {/* Contact Info */}
-                            <div className="space-y-4 lg:space-y-5 lg:overflow-y-auto lg:pr-2">
+                            {/* Contact Info - Sol taraf (2 kolon) */}
+                            <div className="lg:col-span-2 space-y-8">
 
                                 <div>
-                                    <h2 className="text-lg sm:text-xl lg:text-xl font-semibold text-gray-900 dark:text-white mb-3 lg:mb-4">
+                                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-6">
                                         İletişim Bilgileri
                                     </h2>
 
-                                    <div className="space-y-2 lg:space-y-3">
+                                    <div className="space-y-4">
                                         <div className="flex items-center space-x-3">
-                                            <Icon icon="feather:mail" className="w-4 h-4 lg:w-5 lg:h-5 text-blue-500 flex-shrink-0" />
-                                            <span className="text-gray-700 dark:text-gray-300 text-sm lg:text-base">
+                                            <Icon icon="feather:mail" className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                                            <span className="text-gray-700 dark:text-gray-300">
                                                 <a href="mailto:mail@ibrahimsancar.com" className="hover:text-blue-500 transition-colors">
                                                     mail@ibrahimsancar.com
                                                 </a>
@@ -158,8 +158,8 @@ export default function ContactPage(): JSX.Element {
                                         </div>
 
                                         <div className="flex items-center space-x-3">
-                                            <Icon icon="feather:mail" className="w-4 h-4 lg:w-5 lg:h-5 text-blue-500 flex-shrink-0" />
-                                            <span className="text-gray-700 dark:text-gray-300 text-sm lg:text-base">
+                                            <Icon icon="feather:mail" className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                                            <span className="text-gray-700 dark:text-gray-300">
                                                 <a href="mailto:iletisim@ibrahimsancar.com" className="hover:text-blue-500 transition-colors">
                                                     iletisim@ibrahimsancar.com
                                                 </a>
@@ -167,8 +167,8 @@ export default function ContactPage(): JSX.Element {
                                         </div>
 
                                         <div className="flex items-center space-x-3">
-                                            <Icon icon="feather:instagram" className="w-4 h-4 lg:w-5 lg:h-5 text-blue-500 flex-shrink-0" />
-                                            <span className="text-gray-700 dark:text-gray-300 text-sm lg:text-base">
+                                            <Icon icon="feather:instagram" className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                                            <span className="text-gray-700 dark:text-gray-300">
                                                 <a href="https://instagram.com/ibrahimsancar0" target="_blank" rel="noopener noreferrer"
                                                     className="hover:text-blue-500 transition-colors">
                                                     @ibrahimsancar0
@@ -177,8 +177,8 @@ export default function ContactPage(): JSX.Element {
                                         </div>
 
                                         <div className="flex items-center space-x-3">
-                                            <Icon icon="simple-icons:x" className="w-4 h-4 lg:w-5 lg:h-5 text-blue-500 flex-shrink-0" />
-                                            <span className="text-gray-700 dark:text-gray-300 text-sm lg:text-base">
+                                            <Icon icon="simple-icons:x" className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                                            <span className="text-gray-700 dark:text-gray-300">
                                                 <a href="https://x.com/ibrahimsancar0" target="_blank" rel="noopener noreferrer"
                                                     className="hover:text-blue-500 transition-colors">
                                                     @ibrahimsancar0
@@ -190,39 +190,39 @@ export default function ContactPage(): JSX.Element {
 
                                 {/* Services */}
                                 <div>
-                                    <h3 className="text-base sm:text-lg lg:text-lg font-semibold text-gray-900 dark:text-white mb-2 lg:mb-3">
+                                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4">
                                         Hizmetlerim
                                     </h3>
-                                    <ul className="space-y-1.5 lg:space-y-2 text-gray-600 dark:text-gray-300 text-sm lg:text-base">
-                                        <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-3 h-3 lg:w-4 lg:h-4 text-green-500 flex-shrink-0" />
+                                    <ul className="space-y-3 text-gray-600 dark:text-gray-300">
+                                        <li className="flex items-center space-x-3">
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>Sosyal Medya Pazarlama</span>
                                         </li>
-                                        <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-3 h-3 lg:w-4 lg:h-4 text-green-500 flex-shrink-0" />
+                                        <li className="flex items-center space-x-3">
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>Shopify Mağaza Kurulumu</span>
                                         </li>
-                                        <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-3 h-3 lg:w-4 lg:h-4 text-green-500 flex-shrink-0" />
+                                        <li className="flex items-center space-x-3">
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>E-Ticaret Danışmanlığı</span>
                                         </li>
-                                        <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-3 h-3 lg:w-4 lg:h-4 text-green-500 flex-shrink-0" />
+                                        <li className="flex items-center space-x-3">
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>Instagram & YouTube Marketing</span>
                                         </li>
-                                        <li className="flex items-center space-x-2">
-                                            <Icon icon="feather:check" className="w-3 h-3 lg:w-4 lg:h-4 text-green-500 flex-shrink-0" />
+                                        <li className="flex items-center space-x-3">
+                                            <Icon icon="feather:check" className="w-4 h-4 text-green-500 flex-shrink-0" />
                                             <span>Dijital Strateji Geliştirme</span>
                                         </li>
                                     </ul>
                                 </div>
 
                                 {/* Company Info */}
-                                <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 lg:p-4 rounded-lg backdrop-blur-sm">
-                                    <h3 className="text-sm lg:text-base font-semibold text-gray-900 dark:text-white mb-2">
+                                <div className="bg-gray-50/80 dark:bg-gray-800/80 p-6 rounded-lg backdrop-blur-sm">
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                                         Rage Medya
                                     </h3>
-                                    <p className="text-gray-600 dark:text-gray-300 text-xs lg:text-sm leading-relaxed">
+                                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                                         2021 yılında kurduğum Rage Medya ile sosyal medya pazarlama ve e-ticaret
                                         alanında yüzlerce başarılı proje gerçekleştirdim. Şirketinizin dijital
                                         dönüşümünde size yardımcı olmaktan mutluluk duyarım.
@@ -230,69 +230,69 @@ export default function ContactPage(): JSX.Element {
                                 </div>
                             </div>
 
-                            {/* Contact Form */}
-                            <div className="bg-white/80 dark:bg-gray-800/80 p-4 lg:p-6 rounded-lg shadow-lg backdrop-blur-sm lg:overflow-y-auto lg:pr-2">
+                            {/* Contact Form - Sağ taraf (3 kolon) */}
+                            <div className="lg:col-span-3">
+                                <div className="bg-white/80 dark:bg-gray-800/80 p-8 rounded-lg shadow-lg backdrop-blur-sm h-full">
 
-                                <h2 className="text-lg sm:text-xl lg:text-xl font-semibold text-gray-900 dark:text-white mb-3 lg:mb-4">
-                                    Mesaj Gönder
-                                </h2>
+                                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-6">
+                                        Mesaj Gönder
+                                    </h2>
 
-                                {submitStatus === 'success' && (
-                                    <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                                        <div className="flex items-center space-x-2">
-                                            <Icon icon="feather:check-circle" className="w-5 h-5 text-green-500 flex-shrink-0" />
-                                            <span className="text-green-700 dark:text-green-300 text-sm sm:text-base">{submitMessage}</span>
+                                    {submitStatus === 'success' && (
+                                        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                                            <div className="flex items-center space-x-2">
+                                                <Icon icon="feather:check-circle" className="w-5 h-5 text-green-500 flex-shrink-0" />
+                                                <span className="text-green-700 dark:text-green-300 text-sm sm:text-base">{submitMessage}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
 
-                                {submitStatus === 'error' && (
-                                    <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                                        <div className="flex items-center space-x-2">
-                                            <Icon icon="feather:alert-circle" className="w-5 h-5 text-red-500 flex-shrink-0" />
-                                            <span className="text-red-700 dark:text-red-300 text-sm sm:text-base">{submitMessage}</span>
+                                    {submitStatus === 'error' && (
+                                        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                                            <div className="flex items-center space-x-2">
+                                                <Icon icon="feather:alert-circle" className="w-5 h-5 text-red-500 flex-shrink-0" />
+                                                <span className="text-red-700 dark:text-red-300 text-sm sm:text-base">{submitMessage}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
 
-                                <form onSubmit={handleSubmit} className="space-y-3 lg:space-y-4">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+                                    <form onSubmit={handleSubmit} className="space-y-6">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                            <div>
+                                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                                    Ad Soyad *
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="name"
+                                                    name="name"
+                                                    required
+                                                    value={formData.name}
+                                                    onChange={handleChange}
+                                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                                                    placeholder="Adınız ve soyadınız"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                                    E-posta *
+                                                </label>
+                                                <input
+                                                    type="email"
+                                                    id="email"
+                                                    name="email"
+                                                    required
+                                                    value={formData.email}
+                                                    onChange={handleChange}
+                                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                                                    placeholder="ornek@email.com"
+                                                />
+                                            </div>
+                                        </div>
+
                                         <div>
-                                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                Ad Soyad *
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="name"
-                                                name="name"
-                                                required
-                                                value={formData.name}
-                                                onChange={handleChange}
-                                                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-                                                placeholder="Adınız ve soyadınız"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                E-posta *
-                                            </label>
-                                            <input
-                                                type="email"
-                                                id="email"
-                                                name="email"
-                                                required
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-                                                placeholder="ornek@email.com"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
-                                        <div>
-                                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                                 Telefon
                                             </label>
                                             <input
@@ -301,102 +301,71 @@ export default function ContactPage(): JSX.Element {
                                                 name="phone"
                                                 value={formData.phone}
                                                 onChange={handleChange}
-                                                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-                                                placeholder="+90 5XX XXX XX XX"
+                                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                                                placeholder="+90 (555) 123 45 67"
                                             />
                                         </div>
 
                                         <div>
-                                            <label htmlFor="company" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                Şirket
+                                            <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                                Konu *
                                             </label>
-                                            <input
-                                                type="text"
-                                                id="company"
-                                                name="company"
-                                                value={formData.company}
+                                            <select
+                                                id="subject"
+                                                name="subject"
+                                                required
+                                                value={formData.subject}
                                                 onChange={handleChange}
-                                                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-                                                placeholder="Şirket adınız"
+                                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                                            >
+                                                <option value="">Konu seçiniz</option>
+                                                <option value="sosyal-medya">Sosyal Medya Pazarlama</option>
+                                                <option value="shopify">Shopify Mağaza Kurulumu</option>
+                                                <option value="e-ticaret">E-Ticaret Danışmanlığı</option>
+                                                <option value="instagram">Instagram Marketing</option>
+                                                <option value="youtube">YouTube Marketing</option>
+                                                <option value="strateji">Dijital Strateji</option>
+                                                <option value="diger">Diğer</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                                Mesaj *
+                                            </label>
+                                            <textarea
+                                                id="message"
+                                                name="message"
+                                                required
+                                                rows={6}
+                                                value={formData.message}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors resize-none"
+                                                placeholder="Projeniz hakkında detayları paylaşın..."
                                             />
                                         </div>
-                                    </div>
 
-                                    <div>
-                                        <label htmlFor="service" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Hizmet Türü
-                                        </label>
-                                        <select
-                                            id="service"
-                                            name="service"
-                                            value={formData.service}
-                                            onChange={handleChange}
-                                            className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                        <button
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                                         >
-                                            <option value="">Hizmet seçiniz</option>
-                                            {SERVICES.map((service) => (
-                                                <option key={service} value={service}>
-                                                    {service}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Konu *
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="subject"
-                                            name="subject"
-                                            required
-                                            value={formData.subject}
-                                            onChange={handleChange}
-                                            className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-                                            placeholder="Mesajınızın konusu"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Mesaj *
-                                        </label>
-                                        <textarea
-                                            id="message"
-                                            name="message"
-                                            required
-                                            rows={3}
-                                            value={formData.message}
-                                            onChange={handleChange}
-                                            className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none"
-                                            placeholder="Mesajınızı buraya yazın..."
-                                        />
-                                    </div>
-
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 text-sm flex items-center justify-center space-x-2"
-                                    >
-                                        {isSubmitting ? (
-                                            <>
-                                                <Icon icon="feather:loader" className="w-4 h-4 animate-spin" />
-                                                <span>Gönderiliyor...</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Icon icon="feather:send" className="w-4 h-4" />
-                                                <span>Mesaj Gönder</span>
-                                            </>
-                                        )}
-                                    </button>
-                                </form>
+                                            {isSubmitting ? (
+                                                <>
+                                                    <Icon icon="feather:loader" className="w-5 h-5 animate-spin" />
+                                                    <span>Gönderiliyor...</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Icon icon="feather:send" className="w-5 h-5" />
+                                                    <span>Mesaj Gönder</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-
-                        {/* Bottom spacing */}
-                        <div className="h-8"></div>
                     </div>
                 </div>
             </Layout.Default>
