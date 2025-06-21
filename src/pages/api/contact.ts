@@ -47,7 +47,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!process.env.RESEND_API_KEY || !TO_EMAIL || !FROM_EMAIL) {
       console.error('Email service is not configured. Check environment variables.');
-      return res.status(503).json({ error: 'E-posta servisi şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.' });
+      console.error('Missing variables:', {
+        RESEND_API_KEY: !!process.env.RESEND_API_KEY,
+        TO_EMAIL: !!TO_EMAIL,
+        FROM_EMAIL: !!FROM_EMAIL
+      });
+      return res.status(503).json({
+        error: 'E-posta servisi şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin veya doğrudan mail@ibrahimsancar.com adresine yazın.',
+        details: 'Email service configuration error'
+      });
     }
 
     // Create structured email content

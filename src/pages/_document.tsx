@@ -6,9 +6,9 @@ export default function Document(): JSX.Element {
 		<Html lang="tr" dir="ltr">
 			<Head>
 				{/* Ana Favicon - Yeni Memoji */}
-				<link rel="icon" type="image/png" href="/favicon.png" />
-				<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-				<link rel="shortcut icon" href="/favicon.ico" />
+				<link rel="icon" type="image/png" href="/favicon.png?v=2025" />
+				<link rel="icon" type="image/x-icon" href="/favicon.ico?v=2025" />
+				<link rel="shortcut icon" href="/favicon.ico?v=2025" />
 
 				{/* 2025 SEO - Temel Meta Etiketleri */}
 				<meta name="description" content="İbrahim Can Sancar - 2003 doğumlu girişimci, Akdeniz Üniversitesi Reklamcılık öğrencisi. Rage Medya kurucusu, sosyal medya uzmanı, Shopify e-ticaret danışmanı. Snug Sneakers eski ortağı. Yapay zeka ve dijital pazarlama konularında uzman." />
@@ -73,15 +73,15 @@ export default function Document(): JSX.Element {
 				<link rel="manifest" href="/manifest.json" />
 
 				{/* Apple Touch Icons - Yeni Memoji */}
-				<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-				<link rel="apple-touch-icon" sizes="60x60" href="/apple/apple-touch-icon-iphone-60.png" />
-				<link rel="apple-touch-icon" sizes="76x76" href="/apple/apple-touch-icon-ipad-76.png" />
-				<link rel="apple-touch-icon" sizes="120x120" href="/apple/apple-touch-icon-iphone-retina-120.png" />
-				<link rel="apple-touch-icon" sizes="152x152" href="/apple/apple-touch-icon-ipad-retina-152.png" />
+				<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2025" sizes="180x180" />
+				<link rel="apple-touch-icon" sizes="60x60" href="/apple/apple-touch-icon-iphone-60.png?v=2025" />
+				<link rel="apple-touch-icon" sizes="76x76" href="/apple/apple-touch-icon-ipad-76.png?v=2025" />
+				<link rel="apple-touch-icon" sizes="120x120" href="/apple/apple-touch-icon-iphone-retina-120.png?v=2025" />
+				<link rel="apple-touch-icon" sizes="152x152" href="/apple/apple-touch-icon-ipad-retina-152.png?v=2025" />
 
 				{/* Favicon Boyutları - Yeni Memoji */}
-				<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-				<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+				<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2025" />
+				<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2025" />
 
 				{/* Performance Optimization */}
 				<link rel="preconnect" href="https://fonts.googleapis.com" />

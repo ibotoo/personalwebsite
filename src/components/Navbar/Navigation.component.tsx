@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icon } from '@iconify/react';
-import { useState, useEffect } from 'react';
 
 interface NavigationButtonsProps {
     className?: string;
@@ -29,9 +29,17 @@ export function NavigationButtons({ className = '' }: NavigationButtonsProps): J
     };
 
     const handleBackClick = () => {
-        if (window.history.length > 1) {
-            router.back();
+        // Önce tarayıcı geçmişini kontrol et
+        if (typeof window !== 'undefined') {
+            // Eğer geçmişte sayfa varsa geri git
+            if (window.history.length > 1 && document.referrer) {
+                window.history.back();
+            } else {
+                // Yoksa ana sayfaya yönlendir
+                router.push('/');
+            }
         } else {
+            // Server-side rendering durumunda ana sayfaya git
             router.push('/');
         }
     };

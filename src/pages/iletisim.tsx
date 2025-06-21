@@ -111,8 +111,9 @@ export default function ContactPage(): JSX.Element {
                 setSubmitMessage(result.error || 'Bir hata oluştu');
             }
         } catch (error) {
+            console.error('İletişim formu hatası:', error);
             setSubmitStatus('error');
-            setSubmitMessage('Bağlantı hatası oluştu. Lütfen tekrar deneyin.');
+            setSubmitMessage('Bağlantı hatası oluştu. Lütfen daha sonra tekrar deneyin veya doğrudan mail@ibrahimsancar.com adresine yazın.');
         } finally {
             setIsSubmitting(false);
         }
