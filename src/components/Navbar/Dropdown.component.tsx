@@ -104,12 +104,14 @@ export function Dropdown({ children, items, position = 'top-left' }: StandardPro
 												switch (item.type) {
 													case NavigationItemType.ACTION:
 														return (
-															<StyledMenuItem
-																active={active}
-																className="group"
-																onClick={(): void =>
-																	item.onClick()
-																}>
+															<button
+																className={clsx(
+																	'flex items-center w-full px-4 py-3 text-sm font-medium tracking-wide text-left cursor-pointer default-transition',
+																	active
+																		? 'bg-gray-100/50 text-gray-900 dark:bg-gray-700/50 dark:text-white'
+																		: 'text-gray-400 hover:text-gray-700 dark:hover:text-white',
+																)}
+																onClick={item.onClick}>
 																<MenuButtonIcon icon={item.icon} />
 																<span className="text-xs sm:text-sm">{item.text}</span>
 																{item.endIcon && (
@@ -121,7 +123,7 @@ export function Dropdown({ children, items, position = 'top-left' }: StandardPro
 																		/>
 																	</>
 																)}
-															</StyledMenuItem>
+															</button>
 														);
 													case NavigationItemType.DIVIDER:
 														return (
