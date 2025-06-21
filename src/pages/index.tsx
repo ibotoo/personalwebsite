@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { Icon } from '@iconify/react';
 import { NextSeo } from 'next-seo';
 
@@ -181,13 +182,13 @@ export default function HomePage(): JSX.Element {
 									ease: [0.25, 0.46, 0.45, 0.94],
 								}}
 								className="group">
-								<a
-									href="/iletisim"
-									className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out backdrop-blur-sm border border-white/20">
-									<Icon className="mr-3 w-5 h-5" icon="feather:mail" />
-									<span className="text-base">Benimle İletişime Geç</span>
-									<Icon className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" icon="feather:arrow-right" />
-								</a>
+								<Link href="/iletisim">
+									<a className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out backdrop-blur-sm border border-white/20">
+										<Icon className="mr-3 w-5 h-5" icon="feather:mail" />
+										<span className="text-base">Benimle İletişime Geç</span>
+										<Icon className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" icon="feather:arrow-right" />
+									</a>
+								</Link>
 							</Animate>
 						</div>
 
