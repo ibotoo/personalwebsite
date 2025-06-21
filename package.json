@@ -6,10 +6,6 @@
 	"repository": "https://github.com/ibotoo/personalwebsite.git",
 	"author": "İbrahim Can Sancar <mail@ibrahimsancar.com>",
 	"license": "MIT",
-	"engines": {
-		"node": ">=16",
-		"pnpm": ">=8"
-	},
 	"prettier": {
 		"arrowParens": "always",
 		"bracketSpacing": true,
