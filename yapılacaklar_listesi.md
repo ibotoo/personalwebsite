@@ -1,32 +1,54 @@
 # Vercel Derleme Hatası Analizi ve Çözüm Planı
 
-## Mevcut Durum
-- Vercel'de `/iletisim` sayfası oluşturulurken `TypeError: Cannot destructure property 'auth' of 'urlObj' as it is undefined` hatası alınıyor
-- Hata `next/link` bileşenine geçersiz veya tanımsız `href` prop'u verildiğinde meydana geliyor
-- Stack trace `formatUrl` fonksiyonunu işaret ediyor
+## ❌ Mevcut Durum - Hata Devam Ediyor
+- Vercel'de `/iletisim` sayfası oluşturulurken `TypeError: Cannot destructure property 'auth' of 'urlObj' as it is undefined` hatası hala alınıyor
+- `useSeoProps` hook'u kaldırılmasına rağmen hata devam ediyor
+- Stack trace hala `formatUrl` fonksiyonunu işaret ediyor
+- Sorun başka bir `next/link` kullanımında olmalı
 
-## Yapılacaklar
+## 🔍 Derin Analiz Gerekli
 
-### 1. Hata Kaynağını Bulma
-- [ ] `/iletisim` sayfasındaki tüm `Link` bileşenlerini kontrol et
-- [ ] `Layout.Default` bileşenini incele
-- [ ] `Navbar` bileşenlerini kontrol et
-- [ ] `Button` bileşenlerini kontrol et
-- [ ] `useNavigation` hook'unu incele
-- [ ] `useSeoProps` hook'unu kontrol et
+### Potansiyel Hata Kaynakları
+1. **Button/Standard.component.tsx** - Link kullanımı var
+2. **MenuLink fonksiyonu** - Dropdown'da Link kullanımı
+3. **Dynamic import** - Background component
+4. **Navbar bileşenleri** - Link kullanımları
+5. **Hidden Link'ler** - Görünmeyen ama render edilen linkler
 
-### 2. Potansiyel Çözümler
-- [ ] Tanımsız `href` prop'larını kontrol et
-- [ ] Koşullu render'larda `href` kontrolü ekle
-- [ ] `Link` bileşenlerini `a` etiketleriyle değiştir
-- [ ] Dinamik `href` değerlerini kontrol et
+### Yapılacak İşlemler
+- [ ] Tüm Link kullanımlarını bul ve kontrol et
+- [ ] Button bileşenindeki Link kullanımını düzelt
+- [ ] MenuLink fonksiyonunu tamamen kaldır
+- [ ] Tüm href değerlerini statik yap
+- [ ] Dynamic import'ları kontrol et
+
+## Yapılan Değişiklikler
+
+### ✅ Tamamlanan İşlemler
+- [x] `/iletisim` sayfasındaki tüm `Link` bileşenlerini kontrol et
+- [x] `Layout.Default` bileşenini incele
+- [x] `Navbar` bileşenlerini kontrol et
+- [x] `Button` bileşenlerini kontrol et
+- [x] `useNavigation` hook'unu incele
+- [x] `useSeoProps` hook'unu kontrol et
+- [x] Tanımsız `href` prop'larını kontrol et
+- [x] `useSeoProps` hook'unu kaldır ve sabit SEO props kullan
+- [x] Vercel'de yeniden dağıtım yap
+
+### 🔧 Uygulanan Çözümler
+1. **Navbar Dropdown Düzeltmesi**: `NavigationItemType.ACTION` için `<button>` kullanımı
+2. **SEO Hook Kaldırma**: `useSeoProps` hook'unu kaldırıp sabit SEO props kullanımı
+3. **Router Bağımlılığı Kaldırma**: `router.asPath` kullanımını kaldırma
+
+## Sonraki Adımlar
 
 ### 3. Test ve Doğrulama
-- [ ] Yerel derleme testi yap
-- [ ] Vercel'de yeniden dağıtım yap
-- [ ] Hata çözülüp çözülmediğini kontrol et
+- [ ] Vercel derleme sonucunu kontrol et
+- [ ] Hata çözülüp çözülmediğini doğrula
+- [ ] Gerekirse ek düzeltmeler yap
 
 ## Notlar
 - Hata sadece `/iletisim` sayfasında meydana geliyor
 - Diğer sayfalar başarıyla oluşturuluyor
-- Sorun muhtemelen `/iletisim` sayfasına özgü bir bileşen veya prop'ta 
+- Sorun muhtemelen `useSeoProps` hook'undaki `router.asPath` kullanımından kaynaklanıyordu
+- Sabit SEO props kullanımı prerender sırasında router bağımlılığını ortadan kaldırıyor 

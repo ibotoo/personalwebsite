@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import Link from 'next/link';
 import { forwardRef, Fragment } from 'react';
 import { Icon } from '@iconify/react';
 import { Menu, Transition } from '@headlessui/react';
@@ -59,21 +58,6 @@ function MenuButtonIcon({
 	return <Icon aria-hidden="true" className={clsx('w-5 h-5 mr-3', className)} icon={icon} />;
 }
 
-/**
- * Menu Link
- *
- * @see https://headlessui.dev/react/menu#integrating-with-next-js
- */
-function MenuLink({ children, href, ...rest }: MenuLinkProps): JSX.Element {
-	return (
-		<Link href={href} passHref>
-			<StyledMenuItem {...rest}>
-				{children}
-			</StyledMenuItem>
-		</Link>
-	);
-}
-
 export function Dropdown({ children, items, position = 'top-left' }: StandardProps): JSX.Element {
 	return (
 		<Menu as="div" className="relative inline-block text-left">
@@ -131,33 +115,27 @@ export function Dropdown({ children, items, position = 'top-left' }: StandardPro
 														);
 													case NavigationItemType.LINK:
 														const external = item.external ?? false;
-														if (external)
-															return (
-																<StyledMenuItem
-																	className="group"
-																	active={active}
-																	href={item.href}
-																	rel="noopener noreferrer"
-																	target="_blank">
-																	<MenuButtonIcon
-																		icon={item.icon}
-																	/>
-																	<span className="text-xs sm:text-sm">{item.text}</span>
-																	<span className="flex-1" />
-																	<MenuButtonIcon
-																		direction="right"
-																		icon="feather:external-link"
-																	/>
-																</StyledMenuItem>
-															);
-
 														return (
-															<MenuLink
+															<StyledMenuItem
+																className="group"
 																active={active}
-																href={item.href}>
-																<MenuButtonIcon icon={item.icon} />
+																href={item.href}
+																rel={external ? "noopener noreferrer" : undefined}
+																target={external ? "_blank" : undefined}>
+																<MenuButtonIcon
+																	icon={item.icon}
+																/>
 																<span className="text-xs sm:text-sm">{item.text}</span>
-															</MenuLink>
+																{external && (
+																	<>
+																		<span className="flex-1" />
+																		<MenuButtonIcon
+																			direction="right"
+																			icon="feather:external-link"
+																		/>
+																	</>
+																)}
+															</StyledMenuItem>
 														);
 												}
 											}}

@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import Link from 'next/link';
 import { Icon } from '@iconify/react';
 
 import { Action } from './Action.component';
@@ -70,32 +69,18 @@ export function Item({
 										</Action>
 									);
 								case ListActionType.LINK:
-									if (action.external ?? true)
-										return (
-											<Action
-												as="a"
-												aria-label={action.label}
-												href={action.href}
-												key={index}
-												onClick={action.onClick}
-												rel="noopener noreferrer"
-												target="_blank">
-												<span className="sr-only">{action.label}</span>
-												<Icon className="mt-1" icon={action.icon} />
-											</Action>
-										);
-
 									return (
-										<Link href={action.href} passHref>
-											<Action
-												as="a"
-												aria-label={action.label}
-												key={index}
-												onClick={action.onClick}>
-												<span className="sr-only">{action.label}</span>
-												<Icon className="mt-1" icon={action.icon} />
-											</Action>
-										</Link>
+										<Action
+											as="a"
+											aria-label={action.label}
+											href={action.href}
+											key={index}
+											onClick={action.onClick}
+											rel="noopener noreferrer"
+											target={action.external ? "_blank" : undefined}>
+											<span className="sr-only">{action.label}</span>
+											<Icon className="mt-1" icon={action.icon} />
+										</Action>
 									);
 							}
 						})}
