@@ -179,7 +179,6 @@ export default function HomePage(): JSX.Element {
 								transition={{
 									delay: 1.5,
 									duration: 0.6,
-									ease: [0.25, 0.46, 0.45, 0.94],
 								}}
 								className="group">
 								<Link href="/iletisim">
