@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Validation
     if (!name || !email || !subject || !message) {
       return res.status(400).json({
-        error: 'Missing required fields',
+        error: 'Eksik bilgiler. Lütfen tüm gerekli alanları doldurun.',
         required: ['name', 'email', 'subject', 'message']
       });
     }
@@ -42,14 +42,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: 'Invalid email format' });
+      return res.status(400).json({ error: 'Geçersiz e-posta formatı. Lütfen doğru bir e-posta adresi girin.' });
     }
 
     if (!process.env.RESEND_API_KEY || !TO_EMAIL || !FROM_EMAIL) {
       console.error('Email service is not configured. Check environment variables.');
-      // Geliştirme ortamında formu yine de başarılı gösterebiliriz.
-      // Canlıda burada 500 hatası dönmek daha doğru olacaktır.
-      return res.status(503).json({ error: 'Email service unavailable' });
+      return res.status(503).json({ error: 'E-posta servisi şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.' });
     }
 
     // Create structured email content
@@ -167,13 +165,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // If the main notification email fails, we should probably return an error
     if (notificationResponse.status === 'rejected') {
-      return res.status(500).json({ error: 'Failed to send message. Please try again later.' });
+      return res.status(500).json({ error: 'Mesaj gönderilemedi. Lütfen daha sonra tekrar deneyin.' });
     }
 
-    return res.status(200).json({ message: 'Message sent successfully!' });
+    return res.status(200).json({ message: 'Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağım.' });
 
   } catch (error) {
     console.error('An unexpected error occurred:', error);
-    return res.status(500).json({ error: 'An internal server error occurred.' });
+    return res.status(500).json({ error: 'Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.' });
   }
 } 

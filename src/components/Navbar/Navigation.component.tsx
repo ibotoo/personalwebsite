@@ -36,10 +36,31 @@ export function NavigationButtons({ className = '' }: NavigationButtonsProps): J
         }
     };
 
+    const handleMenuClick = () => {
+        router.push('/');
+    };
+
     return (
         <>
-            {/* Sol üst geri dönüş butonu */}
-            <div className={`fixed top-4 left-4 z-50 ${className}`}>
+            {/* Sol üst navigasyon butonları */}
+            <div className={`fixed top-4 left-4 z-50 flex space-x-2 ${className}`}>
+                {/* Menü butonu */}
+                <div className="relative group">
+                    <button
+                        onClick={handleMenuClick}
+                        className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white rounded-lg shadow-md hover:shadow-lg backdrop-blur-sm border border-gray-200/50 dark:border-gray-600/50 hover:border-gray-300/70 dark:hover:border-gray-500/70 transition-all duration-200 ease-out transform hover:scale-105"
+                        aria-label="Ana menüye git"
+                    >
+                        <Icon icon="feather:menu" className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </button>
+
+                    {/* Tooltip */}
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                        Ana Menü
+                    </div>
+                </div>
+
+                {/* Geri dönüş butonu */}
                 <div className="relative group">
                     <button
                         onClick={handleBackClick}
