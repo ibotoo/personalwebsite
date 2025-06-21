@@ -64,10 +64,10 @@ function MenuButtonIcon({
  *
  * @see https://headlessui.dev/react/menu#integrating-with-next-js
  */
-function MenuLink({ children, href, onClick, ...rest }: MenuLinkProps): JSX.Element {
+function MenuLink({ children, href, ...rest }: MenuLinkProps): JSX.Element {
 	return (
 		<Link href={href} passHref>
-			<StyledMenuItem onClick={(...args): void => onClick(...args)} {...rest}>
+			<StyledMenuItem {...rest}>
 				{children}
 			</StyledMenuItem>
 		</Link>
