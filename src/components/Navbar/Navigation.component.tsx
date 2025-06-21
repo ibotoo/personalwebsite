@@ -29,17 +29,22 @@ export function NavigationButtons({ className = '' }: NavigationButtonsProps): J
     };
 
     const handleBackClick = () => {
-        // Önce tarayıcı geçmişini kontrol et
-        if (typeof window !== 'undefined') {
-            // Eğer geçmişte sayfa varsa geri git
-            if (window.history.length > 1 && document.referrer) {
-                window.history.back();
+        try {
+            // Önce router.back() deneyelim
+            if (typeof window !== 'undefined') {
+                // Eğer bir önceki sayfa varsa geri git
+                if (window.history.length > 2) {
+                    router.back();
+                } else {
+                    // Yoksa ana sayfaya git
+                    router.push('/');
+                }
             } else {
-                // Yoksa ana sayfaya yönlendir
                 router.push('/');
             }
-        } else {
-            // Server-side rendering durumunda ana sayfaya git
+        } catch (error) {
+            // Hata durumunda ana sayfaya git
+            console.error('Geri dönüş hatası:', error);
             router.push('/');
         }
     };
