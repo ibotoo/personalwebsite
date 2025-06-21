@@ -3,7 +3,6 @@ import { Icon } from '@iconify/react';
 import { NextSeo } from 'next-seo';
 
 import { Layout } from '~/layouts';
-import { useSeoProps } from '~/lib';
 import { Animate, Button } from '~/components';
 
 interface FormData {
@@ -43,7 +42,7 @@ export default function ContactPage(): JSX.Element {
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const [submitMessage, setSubmitMessage] = useState('');
 
-    const seoProps = useSeoProps({
+    const seoProps = {
         title: 'İletişim - İbrahim Can Sancar | Rage Medya',
         description: 'İbrahim Can Sancar ile iletişime geçin. Sosyal medya pazarlama, Shopify e-ticaret danışmanlığı ve dijital pazarlama hizmetleri için doğrudan ulaşın.',
         additionalMetaTags: [
@@ -52,7 +51,7 @@ export default function ContactPage(): JSX.Element {
                 content: 'iletişim, contact, İbrahim Sancar iletişim, Rage Medya iletişim, sosyal medya uzmanı iletişim, shopify danışmanı iletişim, e-ticaret uzmanı iletişim, dijital pazarlama iletişim, istanbul sosyal medya ajansı, antalya e-ticaret danışmanı'
             }
         ],
-    });
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
