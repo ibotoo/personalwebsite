@@ -29,7 +29,6 @@ const staticMenuItems: Array<Array<NavigationItem>> = [
 			icon: 'feather:tv',
 			text: 'Multi TV',
 			href: '/multi-tv',
-			external: true
 		},
 	],
 	[
