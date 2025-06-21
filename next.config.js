@@ -41,10 +41,8 @@ const config = {
 	// Performance Optimizations
 	swcMinify: true,
 	experimental: {
-		// Modern bundling for better performance
-		esmExternals: true,
-		// Server Components (if using App Router in future)
-		serverComponentsExternalPackages: [],
+		legacyBrowsers: false,
+		browsersListForSwc: true,
 	},
 
 	// Compression

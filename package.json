@@ -64,6 +64,7 @@
 		"resend": "^4.6.0",
 		"swr": "^1.0.1",
 		"use-sound": "^4.0.1",
+		"web-vitals": "^3.5.2",
 		"windicss": "^3.5.6"
 	},
 	"devDependencies": {
